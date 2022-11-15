@@ -1,0 +1,4 @@
+id,trigger,conditions,script,text,options,notes
+ModSettings_Open,ExerelinNGCOptions,,,,10:modSettingsOption:Mod Settings,
+ModSettings_Open_NO_NEX,NGCDifficultyOptions,,,,3:modSettingsOption:Mod Settings,
+ModSettings_Open_CMD,NewGameOptionSelected,$option==modSettingsOption,OpenSettingsFromCMD,,,

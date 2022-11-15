@@ -1,0 +1,18 @@
+{
+    "id": "lunalib",
+    "name": "LunaLib",
+    "author": "Lukas04",
+    "utility": "true",
+    "version": "1.0.0",
+    "description": "Library included useful utilities for mod devs",
+    "gameVersion": "0.95.1a-RC6",
+	"jars":["jars/LunaLib.jar"],
+	"modPlugin":"LunaLibPlugin",
+	"dependencies": [
+		{
+			"id": "lw_lazylib",
+			"name": "LazyLib",
+		},
+	]
+}
+

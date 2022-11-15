@@ -1,0 +1,5 @@
+ {
+ 	"ruleCommandPackages":[
+ 		"lunalib.lunaCMDs",
+ 	],			
+ }

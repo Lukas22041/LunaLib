@@ -1,0 +1,17 @@
+modID,fieldID,fieldName,fieldType,fieldTooltip,defaultValue,newGame,minValue,maxValue,tags
+lunalib,luna_text1,,Text,,"Settings for the procedual generation of the mod.
+Anything set here is permanently set for the save. ",true,,,
+lunalib,luna_testField1,Generate Pirates,Boolean,"Should pirates spawn in the sector?
+
+true = Pirates spawn in the sector.
+false = Pirates will not spawn in the sector.",true,true,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+lunalib,luna_text2,Test Field,Text,,"General configs for behaviour and loot rates.
+Can be changed in the middle of a run.",false,,,
+lunalib,luna_testField2,Ships recoverable,Boolean,"Makes special pirate ships recoverable
+",false,false,,,
+lunalib,luna_testField3,Difficulty Modifier,Double,Modifies the difficulty scale of generated fleets,1.5,false,0.1,2,
+lunalib,luna_testField4,Fuel Drop Modifier,Double,Changes how much fuel drops from pirate fleets,54.5,false,0.0,100,
+lunalib,luna_testField5,Test,Enum,A,"Yeah, No, Cool, Perchance",false,,,
