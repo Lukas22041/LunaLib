@@ -57,6 +57,17 @@ internal object LunaSettingsLoader
                 "Boolean" -> default = default.toString().toBoolean()
                 "Double" -> default = default.toString().toDouble()
                 "String" -> default = default.toString()
+                "Enum" -> default = default.toString().split(",")
+            }
+
+            if (type == "Enum")
+            {
+                var list: MutableList<String> = ArrayList()
+                for (entry in default as List<String>)
+                {
+                    list.add(entry.trim())
+                }
+                default = list
             }
 
             var newGame = false
@@ -124,7 +135,14 @@ internal object LunaSettingsLoader
                     }
                     catch (e: Throwable)
                     {
-                        data!!.put(default.fieldID, default.defaultValue)
+                        if (default.fieldType == "Enum")
+                        {
+                            data!!.put(default.fieldID, (default.defaultValue as List<String>).get(0))
+                        }
+                        else
+                        {
+                            data!!.put(default.fieldID, default.defaultValue)
+                        }
                     }
                 }
             }
@@ -164,7 +182,14 @@ internal object LunaSettingsLoader
             for (data in SettingsData)
             {
                 if (data.modID != mod.id || !data.newGame) continue
-                saveData.put(data.fieldID, data.defaultValue)
+                if (data.fieldType == "Enum")
+                {
+                    saveData.put(data.fieldID, (data.defaultValue as List<String>).get(0))
+                }
+                else
+                {
+                    saveData.put(data.fieldID, data.defaultValue)
+                }
             }
             if (saveData.isNotEmpty()) newGameSettings.put(mod.id, saveData)
 

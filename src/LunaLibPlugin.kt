@@ -3,6 +3,7 @@ import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsLoader
+import lunalib.lunaWrappers.LunaMemory
 
 class LunaLibPlugin : BaseModPlugin()
 {
@@ -15,7 +16,10 @@ class LunaLibPlugin : BaseModPlugin()
     override fun onGameLoad(newGame: Boolean)
     {
         Global.getSector().addTransientScript(LunaSettingsHotkeyListener())
-        Global.getSector()
+
+        var test = IntelMessage()
+        test.setIntelMessage()
+        test.sendIntelMessage()
     }
 
     override fun onApplicationLoad()

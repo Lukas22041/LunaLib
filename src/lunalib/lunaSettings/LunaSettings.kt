@@ -12,7 +12,7 @@ object LunaSettings
      * @exception exception throws an exception if no setting is found.
     */
     @JvmStatic
-    fun getDouble(ModID: String, FieldID: String, SaveSpecific: Boolean) : Double?
+    fun getDouble(ModID: String, FieldID: String, SaveSpecific: Boolean) : Double
     {
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
@@ -22,7 +22,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getDouble(FieldID)
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type Double not found in JSONObject (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type Double not found in JSONObject (Mod: $ModID)")
                 }
             }
             else
@@ -31,7 +31,7 @@ object LunaSettings
                     return (Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as Double
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type Double not found in Memory (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type Double not found in Memory (Mod: $ModID)")
                 }
             }
         }
@@ -49,7 +49,7 @@ object LunaSettings
      * @exception exception throws an exception if no setting is found.
      */
     @JvmStatic
-    fun getFloat(ModID: String, FieldID: String, SaveSpecific: Boolean) : Float?
+    fun getFloat(ModID: String, FieldID: String, SaveSpecific: Boolean) : Float
     {
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
@@ -59,7 +59,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getDouble(FieldID).toFloat()
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type Float not found in JSONObject (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type Float not found in JSONObject (Mod: $ModID)")
                 }
             }
             else
@@ -68,7 +68,7 @@ object LunaSettings
                     return ((Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as Double).toFloat()
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type Float not found in Memory (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type Float not found in Memory (Mod: $ModID)")
                 }
             }
         }
@@ -86,7 +86,7 @@ object LunaSettings
      * @exception exception throws an exception if no setting is found.
      */
     @JvmStatic
-    fun getBoolean(ModID: String, FieldID: String, SaveSpecific: Boolean) : Boolean?
+    fun getBoolean(ModID: String, FieldID: String, SaveSpecific: Boolean) : Boolean
     {
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
@@ -96,7 +96,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getBoolean(FieldID)
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type Boolean not found in JSONObject (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type Boolean not found in JSONObject (Mod: $ModID)")
                 }
             }
             else
@@ -105,7 +105,7 @@ object LunaSettings
                     return (Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as Boolean
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type Boolean not found in Memory (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type Boolean not found in Memory (Mod: $ModID)")
                 }
             }
         }
@@ -123,7 +123,7 @@ object LunaSettings
      * @exception exception throws an exception if no setting is found.
      */
     @JvmStatic
-    fun getInt(ModID: String, FieldID: String, SaveSpecific: Boolean) : Int?
+    fun getInt(ModID: String, FieldID: String, SaveSpecific: Boolean) : Int
     {
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
@@ -133,7 +133,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getInt(FieldID)
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type Int not found in JSONObject (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type Int not found in JSONObject (Mod: $ModID)")
                 }
             }
             else
@@ -142,7 +142,7 @@ object LunaSettings
                     return (Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as Int
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type Int not found in Memory (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type Int not found in Memory (Mod: $ModID)")
                 }
             }
         }
@@ -160,7 +160,7 @@ object LunaSettings
      * @exception exception throws an exception if no setting is found.
      */
     @JvmStatic
-    fun getString(ModID: String, FieldID: String, SaveSpecific: Boolean) : String?
+    fun getString(ModID: String, FieldID: String, SaveSpecific: Boolean) : String
     {
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
@@ -170,7 +170,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getString(FieldID)
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type String not found in JSONObject (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type String not found in JSONObject (Mod: $ModID)")
                 }
             }
             else
@@ -179,7 +179,7 @@ object LunaSettings
                     return (Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as String
                 }
                 catch(e: Throwable) {
-                    throw Exception("LunaSettings: $FieldID of type String not found in Memory (Mod: $ModID)")
+                    throw Exception("LunaSettings: Value $FieldID of type String not found in Memory (Mod: $ModID)")
                 }
             }
         }

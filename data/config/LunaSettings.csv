@@ -14,4 +14,5 @@ lunalib,luna_testField2,Ships recoverable,Boolean,"Makes special pirate ships re
 ",false,false,,,
 lunalib,luna_testField3,Difficulty Modifier,Double,Modifies the difficulty scale of generated fleets,1.5,false,0.1,2,
 lunalib,luna_testField4,Fuel Drop Modifier,Double,Changes how much fuel drops from pirate fleets,54.5,false,0.0,100,
-lunalib,luna_testField5,Test,Enum,A,"Yeah, No, Cool, Perchance",false,,,
+lunalib,luna_testField5,Test,Enum,A,"First, Second, Third, Forth",true,,,
+lunalib,luna_testField6,ABC,Enum,Ab,"Yes, No, Maybe",false,,,

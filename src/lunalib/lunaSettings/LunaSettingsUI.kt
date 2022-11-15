@@ -14,6 +14,7 @@ import org.lazywizard.lazylib.MathUtils
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.Display
 import org.lwjgl.opengl.GL11
+import java.awt.Button
 import java.awt.Color
 
 
@@ -51,6 +52,13 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     var OptionIntMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
     var OptionDoubleMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
     var OptionBooleanMap: MutableMap<LunaSettingsData, ButtonAPI> = HashMap()
+
+    var OptionEnumMap: MutableMap<LunaSettingsData,ButtonAPI> = HashMap()
+    var OptionEnumTextMap: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
+    var EnumOptions: MutableMap<LunaSettingsData, MutableMap<ButtonAPI, String>> = HashMap()
+    var selectedEnum: LunaSettingsData? = null
+    var EnumOpen = false
+    var enumPanel: TooltipMakerAPI? = null
 
     var newgame = newGame
 
@@ -97,6 +105,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         ModsDisplay()
 
         panel!!.removeComponent(buttonPanel)
+        panel!!.removeComponent(enumPanel)
         panel!!.removeComponent(OptionsList)
         panel!!.removeComponent(OptionsInnerPannel)
 
@@ -104,6 +113,12 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         OptionIntMap.clear()
         OptionDoubleMap.clear()
         OptionBooleanMap.clear()
+
+        OptionEnumMap.clear()
+        OptionEnumTextMap.clear()
+        EnumOptions.clear()
+        selectedEnum = null
+        EnumOpen = false
 
         OptionsInnerPannel = null
         optionsDisplay()
@@ -215,6 +230,67 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             map.value.text = modifiedString
         }
 
+
+        if (OptionsList != null)
+        {
+            for (map in OptionEnumMap)
+            {
+                if (map.value.isChecked && !EnumOpen)
+                {
+                    EnumOpen = true
+                    selectedEnum = map.key
+                    var list = map.key.defaultValue as List<String>
+                    var buttons: MutableMap<ButtonAPI, String> = HashMap()
+
+                    enumPanel = panel!!.createUIElement(OptionsInnerPannel!!.position.width, pH * 0.2f, false)
+                    enumPanel!!.position.inTL(pW * 0.670f, pH * 0.35f)
+                    panel!!.addUIElement(enumPanel)
+
+                    for (entry in list)
+                    {
+                        var enumButton = enumPanel!!.addAreaCheckbox("$entry", null,
+                            Misc.getHighlightColor(),
+                            Misc.getHighlightColor(),
+                            Misc.getHighlightColor(),
+                            300f,
+                            pH * 0.05f,
+                            0f)
+
+                        //enumButton!!.position.inTL(400f,spacing + pH * 0.045f)
+                        buttons.put(enumButton, entry)
+                    }
+                    EnumOptions.put(map.key, buttons)
+                }
+                else if (selectedEnum == map.key && !map.value.isChecked)
+                {
+                    panel!!.removeComponent(enumPanel)
+                    EnumOpen = false
+                }
+                else if (selectedEnum != map.key)
+                {
+                    map.value.isChecked = false
+                }
+            }
+            for (map in EnumOptions)
+            {
+                for (button in map.value)
+                {
+                    if (button.key.isChecked)
+                    {
+
+                        OptionEnumTextMap.get(map.key)!!.text = "Selected: ${button.value}"
+                        panel!!.removeComponent(enumPanel)
+                        EnumOpen = false
+                        EnumOptions.clear()
+
+                        for (but in OptionEnumMap)
+                        {
+                            but.value.isChecked = false
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fun ModsDisplay()
@@ -381,6 +457,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                         "Boolean" -> "Switches between True/False"
                         "Double" -> "Accepts decimal numbers, seperated by a dot (i.e 2.523)"
                         "String" -> "Accepts Letters, Numbers and Characters (i.e Text100*)"
+                        "Enum" -> "Press the button to select from a preset of options."
                         else -> ""
                     }
                     minMaxValue = when(data.fieldType)
@@ -450,6 +527,27 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     else booleanButton.isChecked = LunaSettings.getBoolean(data.modID, data.fieldID, false) ?: false
                     booleanButton.position.inTL(400f,spacing + pH * 0.045f)
                     OptionBooleanMap.put(data, booleanButton)
+                }
+                "Enum" ->
+                {
+                    var para1 = OptionsList!!.addPara("Selected: ", 0f)
+                    para1.position.inTL(400f ,spacing + pH * 0.025f)
+                    OptionEnumTextMap.put(data, para1)
+
+                    if (firstRun) para1.text = "Selected: " + LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
+                    else para1.text = "Selected: " + LunaSettings.getString(data.modID, data.fieldID, false).toString()
+
+                    var enumButton = OptionsList!!.addAreaCheckbox("Select", null,
+                        Misc.getBasePlayerColor(),
+                        Misc.getDarkPlayerColor(),
+                        Misc.getBrightPlayerColor(),
+                        300f,
+                        pH * 0.05f,
+                        0f)
+
+                    enumButton!!.position.inTL(400f,spacing + pH * 0.045f)
+                    OptionEnumMap.put(data, enumButton)
+
                 }
             }
 
@@ -553,6 +651,21 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 data.put(toSave.key.fieldID, toSave.value.isChecked)
             }
         }
+
+        for (toSave in OptionEnumTextMap)
+        {
+            if (toSave.key.newGame)
+            {
+                if (!newgame) continue
+                saveData.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
+            }
+            else
+            {
+                data.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
+            }
+        }
+
+
 
         data.save()
         LunaSettingsLoader.newGameSettings.put(selectedMod!!.id, saveData)

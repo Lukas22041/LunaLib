@@ -15,59 +15,143 @@ import org.lwjgl.util.vector.Vector2f
 class LunaMemory(id: String)
 {
     private var Id = id
+    private var Target: SectorEntityToken? = null
+
+    constructor(id: String, target: SectorEntityToken) : this(id)
+    {
+        Target = target
+    }
 
     fun set(value: Any?)
     {
-        Global.getSector().memoryWithoutUpdate.set("\$$Id", value)
+        if (Target != null)
+        {
+            Target!!.memoryWithoutUpdate.set("\$$Id", value)
+        }
+        else
+        {
+            Global.getSector().memoryWithoutUpdate.set("\$$Id", value)
+        }
     }
 
     fun get() : Any?
     {
-        return Global.getSector().memoryWithoutUpdate.get("\$$Id")
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.get("\$$Id")
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.get("\$$Id")
+        }
     }
 
     fun getInt() : Int?
     {
-        return Global.getSector().memoryWithoutUpdate.getInt("\$$Id")
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.getInt("\$$Id")
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.getInt("\$$Id")
+        }
     }
 
     fun getFloat() : Float?
     {
-        return Global.getSector().memoryWithoutUpdate.getFloat("\$$Id")
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.getFloat("\$$Id")
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.getFloat("\$$Id")
+        }
     }
 
-    fun getString() : String?
+    fun getString() : String
     {
-        return Global.getSector().memoryWithoutUpdate.getString("\$$Id")
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.getString("\$$Id")
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.getString("\$$Id")
+        }
     }
 
     fun getBoolean() : Boolean?
     {
-        return Global.getSector().memoryWithoutUpdate.getBoolean("\$$Id")
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.getBoolean("\$$Id")
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.getBoolean("\$$Id")
+        }
     }
 
     fun getLong() : Long?
     {
-        return Global.getSector().memoryWithoutUpdate.getLong("\$$Id")
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.getLong("\$$Id")
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.getLong("\$$Id")
+        }
     }
 
     fun getVector2f() : Vector2f?
     {
-        return Global.getSector().memoryWithoutUpdate.getVector2f("\$$Id")
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.getVector2f("\$$Id")
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.getVector2f("\$$Id")
+        }
     }
 
     fun getFleet() : CampaignFleetAPI?
     {
-        return Global.getSector().memoryWithoutUpdate.getFleet("\$$Id")
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.getFleet("\$$Id")
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.getFleet("\$$Id")
+        }
     }
 
     fun getEntity() : SectorEntityToken?
     {
-        return Global.getSector().memoryWithoutUpdate.getEntity("\$$Id")
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.getEntity("\$$Id")
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.getEntity("\$$Id")
+        }
     }
 
     fun expire(days: Float)
     {
-        Global.getSector().memoryWithoutUpdate.expire("\$$Id", days)
+        if (Target != null)
+        {
+            Target!!.memoryWithoutUpdate.expire("\$$Id", days)
+        }
+        else
+        {
+            Global.getSector().memoryWithoutUpdate.expire("\$$Id", days)
+
+        }
     }
 }
