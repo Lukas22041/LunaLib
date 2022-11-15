@@ -167,6 +167,10 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 {
                     map.value.text = map.key.defaultValue.toString()
                 }
+                for (map in OptionEnumTextMap)
+                {
+                    map.value.text = (map.key.defaultValue as List<String>).get(0)
+                }
                 resetButton!!.isChecked = false
             }
         }
@@ -202,7 +206,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             var value = 0
             try {
                 value = modifiedString.toInt()
-                value = MathUtils.clamp(value, map.key.minValue.toInt(), map.key.maxValue.toInt())
+                value = MathUtils.clamp(value, 0, map.key.maxValue.toInt())
                 modifiedString = "$value"
             }
             catch (e: Throwable)
@@ -217,7 +221,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             var modifiedString = map.value.text.replace("[^0-9.]".toRegex(), "")
 
             try {
-                if (modifiedString.toDouble() !in map.key.minValue..map.key.maxValue)
+                if (modifiedString.toDouble() !in 0.0..map.key.maxValue)
                 {
                     modifiedString = modifiedString.substring(0, modifiedString.length - 1) + "" + modifiedString.substring(modifiedString.length)
                 }
@@ -462,8 +466,8 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     }
                     minMaxValue = when(data.fieldType)
                     {
-                        "Int" -> "\nMin: ${data.minValue.toInt()}   Max: ${data.maxValue.toInt()}"
-                        "Double" -> "\nMin: ${data.minValue}   Max: ${data.maxValue}"
+                        "Int" -> "\nMin: 0   Max: ${data.maxValue.toInt()}"
+                        "Double" -> "\nMin: 0.0   Max: ${data.maxValue}"
                         else -> ""
                     }
 
