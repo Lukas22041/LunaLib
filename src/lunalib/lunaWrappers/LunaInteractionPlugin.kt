@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.*
 import com.fs.starfarer.api.campaign.rules.MemoryAPI
 import com.fs.starfarer.api.combat.BattleCreationContext
+import com.fs.starfarer.api.combat.EngagementResultAPI
 import com.fs.starfarer.api.impl.campaign.FleetEncounterContext
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl.FIDConfig
@@ -47,10 +48,6 @@ abstract class LunaInteractionPlugin() : InteractionDialogPlugin
     var negativeColor = Misc.getNegativeHighlightColor()
     var textColor = Misc.getTextColor()
 
-    // Some utility variables that wont change during a dialog
-    var sector = Global.getSector()
-    var playerFleet = Global.getSector().playerFleet
-
     //Innitiates and executes the main dialog method
     final override fun init(dialog: InteractionDialogAPI) {
         this.dialog = dialog
@@ -69,6 +66,9 @@ abstract class LunaInteractionPlugin() : InteractionDialogPlugin
         start()
     }
 
+    /**
+     *Gets called after initialisation
+     */
     abstract fun start()
 
     override fun optionSelected(optionText: String?, optionData: Any?)
@@ -127,17 +127,28 @@ abstract class LunaInteractionPlugin() : InteractionDialogPlugin
 
      /**
      *Creates a visual cost panel for commodities. The return value can be used to disable/enable options. Does not handle removing the commodities.
-     * @param Map of CommodityIDs and the cost for them.
+     * @param commodities map of CommodityIDs and the cost for them.
+      *@param border creates a border around the cost, not recommended for anything including more than 3 commodities.
      * @return returns true if the player meets the cost
      */
-    final fun createCostPanel(commodities: Map<String, Int>) : Boolean
+    final fun createCostPanel(commodities: Map<String, Int>, border: Boolean) : Boolean
     {
-        var cost: ResourceCostPanelAPI = textPanel.addCostPanel("Cost", 67f, Misc.getBasePlayerColor(), Color.DARK_GRAY)
+
+        var cost: ResourceCostPanelAPI = textPanel.addCostPanel("", 67f, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor())
         var cargo = Global.getSector().playerFleet.cargo
 
+        var slots = 0
         var metConditions = true
         for (commodity in commodities)
         {
+            if (slots > 2)
+            {
+                cost = textPanel.addCostPanel("", 67f, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor())
+                slots = 0
+            }
+            slots++
+
+
             val available: Int = cargo.getCommodityQuantity(commodity.key).toInt()
             var color: Color? = Misc.getPositiveHighlightColor()
 
@@ -147,17 +158,17 @@ abstract class LunaInteractionPlugin() : InteractionDialogPlugin
             }
 
             cost.setNumberOnlyMode(true);
-            cost.setAlignment(Alignment.LMID);
+            cost.alignment = Alignment.MID
+            cost.isWithBorder = border
 
-            cost.addCost(commodity.key, "" + commodity.value + " (" + available + " available)", color);
+            cost.addCost(commodity.key, "" + commodity.value + " (" + available + ")", color);
+            cost.update()
+
         }
 
-        cost.update()
 
         return metConditions
     }
-
-
 
     /**
      * Triggers defenders if $defenderFleet is set to a fleet in the memory of the target.
@@ -187,8 +198,8 @@ abstract class LunaInteractionPlugin() : InteractionDialogPlugin
         config.pullInStations = false
         config.lootCredits = false
 
-        config.firstTimeEngageOptionText = "Engage the chiral defenses"
-        config.afterFirstTimeEngageOptionText = "Re-engage the chiral defenses"
+        config.firstTimeEngageOptionText = "Engage the defenses"
+        config.afterFirstTimeEngageOptionText = "Re-engage the defenses"
         config.noSalvageLeaveOptionText = "Continue"
 
         config.dismissOnLeave = false
@@ -214,10 +225,32 @@ abstract class LunaInteractionPlugin() : InteractionDialogPlugin
     {
 
     }
+
+    override fun optionMousedOver(optionText: String?, optionData: Any?) {
+
+    }
+
+    override fun advance(amount: Float) {
+
+    }
+
+    override fun backFromEngagement(battleResult: EngagementResultAPI?) {
+
+    }
+
+    override fun getContext(): Any? {
+        return null
+    }
+
+    override fun getMemoryMap(): MutableMap<String, MemoryAPI>? {
+        return null
+    }
+
+
 }
 
-//Needed setting up defense fleets dialogs.
-private class FIDOverride(defenders: CampaignFleetAPI, dialog: InteractionDialogAPI, plugin: FleetInteractionDialogPluginImpl, originalPlugin: InteractionDialogPlugin, LunaInt: LunaInteractionPlugin) : FleetInteractionDialogPluginImpl.BaseFIDDelegate()
+
+class FIDOverride(defenders: CampaignFleetAPI, dialog: InteractionDialogAPI, plugin: FleetInteractionDialogPluginImpl, originalPlugin: InteractionDialogPlugin, LunaInt: LunaInteractionPlugin) : FleetInteractionDialogPluginImpl.BaseFIDDelegate()
 {
 
     var defenders: CampaignFleetAPI = defenders

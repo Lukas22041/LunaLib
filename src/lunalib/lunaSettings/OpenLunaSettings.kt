@@ -21,7 +21,6 @@ class OpenSettingsPanelInteraction : InteractionDialogPlugin
         dialog!!.hideVisualPanel();
         dialog.hideTextPanel();
 
-        //this is where the size of the panel is set, automatically centered
         dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.9f,
             Global.getSettings().screenHeight * 0.9f,
             OpenSettingsPanelDelegate(LunaSettingsUI(false), dialog))
@@ -52,19 +51,17 @@ class OpenSettingsPanelInteraction : InteractionDialogPlugin
     }
 }
 
-
 class OpenSettingsPanelDelegate(missionPanel: LunaSettingsUI?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
 {
 
-    protected var callbacks: DialogCallbacks? = null
-    protected var plugin: LunaSettingsUI? = null
-    protected var dialog: InteractionDialogAPI? = null
+    private var callbacks: DialogCallbacks? = null
+    private var plugin: LunaSettingsUI? = null
+    private var dialog: InteractionDialogAPI? = null
 
     init {
         this.plugin = missionPanel;
         this.dialog = dialog;
     }
-
 
     override fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?) {
         this.callbacks = callbacks;

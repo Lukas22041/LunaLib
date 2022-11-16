@@ -1,4 +1,4 @@
-package lunalib.lunaWrappers
+package lunalib.lunaUtil
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CampaignFleetAPI

@@ -17,11 +17,10 @@ import org.lwjgl.opengl.GL11
 import java.awt.Button
 import java.awt.Color
 
-
+//Probably the worst code ive ever written, it works, but at some point it should probably be rewritten.
+//Do not use this as an example for your own UI.
 class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 {
-
-
     private var dialog: InteractionDialogAPI? = null
     private var callbacks: DialogCallbacks? = null
     private var panel: CustomPanelAPI? = null
@@ -31,36 +30,35 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     private var pH = 0
     private var tooltip: TooltipMakerAPI? = null
 
-    var selectedMod: ModSpecAPI? = null
-
+    private var selectedMod: ModSpecAPI? = null
 
     //Left Side Panel
-    var ModsInnerPannel: CustomPanelAPI? = null
-    var ModsList: TooltipMakerAPI? = null
-    var modButtons: HashMap<ButtonAPI, ModSpecAPI> = HashMap()
+    private var ModsInnerPannel: CustomPanelAPI? = null
+    private var ModsList: TooltipMakerAPI? = null
+    private var modButtons: HashMap<ButtonAPI, ModSpecAPI> = HashMap()
 
 
     //Right Side Panel
-    var OptionsInnerPannel: CustomPanelAPI? = null
-    var OptionsList: TooltipMakerAPI? = null
-    var saveButton: ButtonAPI? = null
-    var resetButton: ButtonAPI? = null
-    var buttonPanel: TooltipMakerAPI? = null
+    private var OptionsInnerPannel: CustomPanelAPI? = null
+    private var OptionsList: TooltipMakerAPI? = null
+    private var saveButton: ButtonAPI? = null
+    private var resetButton: ButtonAPI? = null
+    private var buttonPanel: TooltipMakerAPI? = null
 
     //Saves data
-    var OptionStringMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
-    var OptionIntMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
-    var OptionDoubleMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
-    var OptionBooleanMap: MutableMap<LunaSettingsData, ButtonAPI> = HashMap()
+    private var OptionStringMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
+    private var OptionIntMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
+    private var OptionDoubleMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
+    private var OptionBooleanMap: MutableMap<LunaSettingsData, ButtonAPI> = HashMap()
 
-    var OptionEnumMap: MutableMap<LunaSettingsData,ButtonAPI> = HashMap()
-    var OptionEnumTextMap: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
-    var EnumOptions: MutableMap<LunaSettingsData, MutableMap<ButtonAPI, String>> = HashMap()
-    var selectedEnum: LunaSettingsData? = null
-    var EnumOpen = false
-    var enumPanel: TooltipMakerAPI? = null
+    private var OptionEnumMap: MutableMap<LunaSettingsData,ButtonAPI> = HashMap()
+    private var OptionEnumTextMap: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
+    private var EnumOptions: MutableMap<LunaSettingsData, MutableMap<ButtonAPI, String>> = HashMap()
+    private var selectedEnum: LunaSettingsData? = null
+    private var EnumOpen = false
+    private var enumPanel: TooltipMakerAPI? = null
 
-    var newgame = newGame
+    private var newgame = newGame
 
     init {
 
@@ -82,7 +80,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         reset()
     }
 
-    fun reset() {
+    private fun reset() {
         //clears the ui panel
         if (tooltip != null) {
             panel!!.removeComponent(tooltip)
@@ -97,7 +95,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         optionsDisplay()
     }
 
-    fun resetOption()
+    private fun resetOption()
     {
         panel!!.removeComponent(ModsList)
         panel!!.removeComponent(ModsInnerPannel)
@@ -169,7 +167,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 }
                 for (map in OptionEnumTextMap)
                 {
-                    map.value.text = (map.key.defaultValue as List<String>).get(0)
+                    map.value.text = "Selected: " + (map.key.defaultValue as List<String>).get(0)
                 }
                 resetButton!!.isChecked = false
             }
@@ -297,7 +295,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         }
     }
 
-    fun ModsDisplay()
+    private fun ModsDisplay()
     {
         ModsInnerPannel = panel!!.createCustomPanel(pW / 4f , pH.toFloat(), null)
         ModsInnerPannel!!.position.setLocation(0f,0f).inTL(0f, 0f);
@@ -352,7 +350,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         panel!!.addComponent(ModsInnerPannel)
     }
 
-    fun optionsDisplay()
+    private fun optionsDisplay()
     {
         OptionsInnerPannel = panel!!.createCustomPanel(pW * 0.7f , pH.toFloat() * 0.9f, null)
         OptionsInnerPannel!!.position.setLocation(0f, 0f).inTL(pW * 0.273f, pH * 0.05f)
@@ -400,7 +398,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         panel!!.addComponent(OptionsInnerPannel)
     }
 
-    fun addOptions(SettingsData: List<LunaSettingsData>, firstRun: Boolean, spacing: Float) : Float
+    private fun addOptions(SettingsData: List<LunaSettingsData>, firstRun: Boolean, spacing: Float) : Float
     {
         var spacing = spacing
         if (firstRun)
@@ -560,7 +558,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         return spacing
     }
 
-    fun saveData()
+    private fun saveData()
     {
         var data = JSONUtils.loadCommonJSON("LunaSettings/${selectedMod!!.id}.json", "data/config/LunaSettingsDefault.default");
         var saveData: MutableMap<String, Any> = HashMap()

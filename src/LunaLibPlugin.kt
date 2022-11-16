@@ -1,9 +1,7 @@
 import lunalib.lunaSettings.LunaSettingsHotkeyListener
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
-import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsLoader
-import lunalib.lunaWrappers.LunaMemory
 
 class LunaLibPlugin : BaseModPlugin()
 {
@@ -17,9 +15,7 @@ class LunaLibPlugin : BaseModPlugin()
     {
         Global.getSector().addTransientScript(LunaSettingsHotkeyListener())
 
-        var test = IntelMessage()
-        test.setIntelMessage()
-        test.sendIntelMessage()
+
     }
 
     override fun onApplicationLoad()

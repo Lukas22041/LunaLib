@@ -3,6 +3,8 @@ package lunalib.lunaSettings
 import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CoreUITabId
+import lunalib.lunaUtil.LunaMisc
+import lunalib.lunaUtil.LunaTimer
 import org.lwjgl.input.Keyboard
 
 class LunaSettingsHotkeyListener : EveryFrameScript
@@ -12,10 +14,17 @@ class LunaSettingsHotkeyListener : EveryFrameScript
     var keyCooldown = 0
     var keyCooldownMax = 50
 
+    var timer = LunaTimer()
+
     override fun advance(amount: Float) {
 
         val paused = Global.getSector().campaignUI.currentCoreTab == CoreUITabId.FLEET || Global.getSector().campaignUI.currentCoreTab == null
                 && !Global.getSector().campaignUI.isShowingDialog && !Global.getSector().campaignUI.isShowingMenu
+
+        var test = timer.getDays()
+        var test2 = timer.getSeconds()
+        var test3 = 0
+
 
         if (keyPressed)
         {
@@ -35,6 +44,9 @@ class LunaSettingsHotkeyListener : EveryFrameScript
         {
             var ui = Global.getSector().campaignUI
             ui.showInteractionDialog(OpenSettingsPanelInteraction(), Global.getSector().playerFleet)
+
+            /*  var ui = Global.getSector().campaignUI
+            ui.showInteractionDialog(Example(), Global.getSector().playerFleet)*/
 
             keyPressed = true
         }

@@ -5,9 +5,9 @@ lunalib,luna_example_newgame_field,Example Boolean,Boolean,true,"An active Butto
 ,,,,,,,,
 ,,,,,,,,
 ,,,,,,,,
-lunalib,luna_exampleText,Example Text Field,Text,"Text Fields can be used to give further context on settings.
-Settings are always ordered from top to bottom of the .CSV, with the exception of
-newGame and non-newGame values being seperated from eachother.",,false,,
+lunalib,luna_exampleText,Example Text Field,Text,"Any value in this config is merely an example for Modders. 
+None of the Settings here do anything.
+",,false,,
 lunalib,luna_exampleString,Example String,String,some string,"Strings will accept any characters put in, with no filtering.",false,,
 lunalib,luna_exampleInt,Example Int,Int,50,"Int Fields will only accept whole Numbers, and block any other character from being entered.
 Using the maxValue config, you can change the range of values that can be entered.",false,20000,
