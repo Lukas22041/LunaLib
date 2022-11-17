@@ -3,6 +3,7 @@ package lunalib.lunaSettings
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CustomCampaignEntityPlugin
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI
+import data.scripts.util.MagicSettings
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
 import org.apache.log4j.RollingFileAppender

@@ -493,7 +493,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 "Int" ->
                 {
                     var para1 = OptionsList!!.addPara("", 0f)
-                    para1.position.inTL(400f ,spacing + pH * 0.030f)
+                    para1.position.inTL(pW / 3f ,spacing + pH * 0.030f)
                     var field = OptionsList!!.addTextField(300f, 0f)
 
                     if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
@@ -504,7 +504,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 "Double" ->
                 {
                     var para1 = OptionsList!!.addPara("", 0f)
-                    para1.position.inTL(400f ,spacing + pH * 0.030f)
+                    para1.position.inTL(pW / 3f ,spacing + pH * 0.030f)
                     var field = OptionsList!!.addTextField(300f, 0f)
                     if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
                     else field.text = LunaSettings.getDouble(data.modID, data.fieldID, false).toString()
@@ -513,7 +513,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 "String" ->
                 {
                     var para1 = OptionsList!!.addPara("", 0f)
-                    para1.position.inTL(400f ,spacing + pH * 0.030f)
+                    para1.position.inTL(pW / 3f ,spacing + pH * 0.030f)
                     var field = OptionsList!!.addTextField(300f, 0f)
                     if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
                     else field.text = LunaSettings.getString(data.modID, data.fieldID, false).toString()
@@ -530,13 +530,13 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                         0f)
                     if (firstRun) booleanButton.isChecked = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID) as Boolean
                     else booleanButton.isChecked = LunaSettings.getBoolean(data.modID, data.fieldID, false) ?: false
-                    booleanButton.position.inTL(400f,spacing + pH * 0.045f)
+                    booleanButton.position.inTL(pW / 3f,spacing + pH * 0.045f)
                     OptionBooleanMap.put(data, booleanButton)
                 }
                 "Enum" ->
                 {
                     var para1 = OptionsList!!.addPara("Selected: ", 0f)
-                    para1.position.inTL(400f ,spacing + pH * 0.025f)
+                    para1.position.inTL(pW / 3f ,spacing + pH * 0.025f)
                     OptionEnumTextMap.put(data, para1)
 
                     if (firstRun) para1.text = "Selected: " + LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
@@ -550,7 +550,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                         pH * 0.05f,
                         0f)
 
-                    enumButton!!.position.inTL(400f,spacing + pH * 0.045f)
+                    enumButton!!.position.inTL(pW / 3f,spacing + pH * 0.045f)
                     OptionEnumMap.put(data, enumButton)
 
                 }
