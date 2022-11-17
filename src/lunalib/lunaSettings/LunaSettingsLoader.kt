@@ -1,7 +1,12 @@
 package lunalib.lunaSettings
 
 import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.campaign.CustomCampaignEntityPlugin
+import com.fs.starfarer.api.campaign.CustomEntitySpecAPI
 import org.apache.log4j.Level
+import org.apache.log4j.Logger
+import org.apache.log4j.RollingFileAppender
+import org.apache.log4j.spi.LoggingEvent
 import org.json.JSONArray
 import org.lazywizard.lazylib.JSONUtils
 
@@ -18,7 +23,6 @@ data class LunaSettingsData(
 
 internal object LunaSettingsLoader
 {
-    private val log = Global.getLogger(LunaSettingsLoader::class.java)
 
     @JvmStatic
     var Settings: MutableMap<String, JSONUtils.CommonDataJSONObject> = HashMap()
@@ -28,6 +32,8 @@ internal object LunaSettingsLoader
 
     @JvmStatic
     var SettingsData: MutableList<LunaSettingsData> = ArrayList()
+
+    private val log = Global.getLogger(LunaSettingsLoader::class.java)
 
     init {
         log.level = Level.ALL
@@ -88,7 +94,6 @@ internal object LunaSettingsLoader
                 log.debug("LunaSettings: No newGame value for for $id, setting to false")
             }
 
-
             try {
                 maxValue = rows.getString("maxValue").toDouble()
             }
@@ -97,7 +102,6 @@ internal object LunaSettingsLoader
                 maxValue = 100.0
                 log.debug("LunaSettings: No max value for for $id, setting to 100")
             }
-
 
             SettingsData.add(LunaSettingsData(modID, id, name, type, tooltip, default, newGame, maxValue, tags))
             log.debug("LunaSettings: Loaded default settings data: $id, from $modID")

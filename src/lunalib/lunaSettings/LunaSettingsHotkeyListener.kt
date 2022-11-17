@@ -3,7 +3,6 @@ package lunalib.lunaSettings
 import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CoreUITabId
-import lunalib.lunaUtil.LunaMisc
 import lunalib.lunaUtil.LunaTimer
 import org.lwjgl.input.Keyboard
 
@@ -40,8 +39,18 @@ class LunaSettingsHotkeyListener : EveryFrameScript
             return
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_F2))
+        var key: Int = when(LunaSettings.getString("lunalib", "luna_SettingsHotkey", false))
         {
+            "F1" -> Keyboard.KEY_F1
+            "F2" -> Keyboard.KEY_F2
+            "F3" -> Keyboard.KEY_F3
+            "F4" -> Keyboard.KEY_F4
+            else -> Keyboard.KEY_F2
+        }
+
+        if (Keyboard.isKeyDown(key))
+        {
+
             var ui = Global.getSector().campaignUI
             ui.showInteractionDialog(OpenSettingsPanelInteraction(), Global.getSector().playerFleet)
 

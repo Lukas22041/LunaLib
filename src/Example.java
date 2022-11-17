@@ -1,24 +1,17 @@
-import com.fs.starfarer.api.Global;
-import lunalib.lunaUtil.LunaTimer;
+import lunalib.lunaUtil.LunaUtils;
+import java.awt.*;
 
 public class Example
 {
-
-    //Creates a new timer, and sets its timestamp to the current Campaign time.
-    LunaTimer timer = new LunaTimer();
-
     public void exampleMethod()
     {
-        //Gets time in ingame days.
-        Float daysSinceTimerStarted = timer.getDays();
+        float saturation = 1f;
+        int alpha = 255;
 
-        //Gets time in seconds, by converting days to the average time a day takes.
-        Float secondsSinceTimerStarted = timer.getSeconds();
+        //Generates a random color with the saturation provided.
+        Color randomColor = LunaUtils.randomColor(saturation, alpha);
 
-        //Assigns the current time as a new timestamp
-        timer.reset();
-
-        //Assigns a custom timestamp to the timer.
-        timer.assign(Global.getSector().getClock().getTimestamp());
+        //Creates a small notification in the bottom left of the UI.
+        LunaUtils.createIntelMessage("Title", "Message");
     }
 }

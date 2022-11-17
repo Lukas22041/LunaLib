@@ -1,7 +1,12 @@
-import lunalib.lunaSettings.LunaSettingsHotkeyListener
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.impl.campaign.ids.Conditions
+import com.fs.starfarer.api.impl.campaign.ids.Tags
+import lunalib.lunaSettings.LunaSettingsHotkeyListener
 import lunalib.lunaSettings.LunaSettingsLoader
+import lunalib.lunaUtil.*
+import java.awt.Color
+
 
 class LunaLibPlugin : BaseModPlugin()
 {
@@ -11,11 +16,13 @@ class LunaLibPlugin : BaseModPlugin()
         LunaSettingsLoader.loadSaveSettingDefaults()
     }
 
+    override fun onNewGameAfterProcGen() {
+
+    }
+
     override fun onGameLoad(newGame: Boolean)
     {
         Global.getSector().addTransientScript(LunaSettingsHotkeyListener())
-
-
     }
 
     override fun onApplicationLoad()

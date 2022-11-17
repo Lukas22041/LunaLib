@@ -242,6 +242,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     EnumOpen = true
                     selectedEnum = map.key
                     var list = map.key.defaultValue as List<String>
+                    list = list.sorted()
                     var buttons: MutableMap<ButtonAPI, String> = HashMap()
 
                     enumPanel = panel!!.createUIElement(OptionsInnerPannel!!.position.width, pH * 0.2f, false)

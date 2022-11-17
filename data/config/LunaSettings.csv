@@ -1,14 +1,12 @@
 modID,fieldID,fieldName,fieldType,defaultValue,fieldTooltip,newGame,maxValue,tags
-lunalib,luna_example_newgame,,Text,"Any value in this config is merely an example for Modders. 
-None of the Settings here do anything.",,true,,
-lunalib,luna_example_newgame_field,Example Boolean,Boolean,true,"An active Button sets to true, an inactive button sets to false",true,,
+lunalib,luna_SettingsHotkey,Settings Hotkey,Enum,"F2, F1, F3, F4",Changes the hotkey used to open this screen in the campaign.,false,,
 ,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-lunalib,luna_exampleText,Example Text Field,Text,"Any value in this config is merely an example for Modders. 
+lunalib,luna_emptyField,Example Text Field,Text,,,false,,
+lunalib,luna_exampleText,Example Text Field,Text,"Any value below is merely an example for Modders. 
 None of the Settings here do anything.
 ",,false,,
 lunalib,luna_exampleString,Example String,String,some string,"Strings will accept any characters put in, with no filtering.",false,,
+lunalib,luna_exampleBoolean,Example Boolean,Boolean,true,"An active Button sets to true, an inactive button sets to false",false,,
 lunalib,luna_exampleInt,Example Int,Int,50,"Int Fields will only accept whole Numbers, and block any other character from being entered.
 Using the maxValue config, you can change the range of values that can be entered.",false,20000,
 lunalib,luna_exampleDouble,Example Double,Double,1.5,"Doubles allow only numbers and a single decimal dot (.) 
