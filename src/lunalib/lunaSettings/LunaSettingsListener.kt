@@ -2,7 +2,7 @@ package lunalib.lunaSettings
 
 import com.fs.starfarer.api.EveryFrameScript
 
-interface LunaSettingsListener : EveryFrameScript {
+interface LunaSettingsListener {
     abstract fun settingsChanged()
 }
 

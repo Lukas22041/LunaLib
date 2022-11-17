@@ -18,7 +18,7 @@ class LunaSettingsHotkeyListener : LunaSettingsListener, EveryFrameScript
     var hotkey = LunaSettings.getString("lunalib", "luna_SettingsHotkey", false)
 
     init {
-        Global.getSector().addTransientScript(this)
+        Global.getSector().listenerManager.addListener(this, true)
     }
 
     override fun advance(amount: Float) {

@@ -678,21 +678,10 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
     private fun callSettingsChangedListener()
     {
-        var listeners = Global.getSector().scripts
+        var listeners = Global.getSector().listenerManager.getListeners(LunaSettingsListener::class.java)
         for (listener in listeners)
         {
-            if (listener is LunaSettingsListener)
-            {
-                listener.settingsChanged()
-            }
-        }
-        var transientListeners = Global.getSector().transientScripts
-        for (listener in transientListeners)
-        {
-            if (listener is LunaSettingsListener)
-            {
-                listener.settingsChanged()
-            }
+            listener.settingsChanged()
         }
     }
 
