@@ -10,10 +10,8 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel
 import com.fs.starfarer.api.loading.FighterWingSpecAPI
 import com.fs.starfarer.api.loading.HullModSpecAPI
-import com.fs.starfarer.api.loading.IndustrySpecAPI
 import com.fs.starfarer.api.loading.WeaponSpecAPI
 import com.fs.starfarer.api.util.Misc
-import com.fs.starfarer.combat.entities.terrain.Planet
 import java.awt.Color
 import kotlin.random.Random
 
@@ -114,9 +112,22 @@ object LunaUtils
 
     }
 
-    /**Class providing utilities for Entity data.*/
-    object EntityUtils
+    /**Class providing utilities for Sector data.*/
+    object SectorUtils
     {
+
+        /**
+         * Returns all Factions that own a market in the sector.
+         */
+        @JvmStatic
+        fun getFactionsWithMarkets() : List<FactionAPI>
+        {
+            var factions: MutableList<FactionAPI> = ArrayList()
+            Global.getSector().allFactions.forEach { faction -> Global.getSector().economy.marketsCopy.forEach { market -> if (market.factionId == faction.id) factions.add(faction)} }
+            return factions.distinct()
+         }
+
+
         /**
          * Returns all Planets of a certain type ID (i.e "toxic").
          * @param typeID the id of the type to look for.
@@ -127,6 +138,7 @@ object LunaUtils
             var planets: MutableList<PlanetAPI> = ArrayList()
             Global.getSector().starSystems.forEach {  planets.addAll(it.planets.filter { it.spec.planetType == typeID })}
             return planets
+            LunaUtils.SectorUtils
         }
 
         /**

@@ -7,7 +7,6 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI
 import com.fs.starfarer.api.loading.FighterWingSpecAPI
 import com.fs.starfarer.api.loading.HullModSpecAPI
 import com.fs.starfarer.api.loading.WeaponSpecAPI
-import lunalib.lunaUtil.LunaUtils
 
 
 //File for all kinds of Kotlin Extension Functions. This is only useable in Kotlin, and not Java.
@@ -51,19 +50,27 @@ fun FactionAPI.getKnownFightersSpecs() : List<FighterWingSpecAPI> = LunaUtils.Fa
 
 //SectorAPI Extensions
 
+
+/** (LunaLib Extension Function)
+ *
+ * Returns a list of all Factions that own a market in the sector.
+ */
+fun SectorAPI.getFactionsWithMarkets() : List<FactionAPI> = LunaUtils.SectorUtils.getFactionsWithMarkets()
+
+
 /** (LunaLib Extension Function)
  *
  * Returns all Planets of a certain type ID (i.e "toxic").
  * @param typeID the id of the type to look for.
  */
-fun SectorAPI.getPlanetsWithType(typeID: String) : List<PlanetAPI> = LunaUtils.EntityUtils.getPlanetsWithType(typeID)
+fun SectorAPI.getPlanetsWithType(typeID: String) : List<PlanetAPI> = LunaUtils.SectorUtils.getPlanetsWithType(typeID)
 
 /**(LunaLib Extension Function)
  *
  * Returns all Planets that have the input condition.
  * @param conditionID the id of the condition to look for.
  */
-fun SectorAPI.getPlanetsWithCondition(conditionID : String): List<PlanetAPI> = LunaUtils.EntityUtils.getPlanetsWithCondition(conditionID)
+fun SectorAPI.getPlanetsWithCondition(conditionID : String): List<PlanetAPI> = LunaUtils.SectorUtils.getPlanetsWithCondition(conditionID)
 
 
 /** (LunaLib Extension Function)
@@ -71,7 +78,7 @@ fun SectorAPI.getPlanetsWithCondition(conditionID : String): List<PlanetAPI> = L
  * Returns all Custom Entities of a certain type ID (i.e "comm_relay").
  * @param typeID the id of the type to look for.
  */
-fun SectorAPI.getCustomEntitiesWithType(typeID: String) : List<SectorEntityToken> = LunaUtils.EntityUtils.getCustomEntitiesWithType(typeID)
+fun SectorAPI.getCustomEntitiesWithType(typeID: String) : List<SectorEntityToken> = LunaUtils.SectorUtils.getCustomEntitiesWithType(typeID)
 
 
 /** (LunaLib Extension Function)
@@ -79,7 +86,7 @@ fun SectorAPI.getCustomEntitiesWithType(typeID: String) : List<SectorEntityToken
  * Returns all starsystems that include that input tag.
  * @param tag the id of the type to look for.
  */
-fun SectorAPI.getSystemsWithTag(tag: String) : List<StarSystemAPI> =  LunaUtils.EntityUtils.getSystemsWithTag(tag)
+fun SectorAPI.getSystemsWithTag(tag: String) : List<StarSystemAPI> =  LunaUtils.SectorUtils.getSystemsWithTag(tag)
 
 
 

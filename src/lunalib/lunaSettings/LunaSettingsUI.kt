@@ -2,9 +2,11 @@ package lunalib.lunaSettings
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
+import com.fs.starfarer.api.campaign.CampaignEventListener
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate.DialogCallbacks
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
+import com.fs.starfarer.api.campaign.listeners.ListenerUtil
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipCreator
@@ -668,11 +670,30 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             }
         }
 
-
-
         data.save()
         LunaSettingsLoader.newGameSettings.put(selectedMod!!.id, saveData)
         LunaSettingsLoader.Settings.put(selectedMod!!.id, data)
+        callSettingsChangedListener()
+    }
+
+    private fun callSettingsChangedListener()
+    {
+        var listeners = Global.getSector().scripts
+        for (listener in listeners)
+        {
+            if (listener is LunaSettingsListener)
+            {
+                listener.settingsChanged()
+            }
+        }
+        var transientListeners = Global.getSector().transientScripts
+        for (listener in transientListeners)
+        {
+            if (listener is LunaSettingsListener)
+            {
+                listener.settingsChanged()
+            }
+        }
     }
 
     override fun render(alphaMult: Float)

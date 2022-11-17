@@ -6,7 +6,7 @@ import com.fs.starfarer.api.campaign.CoreUITabId
 import lunalib.lunaUtil.LunaTimer
 import org.lwjgl.input.Keyboard
 
-class LunaSettingsHotkeyListener : EveryFrameScript
+class LunaSettingsHotkeyListener : LunaSettingsListener, EveryFrameScript
 {
 
     var keyPressed = false
@@ -15,14 +15,16 @@ class LunaSettingsHotkeyListener : EveryFrameScript
 
     var timer = LunaTimer()
 
+    var hotkey = LunaSettings.getString("lunalib", "luna_SettingsHotkey", false)
+
+    init {
+        Global.getSector().addTransientScript(this)
+    }
+
     override fun advance(amount: Float) {
 
         val paused = Global.getSector().campaignUI.currentCoreTab == CoreUITabId.FLEET || Global.getSector().campaignUI.currentCoreTab == null
                 && !Global.getSector().campaignUI.isShowingDialog && !Global.getSector().campaignUI.isShowingMenu
-
-        var test = timer.getDays()
-        var test2 = timer.getSeconds()
-        var test3 = 0
 
 
         if (keyPressed)
@@ -39,7 +41,7 @@ class LunaSettingsHotkeyListener : EveryFrameScript
             return
         }
 
-        var key: Int = when(LunaSettings.getString("lunalib", "luna_SettingsHotkey", false))
+        var key: Int = when(hotkey)
         {
             "F1" -> Keyboard.KEY_F1
             "F2" -> Keyboard.KEY_F2
@@ -69,4 +71,7 @@ class LunaSettingsHotkeyListener : EveryFrameScript
         return true
     }
 
+    override fun settingsChanged() {
+        hotkey = LunaSettings.getString("lunalib", "luna_SettingsHotkey", false)
+    }
 }

@@ -19,7 +19,7 @@ import org.lwjgl.input.Keyboard
 import java.awt.Color
 
 /**
- * Wrapper for InteractionDialogPlugin, adding some usefull methods and innitiating common variables by default.
+ * Wrapper for InteractionDialogPlugin, adding some useful methods and innitiating common variables by default.
  * @property dialog
  * @property textPanel
  * @property optionPanel
