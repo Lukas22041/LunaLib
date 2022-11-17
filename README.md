@@ -12,4 +12,4 @@ The Library itself is fully written in Kotlin.
 
 ## Credits
 **SpeedRacer, President Matt Damon:** Provided me with help for the Custom UI Screens.  
-**Wisp:** Generaly very helpful, helped with getting to know Kotlin. LunaMemory is inspired by his Memory Delegates.
+**Wisp:** Gave lots of feedback, Provided a good selection of Extension Functions. LunaMemory is inspired by his Memory Delegates. 
