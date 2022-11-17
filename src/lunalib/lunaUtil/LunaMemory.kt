@@ -17,9 +17,31 @@ class LunaMemory(id: String)
     private var Id = id
     private var Target: SectorEntityToken? = null
 
+    //Alternate Constructor that sets a default value for the ID when innitialised, if the memory is currently null.
+    constructor(id: String, default: Any?) : this(id)
+    {
+        if (Global.getSector().memoryWithoutUpdate.get("\$$Id") == null) Global.getSector().memoryWithoutUpdate.set("\$$Id", default)
+    }
+
+    //Alternate Constructor that causes memory to be set on a specific entities local memory
     constructor(id: String, target: SectorEntityToken) : this(id)
     {
         Target = target
+    }
+
+    //Alternate Constructor that causes memory to be set on a specific entities local memory, and sets a default value on to it if the ID returns null.
+    constructor(id: String, default: Any?, target: SectorEntityToken) : this(id)
+    {
+        Target = target
+
+        if (Target != null)
+        {
+            if (Global.getSector().memoryWithoutUpdate.get("\$$Id") == null) Target!!.memoryWithoutUpdate.set("\$$Id", default)
+        }
+        else
+        {
+            if (Global.getSector().memoryWithoutUpdate.get("\$$Id") == null) Global.getSector().memoryWithoutUpdate.set("\$$Id", default)
+        }
     }
 
     fun set(value: Any?)

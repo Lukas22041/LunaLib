@@ -673,7 +673,8 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         data.save()
         LunaSettingsLoader.newGameSettings.put(selectedMod!!.id, saveData)
         LunaSettingsLoader.Settings.put(selectedMod!!.id, data)
-        callSettingsChangedListener()
+
+        if (!newgame) callSettingsChangedListener()
     }
 
     private fun callSettingsChangedListener()

@@ -16,7 +16,8 @@ import com.fs.starfarer.api.loading.WeaponSpecAPI
 //i.e FactionAPI.getMarketsCopy()
 
 
-//Faction Extensions
+
+//FactionAPI Extensions
 
 /** (LunaLib Extension Function)
  *

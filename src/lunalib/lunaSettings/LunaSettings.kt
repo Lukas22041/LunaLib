@@ -5,6 +5,7 @@ import com.fs.starfarer.api.combat.ShipAPI
 import com.fs.starfarer.api.combat.ShipAPI.HullSize
 import org.apache.log4j.Level
 
+
 object LunaSettings
 {
 
@@ -32,7 +33,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getDouble(FieldID)
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type Double not found in JSONObject (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type Double not found in JSONObject (ModID: $ModID)")
                     return null
                 }
             }
@@ -42,7 +43,7 @@ object LunaSettings
                     return (Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as Double
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type Double not found in Memory (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type Double not found in Memory (ModID: $ModID)")
                     return null
                 }
             }
@@ -72,7 +73,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getDouble(FieldID).toFloat()
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type Float not found in JSONObject (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type Float not found in JSONObject (ModID: $ModID)")
                     return null
                 }
             }
@@ -82,7 +83,7 @@ object LunaSettings
                     return ((Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as Double).toFloat()
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type Float not found in Memory (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type Float not found in Memory (ModID: $ModID)")
                     return null
                 }
             }
@@ -112,7 +113,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getBoolean(FieldID)
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type Boolean not found in JSONObject (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type Boolean not found in JSONObject (ModID: $ModID)")
                     return null
                 }
             }
@@ -122,7 +123,7 @@ object LunaSettings
                     return (Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as Boolean
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type Boolean not found in Memory (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type Boolean not found in Memory (ModID: $ModID)")
                     return null
                 }
             }
@@ -152,7 +153,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getInt(FieldID)
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type Int not found in JSONObject (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type Int not found in JSONObject (ModID: $ModID)")
                     return null
                 }
             }
@@ -162,7 +163,7 @@ object LunaSettings
                     return (Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as Int
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type Int not found in Memory (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type Int not found in Memory (ModID: $ModID)")
                     return null
                 }
             }
@@ -192,7 +193,7 @@ object LunaSettings
                     return LunaSettingsLoader.Settings.get(ModID)!!.getString(FieldID)
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type String not found in JSONObject (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type String not found in JSONObject (ModID: $ModID)")
                     return null
                 }
             }
@@ -202,7 +203,7 @@ object LunaSettings
                     return (Global.getSector().memoryWithoutUpdate.get("\$LunaSettings") as MutableMap<String, Map<String, Any>>).get(ModID)!!.get(FieldID) as String
                 }
                 catch(e: Throwable) {
-                    log.error("LunaSettings: Value $FieldID of type String not found in Memory (Mod: $ModID)")
+                    log.error("LunaSettings: Value $FieldID of type String not found in Memory (ModID: $ModID)")
                     return null
                 }
             }

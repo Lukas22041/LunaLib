@@ -17,9 +17,6 @@ import kotlin.random.Random
 
 object LunaUtils
 {
-
-
-
     /**
      * Generates and returns a random color.
      * @param saturation Saturation of the color.

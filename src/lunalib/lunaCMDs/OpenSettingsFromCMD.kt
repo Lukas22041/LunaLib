@@ -8,13 +8,14 @@ import com.fs.starfarer.api.util.Misc
 import lunalib.lunaSettings.LunaSettingsUI
 import lunalib.lunaSettings.OpenSettingsPanelDelegate
 
+// Used to open the LunaSettingsUI from Rules.CSV
+// Not part of the other rules utilities.
 class OpenSettingsFromCMD : BaseCommandPlugin() {
     override fun execute(ruleId: String?, dialog: InteractionDialogAPI?, params: MutableList<Misc.Token>?, memoryMap: MutableMap<String, MemoryAPI>?): Boolean
     {
         dialog!!.hideVisualPanel();
         dialog.hideTextPanel();
 
-        //this is where the size of the panel is set, automatically centered
         dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.9f,
             Global.getSettings().screenHeight * 0.9f,
             OpenSettingsPanelDelegate(LunaSettingsUI(true), dialog))

@@ -94,6 +94,8 @@ internal object LunaSettingsLoader
                 log.debug("LunaSettings: No newGame value for for $id, setting to false")
             }
 
+            if (type == "Int" || type == "Double")
+
             try {
                 maxValue = rows.getString("maxValue").toDouble()
             }
@@ -154,16 +156,14 @@ internal object LunaSettingsLoader
 
         for (mod in mods)
         {
-            try {
                 var data = JSONUtils.loadCommonJSON("LunaSettings/${mod.id}.json", "data/config/LunaSettingsDefault.default");
-                if (data.length() == 0 || data == null) continue
+                if (data.length() == 0 || data == null)
+                {
+                    log.debug("LunaSettings: Could not find any mod settings for ${mod.id}, skipping.")
+                    continue
+                }
                 Settings.put(mod.id, data)
-                log.debug("Loaded Mod Settings for ${mod.id}")
-            }
-            catch (e: Throwable)
-            {
-                log.error("Could not find any mod settings for ${mod.id}")
-            }
+                log.debug("LunaSettings: Loaded Mod Settings for ${mod.id}")
         }
     }
 
