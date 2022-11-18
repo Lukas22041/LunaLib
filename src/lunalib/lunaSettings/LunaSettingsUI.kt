@@ -78,6 +78,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         pW = this.panel!!.position.width.toInt()
         pH = this.panel!!.position.height.toInt()
 
+
         //when something changes in the UI and it needs to be re-drawn, call this
         reset()
     }

@@ -14,5 +14,7 @@ import lunalib.lunaUtil.campaign.SystemUtils
 fun MemoryAPI.isNull(key: String) =
     this.get(key) == null
 
+/** (**LunaLib Extension Function**)*/
 fun MemoryAPI.isNotNull(key: String) =
     this.get(key) != null
+

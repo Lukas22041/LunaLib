@@ -17,12 +17,8 @@ object SystemUtils
      * @param typeID the id of the type to look for.
      */
     @JvmStatic
-    fun getPlanetsWithType(system: StarSystemAPI, typeID: String) : List<PlanetAPI>
-    {
-        var planets: MutableList<PlanetAPI> = ArrayList()
+    fun getPlanetsWithType(system: StarSystemAPI, typeID: String) : List<PlanetAPI> =
         system.planets.filter { it.spec.planetType == typeID }
-        return planets
-    }
 
     /**
      * Returns all Planets that have the input condition.
@@ -30,12 +26,8 @@ object SystemUtils
      * @param conditionID the id of the condition to look for.
      */
     @JvmStatic
-    fun getPlanetsWithCondition(system: StarSystemAPI, conditionID : String): List<PlanetAPI>
-    {
-        var planets: MutableList<PlanetAPI> = ArrayList()
+    fun getPlanetsWithCondition(system: StarSystemAPI, conditionID : String): List<PlanetAPI> =
         system.planets.filter { it.hasCondition(conditionID) }
-        return planets
-    }
 
     /**
      * Returns all Custom Entities of a certain type ID (i.e "comm_relay").
@@ -43,10 +35,6 @@ object SystemUtils
      * @param typeID the id of the type to look for.
      */
     @JvmStatic
-    fun getCustomEntitiesWithType(system: StarSystemAPI, typeID: String) : List<SectorEntityToken>
-    {
-        var entities: MutableList<SectorEntityToken> = ArrayList()
+    fun getCustomEntitiesWithType(system: StarSystemAPI, typeID: String) : List<SectorEntityToken> =
         system.customEntities.filter { it.customEntitySpec.id == typeID }
-        return entities
-    }
 }
