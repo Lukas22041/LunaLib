@@ -3,10 +3,7 @@ package lunalib.lunaSettings
 import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CoreUITabId
-import com.fs.starfarer.api.combat.BeamAPI
 import com.fs.starfarer.api.util.IntervalUtil
-import lunalib.lunaUtil.LunaTimer
-import lunalib.lunaUtil.LunaUtils
 import org.lwjgl.input.Keyboard
 
 class LunaSettingsHotkeyListener : LunaSettingsListener, EveryFrameScript

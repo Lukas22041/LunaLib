@@ -22,6 +22,11 @@ data class LunaSettingsData(
     val maxValue: Double,
     val tags: List<String>)
 
+/**
+Class that both loads and holds data for LunaSettings. Can not be used outside LunaLib.
+
+[LunaSettings on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/Integrating-LunaSettings)
+*/
 internal object LunaSettingsLoader
 {
 

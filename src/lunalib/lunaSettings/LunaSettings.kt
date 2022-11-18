@@ -5,7 +5,12 @@ import com.fs.starfarer.api.combat.ShipAPI
 import com.fs.starfarer.api.combat.ShipAPI.HullSize
 import org.apache.log4j.Level
 
+/**
+Class for getting LunaSettings stored data.
 
+[LunaSettings on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/Integrating-LunaSettings)
+
+*/
 object LunaSettings
 {
 
@@ -15,13 +20,16 @@ object LunaSettings
         log.level = Level.ALL
     }
 
+
     /**
-     * Gets a double from the LunaSettings.
-     * @param modID The ID of the mod the setting is from.
-     * @param fieldID the ID of the field you are trying to get the value from
-     * @param SaveSpecific if false, accesses a cross-save value, if set to true, accesses a save specific value.
-     * @return returns the requested value. Can be null if the mod or value was not found.
-    */
+    Method for getting a Double from LunaSettings.
+
+    [LunaSettings on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/Integrating-LunaSettings)
+
+    Requires the [ModID], the [FieldID] of the Setting and a [SaveSpecific] Boolean, that needs to be set to true if the Field is set to "newGame".
+
+    Can Return null if either the mod or field is not found.
+     */
     @JvmStatic
     fun getDouble(ModID: String, FieldID: String, SaveSpecific: Boolean) : Double?
     {
@@ -56,11 +64,13 @@ object LunaSettings
     }
 
     /**
-     * Gets a double from the LunaSettings and converts it in to a float.
-     * @param modID The ID of the mod the setting is from.
-     * @param fieldID the ID of the field you are trying to get the value from
-     * @param SaveSpecific if false, accesses a cross-save value, if set to true, accesses a save specific value.
-     * @return returns the requested value. Can be null if the mod or value was not found.
+    Method for getting a Float from LunaSettings. Since floats dont exist in .json's, it just converts a saved double.
+
+    [LunaSettings on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/Integrating-LunaSettings)
+
+    Requires the [ModID], the [FieldID] of the Setting and a [SaveSpecific] Boolean, that needs to be set to true if the Field is set to "newGame".
+
+    Can Return null if either the mod or field is not found.
      */
     @JvmStatic
     fun getFloat(ModID: String, FieldID: String, SaveSpecific: Boolean) : Float?
@@ -96,11 +106,13 @@ object LunaSettings
     }
 
     /**
-     * Gets a Boolean from the LunaSettings.
-     * @param modID The ID of the mod the setting is from.
-     * @param fieldID the ID of the field you are trying to get the value from
-     * @param SaveSpecific if false, accesses a cross-save value, if set to true, accesses a save specific value.
-     * @return returns the requested value. Can be null if the mod or value was not found.
+    Method for getting a Boolean from LunaSettings.
+
+    [LunaSettings on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/Integrating-LunaSettings)
+
+    Requires the [ModID], the [FieldID] of the Setting and a [SaveSpecific] Boolean, that needs to be set to true if the Field is set to "newGame".
+
+    Can Return null if either the mod or field is not found.
      */
     @JvmStatic
     fun getBoolean(ModID: String, FieldID: String, SaveSpecific: Boolean) : Boolean?
@@ -136,11 +148,13 @@ object LunaSettings
     }
 
     /**
-     * Gets an Integer from the LunaSettings.
-     * @param modID The ID of the mod the setting is from.
-     * @param fieldID the ID of the field you are trying to get the value from
-     * @param SaveSpecific if false, accesses a cross-save value, if set to true, accesses a save specific value.
-     * @return returns the requested value. Can be null if the mod or value was not found.
+    Method for getting an Int from LunaSettings.
+
+    [LunaSettings on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/Integrating-LunaSettings)
+
+    Requires the [ModID], the [FieldID] of the Setting and a [SaveSpecific] Boolean, that needs to be set to true if the Field is set to "newGame".
+
+    Can Return null if either the mod or field is not found.
      */
     @JvmStatic
     fun getInt(ModID: String, FieldID: String, SaveSpecific: Boolean) : Int?
@@ -176,11 +190,13 @@ object LunaSettings
     }
 
     /**
-     * Gets a String from the LunaSettings.
-     * @param modID The ID of the mod the setting is from.
-     * @param fieldID the ID of the field you are trying to get the value from
-     * @param SaveSpecific if false, accesses a cross-save value, if set to true, accesses a save specific value.
-     * @return returns the requested value. Can be null if the mod or value was not found.
+    Method for getting a String from LunaSettings.
+
+    [LunaSettings on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/Integrating-LunaSettings)
+
+    Requires the [ModID], the [FieldID] of the Setting and a [SaveSpecific] Boolean, that needs to be set to true if the Field is set to "newGame".
+
+    Can Return null if either the mod or field is not found.
      */
     @JvmStatic
     fun getString(ModID: String, FieldID: String, SaveSpecific: Boolean) : String?

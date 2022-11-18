@@ -1,4 +1,4 @@
-package lunalib.lunaUtil
+package lunalib.lunaUtil.campaign
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CampaignFleetAPI
@@ -8,10 +8,38 @@ import org.lwjgl.util.vector.Vector2f
 //Inspired by Wisps Memory delegate, but in a format more useable in Java.
 
  /**
- * Class that gets instantiated with an ID, and can then be used to put data in to memory under that ID.
- * Avoids having to create references to the MemoryAPI multiple times in a class.
- * @param id ID of the memory setting. Should just be the ID, without a $ sign.
- */
+ A utility class that can be used to interact with the MemoryAPI more conveniently.
+ No data, except the [Id] is stored within the LunaMemory object, which is then used to make calls to MemoryAPI to get the value from that ID.
+
+ [LunaMemory on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaMemory)
+ ```java
+ //Instantiate it with an ID.
+ LunaMemory message = new LunaMemory("VariableID");
+
+ //Puts a value in to memory
+ public void setIntelMessage()
+ {
+ message.set("A test String");
+ }
+
+ //Sends an intel message using the variable in memory.
+ public void sendIntelMessage()
+ {
+ String string = message.getString();
+ LunaUtil.createIntelMessage("Title", string);
+ }
+ ```
+
+ The Class' Constructor also accepts a default variable, which can be used to avoid Nullpointer exceptions occuring from having no variable set.
+ It also accepts a SectorEntityToken, which causes LunaMemory to save its data in the local memory of that entity, instead of Globaly.
+ ```Java
+  LunaMemory message = new LunaMemory("VariableID", "A default String stored in the playerfleet!", Global.getSector().getPlayerFleet());
+  ```
+
+ [LunaMemory on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaMemory)
+
+
+  */
 class LunaMemory(id: String)
 {
     private var Id = id

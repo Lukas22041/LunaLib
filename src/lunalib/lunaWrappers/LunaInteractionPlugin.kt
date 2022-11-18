@@ -19,15 +19,30 @@ import org.lwjgl.input.Keyboard
 import java.awt.Color
 
 /**
- * Wrapper for InteractionDialogPlugin, adding some useful methods and innitiating common variables by default.
- * @property dialog
- * @property textPanel
- * @property optionPanel
- * @property visualPanel
- * @property interactionTarget
- * @property targetMemory
- * @property memory Global Memory
- */
+Wrapper for [InteractionDialogPlugin].
+
+[LunaInteractionPlugin on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaInteractionPlugin)
+
+It presets a variety of commonly used variables on innitialisation, reducing the large bloat that most IDPs have in their init() method.
+The Class also comes with some utility methods.
+
+[LunaInteractionPlugin] only has one abstract method, which is called [start].
+ All other InteractionDialogPlugins, except init() can still be overriden.
+
+```Java
+public class Example extends LunaInteractionPlugin
+{
+*   @Override
+*   public void start()
+*   {
+*   textPanel.addPara("A new dialog, woo!", getPlayerColor(), getHighlightColor(), "dialog");
+*   addLeaveOption();
+*   }
+}
+```
+
+
+*/
 abstract class LunaInteractionPlugin() : InteractionDialogPlugin
 {
     // General variables that are commonly used
@@ -40,7 +55,7 @@ abstract class LunaInteractionPlugin() : InteractionDialogPlugin
     lateinit var memory: MemoryAPI
 
     // Preset Color variables to make accessing those easier
-    var playerColor = Misc.getBasePlayerColor()
+    val playerColor = Misc.getBasePlayerColor()
     var brightPlayerColor = Misc.getBrightPlayerColor()
     var darkPlayercolor = Misc.getDarkPlayerColor()
     var highlightColor = Misc.getHighlightColor()
