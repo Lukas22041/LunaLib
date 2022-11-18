@@ -9,6 +9,7 @@ import com.fs.starfarer.api.loading.WeaponSpecAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.lunaUtil.LunaMisc
 import lunalib.lunaUtil.campaign.FactionUtils
+import java.awt.Color
 
 
 //File for Kotlin Extension Functions of FactionAPI. This is only useable in Kotlin, and not Java.
@@ -44,3 +45,8 @@ fun FactionAPI.isPirateFaction() =
 /** (**LunaLib Extension Function**)*/
 fun FactionAPI.isDecentralized() =
     Misc.isDecentralized(this)
+
+/** (**LunaLib Extension Function**)*/
+fun FactionAPI.existsInSector() =
+    FactionUtils.existsInSector(this.id)
+

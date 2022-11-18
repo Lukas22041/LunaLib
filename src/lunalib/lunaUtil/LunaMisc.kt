@@ -74,9 +74,4 @@ object LunaMisc
         Global.getSector().campaignUI.addMessage(intel)
     }
 
-
-
-
-
-
 }

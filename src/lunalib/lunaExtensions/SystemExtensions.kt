@@ -41,9 +41,9 @@ fun StarSystemAPI.getPlanetsWithType(typeID: String) =
 fun StarSystemAPI.getPlanetsWithCondition(typeID: String) =
     SystemUtils.getPlanetsWithCondition(this, typeID)
 
+/** (**LunaLib Extension Function**)*/
 fun StarSystemAPI.hasPlanets() =
     Misc.systemHasPlanets(this)
-
 
 /** (**LunaLib Extension Function**)*/
 fun LocationAPI.getMarkets(factionId: String? = null) =

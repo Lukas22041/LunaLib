@@ -3,18 +3,19 @@ package lunalib.lunaUtil.campaign
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CampaignFleetAPI
 import com.fs.starfarer.api.campaign.SectorEntityToken
+import com.fs.starfarer.api.campaign.rules.MemoryAPI
 import org.lwjgl.util.vector.Vector2f
 
 //Inspired by Wisps Memory delegate, but in a format more useable in Java.
 
  /**
  A utility class that can be used to interact with the MemoryAPI more conveniently.
- No data, except the [Id] is stored within the LunaMemory object, which is then used to make calls to MemoryAPI to get the value from that ID.
+ No data, except the [Key] is stored within the LunaMemory object, which is then used to make calls to MemoryAPI to get the value from that MemKey.
 
  [LunaMemory on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaMemory)
  ```java
  //Instantiate it with an ID.
- LunaMemory message = new LunaMemory("VariableID");
+ LunaMemory message = new LunaMemory("VariableKey");
 
  //Puts a value in to memory
  public void setIntelMessage()
@@ -33,42 +34,42 @@ import org.lwjgl.util.vector.Vector2f
  The Class' Constructor also accepts a default variable, which can be used to avoid Nullpointer exceptions occuring from having no variable set.
  It also accepts a SectorEntityToken, which causes LunaMemory to save its data in the local memory of that entity, instead of Globaly.
  ```Java
-  LunaMemory message = new LunaMemory("VariableID", "A default String stored in the playerfleet!", Global.getSector().getPlayerFleet());
+  LunaMemory message = new LunaMemory("VariableKey", "A default String stored in the playerfleet!", Global.getSector().getPlayerFleet());
   ```
 
  [LunaMemory on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaMemory)
 
 
   */
-class LunaMemory(id: String)
+class LunaMemory(key: String)
 {
-    private var Id = id
+
+    private var Key = key
     private var Target: SectorEntityToken? = null
 
     //Alternate Constructor that sets a default value for the ID when innitialised, if the memory is currently null.
-    constructor(id: String, default: Any?) : this(id)
+    constructor(key: String, default: Any?) : this(key)
     {
-        if (Global.getSector().memoryWithoutUpdate.get("\$$Id") == null) Global.getSector().memoryWithoutUpdate.set("\$$Id", default)
+        if (Global.getSector().memoryWithoutUpdate.get("\$$Key") == null) Global.getSector().memoryWithoutUpdate.set("\$$Key", default)
     }
 
     //Alternate Constructor that causes memory to be set on a specific entities local memory
-    constructor(id: String, target: SectorEntityToken) : this(id)
+    constructor(key: String, target: SectorEntityToken) : this(key)
     {
         Target = target
     }
 
     //Alternate Constructor that causes memory to be set on a specific entities local memory, and sets a default value on to it if the ID returns null.
-    constructor(id: String, default: Any?, target: SectorEntityToken) : this(id)
+    constructor(key: String, default: Any?, target: SectorEntityToken) : this(key)
     {
         Target = target
-
         if (Target != null)
         {
-            if (Global.getSector().memoryWithoutUpdate.get("\$$Id") == null) Target!!.memoryWithoutUpdate.set("\$$Id", default)
+            if (Global.getSector().memoryWithoutUpdate.get("\$$Key") == null) Target!!.memoryWithoutUpdate.set("\$$Key", default)
         }
         else
         {
-            if (Global.getSector().memoryWithoutUpdate.get("\$$Id") == null) Global.getSector().memoryWithoutUpdate.set("\$$Id", default)
+            if (Global.getSector().memoryWithoutUpdate.get("\$$Key") == null) Global.getSector().memoryWithoutUpdate.set("\$$Key", default)
         }
     }
 
@@ -76,11 +77,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            Target!!.memoryWithoutUpdate.set("\$$Id", value)
+            Target!!.memoryWithoutUpdate.set("\$$Key", value)
         }
         else
         {
-            Global.getSector().memoryWithoutUpdate.set("\$$Id", value)
+            Global.getSector().memoryWithoutUpdate.set("\$$Key", value)
         }
     }
 
@@ -88,11 +89,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            return Target!!.memoryWithoutUpdate.get("\$$Id")
+            return Target!!.memoryWithoutUpdate.get("\$$Key")
         }
         else
         {
-            return Global.getSector().memoryWithoutUpdate.get("\$$Id")
+            return Global.getSector().memoryWithoutUpdate.get("\$$Key")
         }
     }
 
@@ -100,11 +101,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            return Target!!.memoryWithoutUpdate.getInt("\$$Id")
+            return Target!!.memoryWithoutUpdate.getInt("\$$Key")
         }
         else
         {
-            return Global.getSector().memoryWithoutUpdate.getInt("\$$Id")
+            return Global.getSector().memoryWithoutUpdate.getInt("\$$Key")
         }
     }
 
@@ -112,11 +113,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            return Target!!.memoryWithoutUpdate.getFloat("\$$Id")
+            return Target!!.memoryWithoutUpdate.getFloat("\$$Key")
         }
         else
         {
-            return Global.getSector().memoryWithoutUpdate.getFloat("\$$Id")
+            return Global.getSector().memoryWithoutUpdate.getFloat("\$$Key")
         }
     }
 
@@ -124,11 +125,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            return Target!!.memoryWithoutUpdate.getString("\$$Id")
+            return Target!!.memoryWithoutUpdate.getString("\$$Key")
         }
         else
         {
-            return Global.getSector().memoryWithoutUpdate.getString("\$$Id")
+            return Global.getSector().memoryWithoutUpdate.getString("\$$Key")
         }
     }
 
@@ -136,11 +137,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            return Target!!.memoryWithoutUpdate.getBoolean("\$$Id")
+            return Target!!.memoryWithoutUpdate.getBoolean("\$$Key")
         }
         else
         {
-            return Global.getSector().memoryWithoutUpdate.getBoolean("\$$Id")
+            return Global.getSector().memoryWithoutUpdate.getBoolean("\$$Key")
         }
     }
 
@@ -148,11 +149,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            return Target!!.memoryWithoutUpdate.getLong("\$$Id")
+            return Target!!.memoryWithoutUpdate.getLong("\$$Key")
         }
         else
         {
-            return Global.getSector().memoryWithoutUpdate.getLong("\$$Id")
+            return Global.getSector().memoryWithoutUpdate.getLong("\$$Key")
         }
     }
 
@@ -160,11 +161,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            return Target!!.memoryWithoutUpdate.getVector2f("\$$Id")
+            return Target!!.memoryWithoutUpdate.getVector2f("\$$Key")
         }
         else
         {
-            return Global.getSector().memoryWithoutUpdate.getVector2f("\$$Id")
+            return Global.getSector().memoryWithoutUpdate.getVector2f("\$$Key")
         }
     }
 
@@ -172,11 +173,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            return Target!!.memoryWithoutUpdate.getFleet("\$$Id")
+            return Target!!.memoryWithoutUpdate.getFleet("\$$Key")
         }
         else
         {
-            return Global.getSector().memoryWithoutUpdate.getFleet("\$$Id")
+            return Global.getSector().memoryWithoutUpdate.getFleet("\$$Key")
         }
     }
 
@@ -184,11 +185,11 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            return Target!!.memoryWithoutUpdate.getEntity("\$$Id")
+            return Target!!.memoryWithoutUpdate.getEntity("\$$Key")
         }
         else
         {
-            return Global.getSector().memoryWithoutUpdate.getEntity("\$$Id")
+            return Global.getSector().memoryWithoutUpdate.getEntity("\$$Key")
         }
     }
 
@@ -196,12 +197,36 @@ class LunaMemory(id: String)
     {
         if (Target != null)
         {
-            Target!!.memoryWithoutUpdate.expire("\$$Id", days)
+            Target!!.memoryWithoutUpdate.expire("\$$Key", days)
         }
         else
         {
-            Global.getSector().memoryWithoutUpdate.expire("\$$Id", days)
+            Global.getSector().memoryWithoutUpdate.expire("\$$Key", days)
 
+        }
+    }
+
+    fun isNull() : Boolean
+    {
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.get("\$$Key") == null
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.get("\$$Key") == null
+        }
+    }
+
+    fun isNotNull() : Boolean
+    {
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.get("\$$Key") != null
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.get("\$$Key") != null
         }
     }
 }
