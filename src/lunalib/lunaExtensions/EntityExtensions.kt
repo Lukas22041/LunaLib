@@ -10,7 +10,7 @@ import com.fs.starfarer.api.impl.campaign.procgen.StarAge
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.api.util.Misc.FleetFilter
 
-//File for Kotlin Extension Functions of SectorEntityToken. This is only useable in Kotlin, and not Java.
+//File for Kotlin Extension Functions of SectorEntityToken and PlanetAPI. This is only useable in Kotlin, and not Java.
 
 /** (**LunaLib Extension Function**)*/
 fun SectorEntityToken.getDistance(to: SectorEntityToken) =

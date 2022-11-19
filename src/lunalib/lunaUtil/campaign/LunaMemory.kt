@@ -4,6 +4,8 @@ import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CampaignFleetAPI
 import com.fs.starfarer.api.campaign.SectorEntityToken
 import com.fs.starfarer.api.campaign.rules.MemoryAPI
+import lunalib.lunaExtensions.getArray
+import lunalib.lunaExtensions.getList
 import org.lwjgl.util.vector.Vector2f
 
 //Inspired by Wisps Memory delegate, but in a format more useable in Java.
@@ -190,6 +192,42 @@ class LunaMemory(key: String)
         else
         {
             return Global.getSector().memoryWithoutUpdate.getEntity("\$$Key")
+        }
+    }
+
+    fun getList() : List<*>?
+    {
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.get("\$$Key") as List<*>?
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.get("\$$Key") as List<*>?
+        }
+    }
+
+    fun getArray() : Array<*>?
+    {
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.get("\$$Key") as Array<*>?
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.get("\$$Key") as Array<*>?
+        }
+    }
+
+    fun getMap() : Map<*, *>?
+    {
+        if (Target != null)
+        {
+            return Target!!.memoryWithoutUpdate.get("\$$Key") as Map<*, *>?
+        }
+        else
+        {
+            return Global.getSector().memoryWithoutUpdate.get("\$$Key") as Map<*, *>?
         }
     }
 

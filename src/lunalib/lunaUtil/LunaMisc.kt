@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.SectorEntityToken
 import com.fs.starfarer.api.campaign.StarSystemAPI
 import com.fs.starfarer.api.campaign.econ.MarketAPI
 import com.fs.starfarer.api.combat.ShipHullSpecAPI
+import com.fs.starfarer.api.combat.ShipVariantAPI
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel
 import com.fs.starfarer.api.loading.FighterWingSpecAPI
 import com.fs.starfarer.api.loading.HullModSpecAPI
@@ -22,6 +23,13 @@ A class containing a collection of different Utilities that did not require thei
 */
 object LunaMisc
 {
+
+    /**
+    * Returns a list of all loaded ShipVariantAPIs.
+    */
+    fun getAllShipVariants() : List<ShipVariantAPI> =
+        Global.getSettings().allVariantIds.map { Global.getSettings().getVariant(it) }
+
     /**
      * Generates and returns a random color.
      * @param saturation Saturation of the color.
