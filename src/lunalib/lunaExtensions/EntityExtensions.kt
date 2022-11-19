@@ -60,7 +60,7 @@ fun SectorEntityToken.findNearestJumppint() =
 fun SectorEntityToken.findNearestPlanet(allowStars: Boolean) =
     Misc.findNearestPlanetTo(this, false, allowStars)
 
-
+/** (**LunaLib Extension Function**)*/
 fun SectorEntityToken.getSalvageSeed() =
     Misc.getSalvageSeed(this)
 
