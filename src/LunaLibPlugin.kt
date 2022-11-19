@@ -22,8 +22,6 @@ class LunaLibPlugin : BaseModPlugin()
     override fun onGameLoad(newGame: Boolean)
     {
         Global.getSector().addTransientScript(LunaSettingsHotkeyListener())
-
-        CampaignEngine.getInstance()
     }
 
     override fun onApplicationLoad()
