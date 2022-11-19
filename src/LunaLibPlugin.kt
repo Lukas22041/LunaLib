@@ -1,15 +1,10 @@
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
-import com.fs.starfarer.campaign.CampaignEngine
 import lunalib.lunaSettings.LunaSettingsHotkeyListener
 import lunalib.lunaSettings.LunaSettingsLoader
-import lunalib.lunaUtil.campaign.LunaMemory
-import java.awt.Color
 
 class LunaLibPlugin : BaseModPlugin()
 {
-
-
     override fun onNewGame()
     {
         LunaSettingsLoader.storeSaveSettingsInToMemory()
