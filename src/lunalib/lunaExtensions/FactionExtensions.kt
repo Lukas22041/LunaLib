@@ -14,39 +14,39 @@ import java.awt.Color
 
 //File for Kotlin Extension Functions of FactionAPI. This is only useable in Kotlin, and not Java.
 
-/** (**LunaLib Extension Function**)*/
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.getMarketsCopy() : List<MarketAPI> =
    FactionUtils.getMarketsCopy(this.id)
 
-/** (**LunaLib Extension Function**)*/
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.getKnownShipSpecs() : List<ShipHullSpecAPI> =
     FactionUtils.getKnownShipSpecs(this.id)
 
-/** (**LunaLib Extension Function**)*/
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.getKnownHullmodSpecs() : List<HullModSpecAPI> =
     FactionUtils.getKnownHullmodSpecs(this.id)
 
-/** (**LunaLib Extension Function**)*/
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.getKnownWeaponSpecs() : List<WeaponSpecAPI> =
     FactionUtils.getKnownWeaponSpecs(this.id)
 
-/** (**LunaLib Extension Function**)*/
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.getKnownFightersSpecs() : List<FighterWingSpecAPI> =
     FactionUtils.getKnownFighterSpecs(this.id)
 
-/** (**LunaLib Extension Function**)*/
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.getNumHostileMarkets(from: SectorEntityToken, maxDist: Float) =
     Misc.getNumHostileMarkets(this, from, maxDist)
 
-/** (**LunaLib Extension Function**)*/
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.isPirateFaction() =
     Misc.isPirateFaction(this)
 
-/** (**LunaLib Extension Function**)*/
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.isDecentralized() =
     Misc.isDecentralized(this)
 
-/** (**LunaLib Extension Function**)*/
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.existsInSector() =
     FactionUtils.existsInSector(this.id)
 
