@@ -199,42 +199,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             }
         }
 
-        //Removes banned characters from fields
-        for (map in OptionIntMap)
-        {
-            var modifiedString = map.value.text.replace("[^0-9]".toRegex(), "")
-
-            var value = 0
-            try {
-                value = modifiedString.toInt()
-                value = MathUtils.clamp(value, 0, map.key.maxValue.toInt())
-                modifiedString = "$value"
-            }
-            catch (e: Throwable)
-            {
-                modifiedString = ""
-            }
-
-            map.value.text = modifiedString
-        }
-        for (map in OptionDoubleMap)
-        {
-            var modifiedString = map.value.text.replace("[^0-9.]".toRegex(), "")
-
-            try {
-                if (modifiedString.toDouble() !in 0.0..map.key.maxValue)
-                {
-                    modifiedString = modifiedString.substring(0, modifiedString.length - 1) + "" + modifiedString.substring(modifiedString.length)
-                }
-            }
-            catch (e: Throwable)
-            {
-                modifiedString = ""
-            }
-
-            map.value.text = modifiedString
-        }
-
+        checkIllegalChar()
 
         if (OptionsList != null)
         {
@@ -468,8 +433,8 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     }
                     minMaxValue = when(data.fieldType)
                     {
-                        "Int" -> "\nMin: 0   Max: ${data.maxValue.toInt()}"
-                        "Double" -> "\nMin: 0.0   Max: ${data.maxValue}"
+                        "Int" -> "\nMin: ${data.minValue.toInt()}   Max: ${data.maxValue.toInt()}"
+                        "Double" -> "\nMin: ${data.minValue}   Max: ${data.maxValue}"
                         else -> ""
                     }
 
@@ -499,7 +464,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
                     if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
                     else field.text = LunaSettings.getInt(data.modID, data.fieldID, false).toString()
-
                     OptionIntMap.put(data, field)
                 }
                 "Double" ->
@@ -566,6 +530,8 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     {
         var data = JSONUtils.loadCommonJSON("LunaSettings/${selectedMod!!.id}.json", "data/config/LunaSettingsDefault.default");
         var saveData: MutableMap<String, Any> = HashMap()
+
+        checkIllegalChar()
 
         for (toSave in OptionIntMap)
         {
@@ -781,6 +747,51 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
                 return
             }
+        }
+    }
+
+    fun checkIllegalChar()
+    {
+        //Removes banned characters from fields
+        for (map in OptionIntMap)
+        {
+            if (map.value.hasFocus()) continue
+            var modifiedString = map.value.text.replace("[^0-9]".toRegex(), "")
+
+            var value = 0
+            try {
+                value = modifiedString.toInt()
+                value = MathUtils.clamp(value, map.key.minValue.toInt(), map.key.maxValue.toInt())
+                modifiedString = "$value"
+            }
+            catch (e: Throwable)
+            {
+                modifiedString = "" + map.key.defaultValue
+            }
+
+            map.value.text = modifiedString
+        }
+        for (map in OptionDoubleMap)
+        {
+            if (map.value.hasFocus()) continue
+            var modifiedString = map.value.text.replace("[^0-9.]".toRegex(), "")
+
+            /* try {
+                 if (modifiedString.toDouble() !in map.key.minValue..map.key.maxValue)
+                 {
+                     modifiedString = modifiedString.substring(0, modifiedString.length - 1) + "" + modifiedString.substring(modifiedString.length)
+                 }
+             }*/
+            try {
+                if (modifiedString.toDouble() < map.key.minValue) modifiedString = "" + map.key.minValue
+                if (modifiedString.toDouble() > map.key.maxValue) modifiedString = "" + map.key.maxValue
+            }
+            catch (e: Throwable)
+            {
+                modifiedString = "" + map.key.defaultValue
+            }
+
+            map.value.text = modifiedString
         }
     }
 }

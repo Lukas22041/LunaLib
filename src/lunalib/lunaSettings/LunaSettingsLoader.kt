@@ -19,6 +19,7 @@ data class LunaSettingsData(
     val FieldTooltip: String,
     val defaultValue: Any,
     val newGame: Boolean,
+    val minValue: Double,
     val maxValue: Double,
     val tags: List<String>)
 
@@ -82,6 +83,7 @@ internal object LunaSettingsLoader
             }
 
             var newGame = false
+            var minValue = 0.0
             var maxValue = 0.0
 
             var tagsToBeFiltered = rows.getString("tags").split(",")
@@ -101,17 +103,27 @@ internal object LunaSettingsLoader
             }
 
             if (type == "Int" || type == "Double")
-
-            try {
-                maxValue = rows.getString("maxValue").toDouble()
-            }
-            catch (e: Throwable)
             {
-                maxValue = 100.0
-                log.debug("LunaSettings: No max value for for $id, setting to 100")
+                try {
+                    minValue = rows.getString("minValue").toDouble()
+                }
+                catch (e: Throwable)
+                {
+                    maxValue = 0.0
+                    log.debug("LunaSettings: No min value for for $id, setting to 0")
+                }
+
+                try {
+                    maxValue = rows.getString("maxValue").toDouble()
+                }
+                catch (e: Throwable)
+                {
+                    maxValue = 100.0
+                    log.debug("LunaSettings: No max value for for $id, setting to 100")
+                }
             }
 
-            SettingsData.add(LunaSettingsData(modID, id, name, type, tooltip, default, newGame, maxValue, tags))
+            SettingsData.add(LunaSettingsData(modID, id, name, type, tooltip, default, newGame, minValue, maxValue, tags))
             log.debug("LunaSettings: Loaded default settings data: $id, from $modID")
         }
     }
