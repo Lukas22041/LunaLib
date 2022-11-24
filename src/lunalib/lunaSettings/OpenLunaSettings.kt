@@ -21,9 +21,15 @@ class OpenSettingsPanelInteraction : InteractionDialogPlugin
         dialog!!.hideVisualPanel();
         dialog.hideTextPanel();
 
+        var scale = Global.getSettings().screenScaleMult
+
         dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.9f,
             Global.getSettings().screenHeight * 0.9f,
             OpenSettingsPanelDelegate(LunaSettingsUI(false), dialog))
+
+        /*dialog.showCustomVisualDialog(900 * scale ,
+            500 * scale,
+            OpenSettingsPanelDelegate(LunaSettingsUI(false), dialog))*/
     }
 
     override fun optionSelected(optionText: String?, optionData: Any?) {

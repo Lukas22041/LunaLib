@@ -41,6 +41,7 @@ class LunaSettingsHotkeyListener : LunaSettingsListener, EveryFrameScript
 
         if (Keyboard.isKeyDown(key))
         {
+            if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) return
             var ui = Global.getSector().campaignUI
             ui.showInteractionDialog(OpenSettingsPanelInteraction(), Global.getSector().playerFleet)
 

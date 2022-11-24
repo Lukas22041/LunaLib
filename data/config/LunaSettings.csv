@@ -1,19 +1,19 @@
 modID,fieldID,fieldName,fieldType,defaultValue,fieldTooltip,newGame,minValue,maxValue,tags
 lunalib,luna_SettingsHotkey,Settings Hotkey,Enum,"F2, F1, F3, F4",Changes the hotkey used to open this screen in the campaign.,false,,,
 ,,,,,,,,,
-lunalib,luna_emptyField,Example Text Field,Text,,,false,,,
+lunalib,luna_emptyField,Example Text Field,Text,,,false,,,noHighlight
 lunalib,luna_exampleText,Example Text Field,Text,"Any value below is merely an example for Modders. 
 None of the Settings here do anything.
-",,false,,,
+",,false,,,noHighlight
 lunalib,luna_exampleString,Example String,String,some string,"Strings will accept any characters put in, with no filtering.",false,,,
 lunalib,luna_exampleBoolean,Example Boolean,Boolean,true,"An active Button sets to true, an inactive button sets to false",false,,,
 lunalib,luna_exampleInt,Example Int,Int,100,"Int Fields will only accept whole Numbers, and block any other character from being entered.
 Using the maxValue config, you can change the range of values that can be entered.",false,50,200,
 lunalib,luna_exampleDouble,Example Double,Double,10.2,"Doubles allow only numbers and a single decimal dot (.) 
-Using the maxValue config, you can change the range of values that can be entered.",false,0,20,
+Using the maxValue config, you can change the range of values that can be entered.",false,0,20,spacing:0.5
 lunalib,luna_exampleEnum,Example Enum,Enum,"Hegemony, Tritach, Pirates, Independent","Enums can be used to create a preset of options. They are stored as Strings, and can be accessed by the getStrings() method. 
 The String behind the first comma will be set as the default value.
 
 Each Entry is seperated by a comma, and all spaces are removed automaticly.  
 
-",false,,,
+",false,,,spacing:2

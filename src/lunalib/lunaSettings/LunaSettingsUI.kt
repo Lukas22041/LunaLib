@@ -2,11 +2,9 @@ package lunalib.lunaSettings
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
-import com.fs.starfarer.api.campaign.CampaignEventListener
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate.DialogCallbacks
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
-import com.fs.starfarer.api.campaign.listeners.ListenerUtil
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipCreator
@@ -14,9 +12,7 @@ import com.fs.starfarer.api.util.Misc
 import org.lazywizard.lazylib.JSONUtils
 import org.lazywizard.lazylib.MathUtils
 import org.lwjgl.input.Keyboard
-import org.lwjgl.opengl.Display
 import org.lwjgl.opengl.GL11
-import java.awt.Button
 import java.awt.Color
 
 //Probably the worst code ive ever written, it works, but at some point it should probably be rewritten.
@@ -26,115 +22,89 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     private var dialog: InteractionDialogAPI? = null
     private var callbacks: DialogCallbacks? = null
     private var panel: CustomPanelAPI? = null
-    private var dW = 0
-    private var dH = 0
-    private var pW = 0
-    private var pH = 0
-    private var tooltip: TooltipMakerAPI? = null
-
+    private var newgame = newGame //True if its called from the new game menu
+    private var pW = 0f
+    private var pH = 0f
     private var selectedMod: ModSpecAPI? = null
 
-    //Left Side Panel
-    private var ModsInnerPannel: CustomPanelAPI? = null
-    private var ModsList: TooltipMakerAPI? = null
+    //Mods Panel
+    private var modsPanel: CustomPanelAPI? = null
+    private var modsPanelList: TooltipMakerAPI? = null
     private var modButtons: HashMap<ButtonAPI, ModSpecAPI> = HashMap()
 
-
-    //Right Side Panel
-    private var OptionsInnerPannel: CustomPanelAPI? = null
-    private var OptionsList: TooltipMakerAPI? = null
+    //Settings Panel
+    private var settingsPanel: CustomPanelAPI? = null
+    private var settingsPanelList: TooltipMakerAPI? = null
     private var saveButton: ButtonAPI? = null
     private var resetButton: ButtonAPI? = null
     private var buttonPanel: TooltipMakerAPI? = null
 
     //Saves data
-    private var OptionStringMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
-    private var OptionIntMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
-    private var OptionDoubleMap: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
-    private var OptionBooleanMap: MutableMap<LunaSettingsData, ButtonAPI> = HashMap()
+    private var stringFields: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
+    private var intFields: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
+    private var doubleFields: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
+    private var booleanField: MutableMap<LunaSettingsData, ButtonAPI> = HashMap()
 
-    private var OptionEnumMap: MutableMap<LunaSettingsData,ButtonAPI> = HashMap()
-    private var OptionEnumTextMap: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
-    private var EnumOptions: MutableMap<LunaSettingsData, MutableMap<ButtonAPI, String>> = HashMap()
+    private var enumField: MutableMap<LunaSettingsData,ButtonAPI> = HashMap()
+    private var enumFieldsPara: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
+    private var enumOptions: MutableMap<LunaSettingsData, MutableMap<ButtonAPI, String>> = HashMap()
     private var selectedEnum: LunaSettingsData? = null
-    private var EnumOpen = false
+    private var isEnumOpen = false
     private var enumPanel: TooltipMakerAPI? = null
 
-    private var newgame = newGame
 
-    init {
 
-    }
 
     fun init(panel: CustomPanelAPI?, callbacks: DialogCallbacks?, dialog: InteractionDialogAPI?) {
-        //so we can get back to the original InteractionDialogPlugin and do stuff with it or close it
         this.panel = panel
         this.callbacks = callbacks
         this.dialog = dialog
 
-        //these might be helpful if you are doing custom rendering
-        dW = Display.getWidth()
-        dH = Display.getHeight()
-        pW = this.panel!!.position.width.toInt()
-        pH = this.panel!!.position.height.toInt()
+        pW = this.panel!!.position.width
+        pH = this.panel!!.position.height
 
-
-        //when something changes in the UI and it needs to be re-drawn, call this
         reset()
     }
 
     private fun reset() {
-        //clears the ui panel
-        if (tooltip != null) {
-            panel!!.removeComponent(tooltip)
-            modButtons.clear()
-        }
-
-        tooltip = panel!!.createUIElement(panel!!.position.width, panel!!.position.height, false)
-        tooltip!!.setForceProcessInput(true)
-        panel!!.addUIElement(tooltip).inTL(0f, 0f)
-
         ModsDisplay()
         optionsDisplay()
     }
 
     private fun resetOption()
     {
-        panel!!.removeComponent(ModsList)
-        panel!!.removeComponent(ModsInnerPannel)
-        ModsInnerPannel = null
+        panel!!.removeComponent(modsPanelList)
+        panel!!.removeComponent(modsPanel)
+        modsPanel = null
         ModsDisplay()
 
         panel!!.removeComponent(buttonPanel)
         panel!!.removeComponent(enumPanel)
-        panel!!.removeComponent(OptionsList)
-        panel!!.removeComponent(OptionsInnerPannel)
+        panel!!.removeComponent(settingsPanelList)
+        panel!!.removeComponent(settingsPanel)
 
-        OptionStringMap.clear()
-        OptionIntMap.clear()
-        OptionDoubleMap.clear()
-        OptionBooleanMap.clear()
+        stringFields.clear()
+        intFields.clear()
+        doubleFields.clear()
+        booleanField.clear()
 
-        OptionEnumMap.clear()
-        OptionEnumTextMap.clear()
-        EnumOptions.clear()
+        enumField.clear()
+        enumFieldsPara.clear()
+        enumOptions.clear()
         selectedEnum = null
-        EnumOpen = false
+        isEnumOpen = false
 
-        OptionsInnerPannel = null
+        settingsPanel = null
         optionsDisplay()
     }
 
     override fun advance(amount: Float) {
 
-        if (saveButton != null)
+        if (saveButton != null && saveButton!!.isChecked)
         {
-            if (saveButton!!.isChecked)
-            {
-                saveButton!!.isChecked = false
-                saveData()
-                resetOption()
-            }
+            saveButton!!.isChecked = false
+            saveData()
+            resetOption()
         }
 
         if (selectedMod != null)
@@ -148,32 +118,30 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             }
         }
 
-        if (resetButton != null)
+
+        if (resetButton != null && resetButton!!.isChecked)
         {
-            if (resetButton!!.isChecked)
+            for (map in booleanField)
             {
-                for (map in OptionBooleanMap)
-                {
-                    map.value.isChecked = map.key.defaultValue as Boolean
-                }
-                for (map in OptionDoubleMap)
-                {
-                    map.value.text = map.key.defaultValue.toString()
-                }
-                for (map in OptionIntMap)
-                {
-                    map.value.text = map.key.defaultValue.toString()
-                }
-                for (map in OptionStringMap)
-                {
-                    map.value.text = map.key.defaultValue.toString()
-                }
-                for (map in OptionEnumTextMap)
-                {
-                    map.value.text = "Selected: " + (map.key.defaultValue as List<String>).get(0)
-                }
-                resetButton!!.isChecked = false
+                map.value.isChecked = map.key.defaultValue as Boolean
             }
+            for (map in doubleFields)
+            {
+                map.value.text = map.key.defaultValue.toString()
+            }
+            for (map in intFields)
+            {
+                map.value.text = map.key.defaultValue.toString()
+            }
+            for (map in stringFields)
+            {
+                map.value.text = map.key.defaultValue.toString()
+            }
+            for (map in enumFieldsPara)
+            {
+                map.value.text = "Selected: " + (map.key.defaultValue as List<String>).get(0)
+            }
+            resetButton!!.isChecked = false
         }
 
         for (button in modButtons) {
@@ -201,25 +169,25 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
         checkIllegalChar()
 
-        if (OptionsList != null)
+        if (settingsPanelList != null)
         {
-            for (map in OptionEnumMap)
+            for (map in enumField)
             {
-                if (map.value.isChecked && !EnumOpen)
+                if (map.value.isChecked && !isEnumOpen)
                 {
-                    EnumOpen = true
+                    isEnumOpen = true
                     selectedEnum = map.key
                     var list = map.key.defaultValue as List<String>
                     list = list.sorted()
-                    var buttons: MutableMap<ButtonAPI, String> = HashMap()
+                    val buttons: MutableMap<ButtonAPI, String> = HashMap()
 
-                    enumPanel = panel!!.createUIElement(OptionsInnerPannel!!.position.width, pH * 0.2f, false)
+                    enumPanel = panel!!.createUIElement(settingsPanel!!.position.width, pH * 0.2f, false)
                     enumPanel!!.position.inTL(pW * 0.670f, pH * 0.35f)
                     panel!!.addUIElement(enumPanel)
 
                     for (entry in list)
                     {
-                        var enumButton = enumPanel!!.addAreaCheckbox("$entry", null,
+                        val enumButton = enumPanel!!.addAreaCheckbox("$entry", null,
                             Misc.getHighlightColor(),
                             Misc.getHighlightColor(),
                             Misc.getHighlightColor(),
@@ -230,31 +198,31 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                         //enumButton!!.position.inTL(400f,spacing + pH * 0.045f)
                         buttons.put(enumButton, entry)
                     }
-                    EnumOptions.put(map.key, buttons)
+                    enumOptions.put(map.key, buttons)
                 }
                 else if (selectedEnum == map.key && !map.value.isChecked)
                 {
                     panel!!.removeComponent(enumPanel)
-                    EnumOpen = false
+                    isEnumOpen = false
                 }
                 else if (selectedEnum != map.key)
                 {
                     map.value.isChecked = false
                 }
             }
-            for (map in EnumOptions)
+            for (map in enumOptions)
             {
                 for (button in map.value)
                 {
                     if (button.key.isChecked)
                     {
 
-                        OptionEnumTextMap.get(map.key)!!.text = "Selected: ${button.value}"
+                        enumFieldsPara.get(map.key)!!.text = "Selected: ${button.value}"
                         panel!!.removeComponent(enumPanel)
-                        EnumOpen = false
-                        EnumOptions.clear()
+                        isEnumOpen = false
+                        enumOptions.clear()
 
-                        for (but in OptionEnumMap)
+                        for (but in enumField)
                         {
                             but.value.isChecked = false
                         }
@@ -264,377 +232,313 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         }
     }
 
+    //Displays all active mods that have atleast one setting loaded.
     private fun ModsDisplay()
     {
-        ModsInnerPannel = panel!!.createCustomPanel(pW / 4f , pH.toFloat(), null)
-        ModsInnerPannel!!.position.setLocation(0f,0f).inTL(0f, 0f);
+        modsPanel = panel!!.createCustomPanel(pW * 0.2f , pH, null)
+        modsPanel!!.position.setLocation(0f,0f).inTL(0f, 0f)
 
+        modsPanelList = modsPanel!!.createUIElement(pW * 0.2f, pH, true)
+        modsPanelList!!.position.inTL(0f, 0f)
 
-        ModsList = ModsInnerPannel!!.createUIElement(pW / 4f , pH.toFloat(), true)
-        ModsList!!.position.inTL(0f, 0f)
+        val modsWithData = LunaSettingsLoader.SettingsData.map { it.modID }.distinct()
 
-
-        var list: MutableList<String> = ArrayList()
-        for (mod in LunaSettingsLoader.SettingsData)
-        {
-            if (list.contains(mod.modID)) continue
-            list.add(mod.modID)
-        }
-
-
-        var mods: List<ModSpecAPI> = Global.getSettings().modManager.enabledModsCopy.filter { list.contains( it.id) }
+        val mods: List<ModSpecAPI> = Global.getSettings().modManager.enabledModsCopy.filter { modsWithData.contains( it.id) }
         var spacing = 0f
         for (mod in mods)
         {
-            val button: ButtonAPI = ModsList!!.addAreaCheckbox(mod.name, null,
+            val button: ButtonAPI = modsPanelList!!.addAreaCheckbox(mod.name, null,
                 Misc.getBasePlayerColor(),
                 Misc.getDarkPlayerColor(),
                 Misc.getBrightPlayerColor(),
-                ModsInnerPannel!!.position.width,
+                modsPanel!!.position.width,
                 pH * 0.1f,
                 0f)
-            button.position.inTL(0f, spacing);
+            button.position.inTL(0f, spacing)
             spacing += pH * 0.1f
             modButtons.put(button, mod)
 
-            val tooltip: TooltipCreator = object : TooltipCreator {
-                override fun isTooltipExpandable(tooltipParam: Any): Boolean {
-                    return false
-                }
+            val tooltip = TooltipPreset("ModID: ${mod.id}\n" +
+                                             "Version: ${mod.version}\n" +
+                                             "Author: ${mod.author}\n", pW * 0.1f, "ModID:", "Version:", "Author:")
 
-                override fun getTooltipWidth(tooltipParam: Any): Float {
-                    return dW / 4f
-                }
-
-                override fun createTooltip(tooltip: TooltipMakerAPI, expanded: Boolean, tooltipParam: Any) {
-                    tooltip.addPara( "ModID: ${mod.id}\n" +
-                                            "Version: ${mod.version}\n" +
-                                            "Author: ${mod.author}\n" , 0f, Misc.getHighlightColor(), "ModID:", "Version:", "Author:")
-                }
-            }
-            ModsList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
+            modsPanelList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
         }
 
-        ModsInnerPannel!!.addUIElement(ModsList)
-        panel!!.addComponent(ModsInnerPannel)
+        modsPanel!!.addUIElement(modsPanelList)
+        panel!!.addComponent(modsPanel)
     }
 
+    //Adds the general body for the Settings Screen
     private fun optionsDisplay()
     {
-        OptionsInnerPannel = panel!!.createCustomPanel(pW * 0.7f , pH.toFloat() * 0.9f, null)
-        OptionsInnerPannel!!.position.setLocation(0f, 0f).inTL(pW * 0.273f, pH * 0.05f)
+        settingsPanel = panel!!.createCustomPanel(pW * 0.7f , pH * 0.8f, null)
+        settingsPanel!!.position.setLocation(0f, 0f).inTL(pW * 0.25f, pH * 0.15f)
 
         if (selectedMod == null)
         {
-            panel!!.addComponent(OptionsInnerPannel)
+            panel!!.addComponent(settingsPanel)
             return
         }
 
-        buttonPanel = panel!!.createUIElement(OptionsInnerPannel!!.position.width, pH * 0.2f, false)
-        buttonPanel!!.position.inTL(pW * 0.270f, pH * 0.05f)
+        buttonPanel = panel!!.createUIElement(pW * 0.7f, pH * 0.3f, false)
+        buttonPanel!!.position.inTL(pW * 0.25f, pH * 0.02f)
         panel!!.addUIElement(buttonPanel)
 
         saveButton = buttonPanel!!.addAreaCheckbox("Save ${selectedMod!!.name}'s settings", null,
             Misc.getHighlightColor(),
             Misc.getHighlightColor(),
             Misc.getHighlightColor(),
-            buttonPanel!!.position.width / 2,
+            pW * 0.35f,
             pH * 0.1f,
             0f)
+        saveButton!!.position.setLocation(0f, 0f).inTL(0f, pH * 0.03f)
+
+        var tooltip = TooltipPreset("Saves the settings of the currently selected mod. Switching to another mod or " +
+                "closing the panel without saving will restore all settings back to their pre-saved state.", pW * 0.3f, "")
+
+        buttonPanel!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
 
         resetButton = buttonPanel!!.addAreaCheckbox("Reset Settings to default", null,
             Misc.getHighlightColor(),
             Misc.getHighlightColor(),
             Misc.getHighlightColor(),
-            buttonPanel!!.position.width / 2,
+            pW * 0.35f,
             pH * 0.1f,
             0f)
+        resetButton!!.position.setLocation(0f, 0f).inTL(pW * 0.35f, pH * 0.03f)
 
-        resetButton!!.position.inTL(pW * 0.353f, 0f)
+        settingsPanelList = settingsPanel!!.createUIElement(settingsPanel!!.position.width , pH * 0.80f, true)
 
-
-        OptionsList = OptionsInnerPannel!!.createUIElement(OptionsInnerPannel!!.position.width , pH * 0.8f, true)
-        OptionsList!!.position.inTL(50f, 100f)
-
-        var newGameData = LunaSettingsLoader.SettingsData.filter { it.newGame }
-        var crossData = LunaSettingsLoader.SettingsData.filter { !it.newGame }
+        val newGameData = LunaSettingsLoader.SettingsData.filter { it.newGame }
+        val crossData = LunaSettingsLoader.SettingsData.filter { !it.newGame }
 
         var spacing = 0f
         if (newgame) spacing = addOptions(newGameData, true, spacing)
         addOptions(crossData, false, spacing)
 
-        OptionsInnerPannel!!.addUIElement(OptionsList)
-        panel!!.addComponent(OptionsInnerPannel)
+        settingsPanel!!.addUIElement(settingsPanelList)
+        panel!!.addComponent(settingsPanel)
     }
 
+    //Adds all available configs to the Settings panel
     private fun addOptions(SettingsData: List<LunaSettingsData>, firstRun: Boolean, spacing: Float) : Float
     {
         var spacing = spacing
         if (firstRun)
         {
-            OptionsList!!.addSectionHeading("Save-Specific Settings (Only applies to a new save)", Alignment.MID, 0f)
-            val tooltip: TooltipCreator = object : TooltipCreator {
-                override fun isTooltipExpandable(tooltipParam: Any): Boolean {
-                    return false
-                }
-                override fun getTooltipWidth(tooltipParam: Any): Float {
-                    return dW / 4f
-                }
-                override fun createTooltip(tooltip: TooltipMakerAPI, expanded: Boolean, tooltipParam: Any) {
-                    tooltip.addPara("Anything in this section will only be saved within the saves and wont be changeable in the middle of a run. ",0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "")
-                }
-            }
-            OptionsList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
+            val heading = settingsPanelList!!.addSectionHeading("Save-Specific Settings (Only applies to a new save)", Alignment.MID, 0f)
+            val tooltip = TooltipPreset("Anything in this section will only be saved within the saves and wont be changeable in the middle of a run. ",  pW * 0.4f)
+            settingsPanelList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
+            spacing += heading.position.height
         }
 
         else
         {
-            var heading = OptionsList!!.addSectionHeading("Global Settings (Applies to all Saves)", Alignment.MID, 0f)
-            heading.position.inTL(0f ,spacing)
+            val heading = settingsPanelList!!.addSectionHeading("Global Settings (Applies to all Saves)", Alignment.MID, 0f)
+            heading.position.inTL(0f, spacing)
+            spacing += heading.position.height
         }
-        var color = Misc.getBasePlayerColor()
 
-        spacing += 20f
         for (data in SettingsData)
         {
             if (data.modID != selectedMod!!.id) continue
+            var mult = 1f
+            for (tag in data.tags)
+            {
+                if (tag.contains("spacing:"))
+                {
+                    try {
+                        mult = tag.replace("spacing:", "").toFloat()
+                    }
+                    catch (e: Throwable)
+                    {
+
+                    }
+                }
+            }
+            val spacingOffset = (pH * 0.15f) * mult
+
+            var borderColor = Misc.getBasePlayerColor()
+            var highlightColor = Misc.getBasePlayerColor()
+
+            for (tag in data.tags)
+            {
+                if (tag == "noBorder") borderColor = Color(0, 0,0, 0)
+                if (tag == "noHighlight") highlightColor = Color(0, 0,0, 0)
+            }
+
             //Adds outlines and enforces spacing
-            var spacingButton = OptionsList!!.addAreaCheckbox("", null,
-                Misc.getBasePlayerColor(),
-                color,
-                color,
-                OptionsInnerPannel!!.position.width,
-                pH * 0.15f,
+            val spacingButton = settingsPanelList!!.addAreaCheckbox("", null,
+                highlightColor,
+                borderColor,
+                borderColor,
+                settingsPanel!!.position.width,
+                spacingOffset,
                 0f)
             spacingButton.isEnabled = false
             spacingButton.position.inTL(0f,spacing)
 
-            var presetTooltip = ""
-            var minMaxValue = ""
-            val tooltip: TooltipCreator = object : TooltipCreator {
-                override fun isTooltipExpandable(tooltipParam: Any): Boolean {
-                    return false
-                }
-
-                override fun getTooltipWidth(tooltipParam: Any): Float {
-                    return dW / 4f
-                }
-
-                override fun createTooltip(tooltip: TooltipMakerAPI, expanded: Boolean, tooltipParam: Any) {
-
-                    presetTooltip = when(data.fieldType)
-                    {
-                        "Int" -> "Accepts whole numbers only (i.e 1200)"
-                        "Boolean" -> "Switches between True/False"
-                        "Double" -> "Accepts decimal numbers, seperated by a dot (i.e 2.523)"
-                        "String" -> "Accepts Letters, Numbers and Characters (i.e Text100*)"
-                        "Enum" -> "Press the button to select from a preset of options."
-                        else -> ""
-                    }
-                    minMaxValue = when(data.fieldType)
-                    {
-                        "Int" -> "\nMin: ${data.minValue.toInt()}   Max: ${data.maxValue.toInt()}"
-                        "Double" -> "\nMin: ${data.minValue}   Max: ${data.maxValue}"
-                        else -> ""
-                    }
-
-                    tooltip.addPara("${data.fieldName} ($presetTooltip) $minMaxValue\n\n${data.FieldTooltip}",0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${data.fieldName}","Min", "Max")
-                }
+            val presetTooltip: String = when(data.fieldType)
+            {
+                "Int" -> "Accepts whole numbers only (i.e 1200)"
+                "Boolean" -> "Switches between True/False"
+                "Double" -> "Accepts decimal numbers, seperated by a dot (i.e 2.523)"
+                "String" -> "Accepts Letters, Numbers and Characters (i.e Text100*)"
+                "Enum" -> "Press the button to select from a preset of options."
+                else -> ""
             }
+            val minMaxValue: String = when(data.fieldType)
+            {
+                "Int" -> "\nMin: ${data.minValue.toInt()}   Max: ${data.maxValue.toInt()}"
+                "Double" -> "\nMin: ${data.minValue}   Max: ${data.maxValue}"
+                else -> ""
+            }
+
+            val tooltip = TooltipPreset("${data.fieldName} ($presetTooltip) $minMaxValue\n\n${data.FieldTooltip}", pW * 0.4f, "${data.fieldName}","Min", "Max")
 
             if (data.fieldType != "Text")
             {
-                OptionsList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
-                var para = OptionsList!!.addPara("${data.fieldName}", 0f)
-                para.position.inTL(100f ,spacing + pH * 0.060f)
+                settingsPanelList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
+                val para = settingsPanelList!!.addPara("${data.fieldName}", 0f)
+                para.position.inTL(pW * 0.10f,(spacing + spacingOffset / 2) - para.position.height / 2)
             }
             else
             {
-                var para = OptionsList!!.addPara("${data.defaultValue}", 0f)
-                para.position.inTL(100f ,spacing + pH * 0.030f)
+                val fieldNamePara = settingsPanelList!!.addPara("${data.defaultValue}", 0f)
+                fieldNamePara.position.inTL(pW * 0.10f,(spacing + spacingOffset / 4))
+
             }
 
             when (data.fieldType)
             {
                 "Int" ->
                 {
-                    var para1 = OptionsList!!.addPara("", 0f)
-                    para1.position.inTL(pW / 3f ,spacing + pH * 0.030f)
-                    var field = OptionsList!!.addTextField(300f, 0f)
+                    val spacingPara = settingsPanelList!!.addPara("", 0f)
+                    spacingPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - spacingPara.position.height * 2)
+                    var test= spacingPara.position.height
+
+                    val field = settingsPanelList!!.addTextField(pW * 0.25f, 0f)
 
                     if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
                     else field.text = LunaSettings.getInt(data.modID, data.fieldID, false).toString()
-                    OptionIntMap.put(data, field)
+                    intFields.put(data, field)
                 }
                 "Double" ->
                 {
-                    var para1 = OptionsList!!.addPara("", 0f)
-                    para1.position.inTL(pW / 3f ,spacing + pH * 0.030f)
-                    var field = OptionsList!!.addTextField(300f, 0f)
+                    val spacingPara = settingsPanelList!!.addPara("", 0f)
+                    spacingPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - spacingPara.position.height * 2)
+                    val field = settingsPanelList!!.addTextField(pW * 0.25f, 0f)
                     if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
                     else field.text = LunaSettings.getDouble(data.modID, data.fieldID, false).toString()
-                    OptionDoubleMap.put(data, field)
+                    doubleFields.put(data, field)
                 }
                 "String" ->
                 {
-                    var para1 = OptionsList!!.addPara("", 0f)
-                    para1.position.inTL(pW / 3f ,spacing + pH * 0.030f)
-                    var field = OptionsList!!.addTextField(300f, 0f)
+                    val spacingPara = settingsPanelList!!.addPara("", 0f)
+                    spacingPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - spacingPara.position.height * 2)
+                    val field = settingsPanelList!!.addTextField(pW * 0.25f, 0f)
                     if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
                     else field.text = LunaSettings.getString(data.modID, data.fieldID, false).toString()
-                    OptionStringMap.put(data, field)
+                    stringFields.put(data, field)
                 }
                 "Boolean" ->
                 {
-                    var booleanButton = OptionsList!!.addAreaCheckbox("True/False", null,
+                    val booleanButton = settingsPanelList!!.addAreaCheckbox("True/False", null,
                         Misc.getBasePlayerColor(),
                         Misc.getDarkPlayerColor(),
                         Misc.getBrightPlayerColor(),
-                        300f,
+                        pW * 0.25f,
                         pH * 0.05f,
                         0f)
                     if (firstRun) booleanButton.isChecked = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID) as Boolean
                     else booleanButton.isChecked = LunaSettings.getBoolean(data.modID, data.fieldID, false) ?: false
-                    booleanButton.position.inTL(pW / 3f,spacing + pH * 0.045f)
-                    OptionBooleanMap.put(data, booleanButton)
+                    booleanButton.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - booleanButton.position.height / 2)
+                    booleanField.put(data, booleanButton)
                 }
                 "Enum" ->
                 {
-                    var para1 = OptionsList!!.addPara("Selected: ", 0f)
-                    para1.position.inTL(pW / 3f ,spacing + pH * 0.025f)
-                    OptionEnumTextMap.put(data, para1)
+                    val selectedPara = settingsPanelList!!.addPara("Selected: ", 0f)
+                    selectedPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - pH * 0.05f)
+                    enumFieldsPara.put(data, selectedPara)
 
-                    if (firstRun) para1.text = "Selected: " + LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
-                    else para1.text = "Selected: " + LunaSettings.getString(data.modID, data.fieldID, false).toString()
+                    if (firstRun) selectedPara.text = "Selected: " + LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
+                    else selectedPara.text = "Selected: " + LunaSettings.getString(data.modID, data.fieldID, false).toString()
 
-                    var enumButton = OptionsList!!.addAreaCheckbox("Select", null,
+                    val enumButton = settingsPanelList!!.addAreaCheckbox("Select", null,
                         Misc.getBasePlayerColor(),
                         Misc.getDarkPlayerColor(),
                         Misc.getBrightPlayerColor(),
-                        300f,
+                        pW * 0.25f,
                         pH * 0.05f,
                         0f)
 
-                    enumButton!!.position.inTL(pW / 3f,spacing + pH * 0.045f)
-                    OptionEnumMap.put(data, enumButton)
-
+                    enumButton.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - enumButton.position.height / 2)
+                    enumField.put(data, enumButton)
                 }
             }
 
-            spacing += pH * 0.15f
+            spacing += spacingOffset
         }
         return spacing
     }
 
     private fun saveData()
     {
-        var data = JSONUtils.loadCommonJSON("LunaSettings/${selectedMod!!.id}.json", "data/config/LunaSettingsDefault.default");
-        var saveData: MutableMap<String, Any> = HashMap()
+        val data = JSONUtils.loadCommonJSON("LunaSettings/${selectedMod!!.id}.json", "data/config/LunaSettingsDefault.default");
+        val saveData: MutableMap<String, Any> = HashMap()
 
         checkIllegalChar()
 
-        for (toSave in OptionIntMap)
+        //Saves active Int Fields.
+        for (toSave in intFields)
         {
-            if (toSave.key.newGame)
+            if (toSave.value.text == "")
             {
-                if (!newgame) continue
-                if (toSave.value.text == "")
-                {
-                    saveData.put(toSave.key.fieldID, toSave.key.defaultValue)
-                }
-                else
-                {
-                    saveData.put(toSave.key.fieldID, toSave.value.text.toInt())
-                }
+                if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.key.defaultValue)
+                else data.put(toSave.key.fieldID, toSave.key.defaultValue)
             }
             else
             {
-                if (toSave.value.text == "")
-                {
-                    data.put(toSave.key.fieldID, toSave.key.defaultValue)
-                }
-                else
-                {
-                    data.put(toSave.key.fieldID, toSave.value.text.toInt())
-                }
-            }
-        }
-        for (toSave in OptionDoubleMap)
-        {
-            if (toSave.key.newGame)
-            {
-                if (!newgame) continue
-                if (toSave.value.text == "")
-                {
-                    saveData.put(toSave.key.fieldID, toSave.key.defaultValue)
-                }
-                else
-                {
-                    saveData.put(toSave.key.fieldID, toSave.value.text.toDouble())
-                }
-            }
-            else
-            {
-                if (toSave.value.text == "")
-                {
-                    data.put(toSave.key.fieldID, toSave.key.defaultValue)
-                }
-                else
-                {
-                    data.put(toSave.key.fieldID, toSave.value.text.toDouble())
-                }
-            }
-        }
-        for (toSave in OptionStringMap)
-        {
-            if (toSave.key.newGame)
-            {
-                if (!newgame) continue
-                if (toSave.value.text == "")
-                {
-                    saveData.put(toSave.key.fieldID, toSave.key.defaultValue)
-                }
-                else
-                {
-                    saveData.put(toSave.key.fieldID, toSave.value.text)
-                }
-            }
-            else
-            {
-                if (toSave.value.text == "")
-                {
-                    data.put(toSave.key.fieldID, toSave.key.defaultValue)
-                }
-                else
-                {
-                    data.put(toSave.key.fieldID, toSave.value.text)
-                }
-            }
-        }
-        for (toSave in OptionBooleanMap)
-        {
-            if (toSave.key.newGame)
-            {
-                if (!newgame) continue
-                saveData.put(toSave.key.fieldID, toSave.value.isChecked)
-            }
-            else
-            {
-                data.put(toSave.key.fieldID, toSave.value.isChecked)
+                if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.text.toInt())
+                else data.put(toSave.key.fieldID, toSave.value.text.toInt())
             }
         }
 
-        for (toSave in OptionEnumTextMap)
+        //Saves active Double Fields.
+        for (toSave in doubleFields)
         {
-            if (toSave.key.newGame)
+            if (toSave.value.text == "")
             {
-                if (!newgame) continue
-                saveData.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
+                if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.key.defaultValue)
+                else data.put(toSave.key.fieldID, toSave.key.defaultValue)
             }
             else
             {
-                data.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
+                if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.text.toDouble())
+                else data.put(toSave.key.fieldID, toSave.value.text.toDouble())
             }
+        }
+
+        //Saves active String Fields.
+        for (toSave in stringFields)
+        {
+            if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.text)
+            else data.put(toSave.key.fieldID, toSave.value.text)
+        }
+
+        //Saves Booleans
+        for (toSave in booleanField)
+        {
+            if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.isChecked)
+            else data.put(toSave.key.fieldID, toSave.value.isChecked)
+        }
+
+        //Saves Enums as Strings
+        for (toSave in enumFieldsPara)
+        {
+            if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
+            else data.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
         }
 
         data.save()
@@ -646,7 +550,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
     private fun callSettingsChangedListener()
     {
-        var listeners = Global.getSector().listenerManager.getListeners(LunaSettingsListener::class.java)
+        val listeners = Global.getSector().listenerManager.getListeners(LunaSettingsListener::class.java)
         for (listener in listeners)
         {
             listener.settingsChanged()
@@ -655,9 +559,13 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
     override fun render(alphaMult: Float)
     {
-        var playercolor = Misc.getDarkPlayerColor()
+        val playercolor = Misc.getDarkPlayerColor()
 
-        if (ModsInnerPannel != null)
+        val panelsToOutline: MutableList<CustomPanelAPI> = ArrayList()
+        if (modsPanel != null) panelsToOutline.add(modsPanel!!)
+        if (settingsPanel != null && selectedMod != null) panelsToOutline.add(settingsPanel!!)
+
+        for (panel in panelsToOutline)
         {
             GL11.glPushMatrix()
 
@@ -667,53 +575,27 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             GL11.glDisable(GL11.GL_TEXTURE_2D)
             GL11.glEnable(GL11.GL_BLEND)
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE)
-            GL11.glColor4ub(playercolor.getRed().toByte(), playercolor.getGreen().toByte(), playercolor.getBlue().toByte(), playercolor.getAlpha().toByte())
+            GL11.glColor4ub(playercolor.red.toByte(), playercolor.green.toByte(), playercolor.blue.toByte(), playercolor.alpha.toByte())
 
-            //Inner Pannel Border
             GL11.glEnable(GL11.GL_LINE_SMOOTH)
             GL11.glBegin(GL11.GL_LINE_STRIP)
 
-            GL11.glVertex2f(ModsInnerPannel!!.position.x, ModsInnerPannel!!.position.y)
-            GL11.glVertex2f(ModsInnerPannel!!.position.x + ModsInnerPannel!!.position.width, ModsInnerPannel!!.position.y)
-            GL11.glVertex2f(ModsInnerPannel!!.position.x + ModsInnerPannel!!.position.width, ModsInnerPannel!!.position.y + ModsInnerPannel!!.position.height)
-            GL11.glVertex2f(ModsInnerPannel!!.position.x, ModsInnerPannel!!.position.y + ModsInnerPannel!!.position.height)
-            GL11.glVertex2f(ModsInnerPannel!!.position.x, ModsInnerPannel!!.position.y)
-
-            GL11.glEnd()
-        }
-        if (OptionsInnerPannel != null)
-        {
-            GL11.glPushMatrix()
-
-            GL11.glTranslatef(0f, 0f, 0f)
-            GL11.glRotatef(0f, 0f, 0f, 1f)
-
-            GL11.glDisable(GL11.GL_TEXTURE_2D)
-            GL11.glEnable(GL11.GL_BLEND)
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE)
-            GL11.glColor4ub(playercolor.getRed().toByte(), playercolor.getGreen().toByte(), playercolor.getBlue().toByte(), playercolor.getAlpha().toByte())
-
-            //Inner Pannel Border
-            GL11.glEnable(GL11.GL_LINE_SMOOTH)
-            GL11.glBegin(GL11.GL_LINE_STRIP)
-
-            GL11.glVertex2f(OptionsInnerPannel!!.position.x, OptionsInnerPannel!!.position.y)
-            GL11.glVertex2f(OptionsInnerPannel!!.position.x + OptionsInnerPannel!!.position.width, OptionsInnerPannel!!.position.y)
-            GL11.glVertex2f(OptionsInnerPannel!!.position.x + OptionsInnerPannel!!.position.width, OptionsInnerPannel!!.position.y + OptionsInnerPannel!!.position.height)
-            GL11.glVertex2f(OptionsInnerPannel!!.position.x, OptionsInnerPannel!!.position.y + OptionsInnerPannel!!.position.height)
-            GL11.glVertex2f(OptionsInnerPannel!!.position.x, OptionsInnerPannel!!.position.y)
+            GL11.glVertex2f(panel.position.x, panel.position.y)
+            GL11.glVertex2f(panel.position.x + panel.position.width, panel.position.y)
+            GL11.glVertex2f(panel.position.x + panel.position.width, panel.position.y + panel.position.height)
+            GL11.glVertex2f(panel.position.x, panel.position.y + panel.position.height)
+            GL11.glVertex2f(panel.position.x, panel.position.y)
 
             GL11.glEnd()
         }
     }
-
 
     override fun positionChanged(position: PositionAPI?) {
 
     }
 
     override fun renderBelow(alphaMult: Float) {
-        var bgColor = Color(20, 20, 20)
+        val bgColor = Color(20, 20, 20)
         val x: Float = panel!!.position.x
         val y: Float = panel!!.position.y
         val w: Float = panel!!.position.width
@@ -722,10 +604,10 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         GL11.glDisable(GL11.GL_TEXTURE_2D)
         GL11.glEnable(GL11.GL_BLEND)
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
-        GL11.glColor4f(bgColor.getRed() / 255f,
-            bgColor.getGreen() / 255f,
-            bgColor.getBlue() / 255f,
-            bgColor.getAlpha() / 255f * alphaMult)
+        GL11.glColor4f(bgColor.red / 255f,
+            bgColor.green / 255f,
+            bgColor.blue / 255f,
+            bgColor.alpha / 255f * alphaMult)
         GL11.glRectf(x, y, x + w, y + h)
         GL11.glColor4f(1f, 1f, 1f, 1f)
         GL11.glPopMatrix()
@@ -734,7 +616,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     override fun processInput(events: MutableList<InputEventAPI>?) {
         for (event in events!!) {
             if (event.isConsumed) continue
-            //is ESC is pressed, close the custom UI panel and the blank IDP we used to create it
             if (event.isKeyDownEvent && event.eventValue == Keyboard.KEY_ESCAPE)
             {
                 event.consume()
@@ -750,10 +631,10 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         }
     }
 
-    fun checkIllegalChar()
+    //Removes illegal characters from fields
+    private fun checkIllegalChar()
     {
-        //Removes banned characters from fields
-        for (map in OptionIntMap)
+        for (map in intFields)
         {
             if (map.value.hasFocus()) continue
             var modifiedString = map.value.text.replace("[^0-9]".toRegex(), "")
@@ -771,17 +652,11 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
             map.value.text = modifiedString
         }
-        for (map in OptionDoubleMap)
+        for (map in doubleFields)
         {
             if (map.value.hasFocus()) continue
             var modifiedString = map.value.text.replace("[^0-9.]".toRegex(), "")
 
-            /* try {
-                 if (modifiedString.toDouble() !in map.key.minValue..map.key.maxValue)
-                 {
-                     modifiedString = modifiedString.substring(0, modifiedString.length - 1) + "" + modifiedString.substring(modifiedString.length)
-                 }
-             }*/
             try {
                 if (modifiedString.toDouble() < map.key.minValue) modifiedString = "" + map.key.minValue
                 if (modifiedString.toDouble() > map.key.maxValue) modifiedString = "" + map.key.maxValue
@@ -794,4 +669,23 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             map.value.text = modifiedString
         }
     }
+}
+
+private class TooltipPreset(var text: String, var width: Float, vararg highlights: String) : TooltipCreator
+{
+
+    var Highlights = highlights
+
+    override fun isTooltipExpandable(tooltipParam: Any?): Boolean {
+        return false
+    }
+
+    override fun getTooltipWidth(tooltipParam: Any?): Float {
+        return width
+    }
+
+    override fun createTooltip(tooltip: TooltipMakerAPI?, expanded: Boolean, tooltipParam: Any?) {
+        tooltip!!.addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), *Highlights)
+    }
+
 }

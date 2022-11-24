@@ -16,6 +16,8 @@ class OpenSettingsFromCMD : BaseCommandPlugin() {
         dialog!!.hideVisualPanel();
         dialog.hideTextPanel();
 
+        var scale = Global.getSettings().screenScaleMult
+
         dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.9f,
             Global.getSettings().screenHeight * 0.9f,
             OpenSettingsPanelDelegate(LunaSettingsUI(true), dialog))
