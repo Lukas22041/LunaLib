@@ -27,6 +27,9 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     private var pH = 0f
     private var selectedMod: ModSpecAPI? = null
 
+    private var headerPanel: TooltipMakerAPI? = null
+    private var header: LabelAPI? = null
+
     //Mods Panel
     private var modsPanel: CustomPanelAPI? = null
     private var modsPanelList: TooltipMakerAPI? = null
@@ -52,8 +55,9 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     private var isEnumOpen = false
     private var enumPanel: TooltipMakerAPI? = null
 
-
-
+    private var keyField: MutableMap<LunaSettingsData,ButtonAPI> = HashMap()
+    private var keyFieldPara: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
+    private var selectedKey: LunaSettingsData? = null
 
     fun init(panel: CustomPanelAPI?, callbacks: DialogCallbacks?, dialog: InteractionDialogAPI?) {
         this.panel = panel
@@ -67,6 +71,8 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     }
 
     private fun reset() {
+
+
         ModsDisplay()
         optionsDisplay()
     }
@@ -75,6 +81,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     {
         panel!!.removeComponent(modsPanelList)
         panel!!.removeComponent(modsPanel)
+        panel!!.removeComponent(headerPanel)
         modsPanel = null
         ModsDisplay()
 
@@ -93,6 +100,10 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         enumOptions.clear()
         selectedEnum = null
         isEnumOpen = false
+
+        keyField.clear()
+        keyFieldPara.clear()
+        selectedKey = null
 
         settingsPanel = null
         optionsDisplay()
@@ -140,6 +151,10 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             for (map in enumFieldsPara)
             {
                 map.value.text = "Selected: " + (map.key.defaultValue as List<String>).get(0)
+            }
+            for (map in keyFieldPara)
+            {
+                map.value.text = "Current Key: " + Keyboard.getKeyName(map.key.defaultValue as Int)
             }
             resetButton!!.isChecked = false
         }
@@ -229,17 +244,45 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     }
                 }
             }
+
+            for (map in keyField)
+            {
+                if (selectedKey != null)
+                {
+                    if (map.key == selectedKey)
+                    {
+                        if (!map.value.isChecked)
+                        {
+                            selectedKey = null
+                        }
+                    }
+                    else
+                    {
+                        map.value.isChecked = false
+                        Keyboard.KEY_Q
+                    }
+                }
+                else if (map.value.isChecked)
+                {
+                    selectedKey = map.key
+                }
+            }
         }
     }
 
     //Displays all active mods that have atleast one setting loaded.
     private fun ModsDisplay()
     {
-        modsPanel = panel!!.createCustomPanel(pW * 0.2f , pH, null)
-        modsPanel!!.position.setLocation(0f,0f).inTL(0f, 0f)
+        headerPanel = panel!!.createUIElement(pW, pH, false)
+        header = headerPanel!!.addSectionHeading("Mod Settings", Alignment.MID, 0f)
 
-        modsPanelList = modsPanel!!.createUIElement(pW * 0.2f, pH, true)
-        modsPanelList!!.position.inTL(0f, 0f)
+        panel!!.addUIElement(headerPanel)
+
+        modsPanel = panel!!.createCustomPanel(pW * 0.2f , pH - header!!.position.height, null)
+        modsPanel!!.position.setLocation(0f,0f).inTL(0f, header!!.position.height)
+
+        modsPanelList = modsPanel!!.createUIElement(pW * 0.2f, pH - header!!.position.height, true)
+        modsPanelList!!.position.inTL(0f, header!!.position.height)
 
         val modsWithData = LunaSettingsLoader.SettingsData.map { it.modID }.distinct()
 
@@ -260,7 +303,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
             val tooltip = TooltipPreset("ModID: ${mod.id}\n" +
                                              "Version: ${mod.version}\n" +
-                                             "Author: ${mod.author}\n", pW * 0.1f, "ModID:", "Version:", "Author:")
+                                             "Author: ${mod.author}\n", pW * 0.3f, "ModID:", "Version:", "Author:")
 
             modsPanelList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
         }
@@ -386,6 +429,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 "Double" -> "Accepts decimal numbers, seperated by a dot (i.e 2.523)"
                 "String" -> "Accepts Letters, Numbers and Characters (i.e Text100*)"
                 "Enum" -> "Press the button to select from a preset of options."
+                "Keycode" -> "Saves the next key pressed after selecting the button."
                 else -> ""
             }
             val minMaxValue: String = when(data.fieldType)
@@ -476,6 +520,26 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     enumButton.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - enumButton.position.height / 2)
                     enumField.put(data, enumButton)
                 }
+                "Keycode" ->
+                {
+                    val selectedPara = settingsPanelList!!.addPara("Current Key: ", 0f)
+                    selectedPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - pH * 0.05f)
+                    keyFieldPara.put(data, selectedPara)
+
+                    if (firstRun) selectedPara.text = "Current Key: " + Keyboard.getKeyName(LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID) as Int)
+                    else selectedPara.text = "Current Key: " + Keyboard.getKeyName(LunaSettings.getInt(data.modID, data.fieldID, false)!!)
+
+                    val keycodeButton = settingsPanelList!!.addAreaCheckbox("Register Key", null,
+                        Misc.getBasePlayerColor(),
+                        Misc.getDarkPlayerColor(),
+                        Misc.getBrightPlayerColor(),
+                        pW * 0.25f,
+                        pH * 0.05f,
+                        0f)
+
+                    keycodeButton.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - keycodeButton.position.height / 2)
+                    keyField.put(data, keycodeButton)
+                }
             }
 
             spacing += spacingOffset
@@ -539,6 +603,13 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         {
             if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
             else data.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
+        }
+
+        //Saves Keycodes as Ints
+        for (toSave in keyFieldPara)
+        {
+            if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID,  Keyboard.getKeyIndex(toSave.value.text.replace("Current Key: ", "")))
+            else data.put(toSave.key.fieldID, Keyboard.getKeyIndex(toSave.value.text.replace("Current Key: ", "")))
         }
 
         data.save()
@@ -616,6 +687,21 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     override fun processInput(events: MutableList<InputEventAPI>?) {
         for (event in events!!) {
             if (event.isConsumed) continue
+
+            if (selectedKey != null && event.isKeyDownEvent && event.eventValue != -1 && event.eventValue != Keyboard.KEY_LSHIFT && event.eventValue != Keyboard.KEY_LCONTROL && event.eventValue != Keyboard.KEY_LMENU)
+            {
+                var value = "Current Key: ${Keyboard.getKeyName(event.eventValue)}"
+
+                if (event.eventValue == Keyboard.KEY_ESCAPE) value = "Current Key: ${Keyboard.getKeyName(0)}"
+
+                event.consume()
+                keyFieldPara.get(selectedKey)!!.text = value
+                keyField.get(selectedKey)!!.isChecked = false
+                selectedKey = null
+
+                continue
+            }
+
             if (event.isKeyDownEvent && event.eventValue == Keyboard.KEY_ESCAPE)
             {
                 event.consume()
@@ -626,7 +712,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
                 if (!newgame) dialog!!.dismiss()
 
-                return
+                continue
             }
         }
     }
@@ -687,5 +773,4 @@ private class TooltipPreset(var text: String, var width: Float, vararg highlight
     override fun createTooltip(tooltip: TooltipMakerAPI?, expanded: Boolean, tooltipParam: Any?) {
         tooltip!!.addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), *Highlights)
     }
-
 }

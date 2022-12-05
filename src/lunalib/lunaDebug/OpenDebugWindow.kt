@@ -1,4 +1,4 @@
-package lunalib.lunaSettings
+package lunalib
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin
@@ -9,9 +9,11 @@ import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate.DialogCallbacks
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
+import data.scripts.util.MagicRender
+import lunalib.lunaDebug.DebugWindowUI
 
 
-internal class OpenSettingsPanelInteraction : InteractionDialogPlugin
+internal class OpenDebugWindowInteraction : InteractionDialogPlugin
 {
 
     var dialog: InteractionDialogAPI? = null
@@ -26,7 +28,7 @@ internal class OpenSettingsPanelInteraction : InteractionDialogPlugin
 
         dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.9f,
             Global.getSettings().screenHeight * 0.9f,
-            OpenSettingsPanelDelegate(LunaSettingsUI(false), dialog))
+            OpenDebugWindowDelegate(DebugWindowUI(), dialog))
     }
 
     override fun optionSelected(optionText: String?, optionData: Any?) {
@@ -54,11 +56,11 @@ internal class OpenSettingsPanelInteraction : InteractionDialogPlugin
     }
 }
 
-internal class OpenSettingsPanelDelegate(missionPanel: LunaSettingsUI?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
+internal class OpenDebugWindowDelegate(missionPanel: DebugWindowUI?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
 {
 
     private var callbacks: DialogCallbacks? = null
-    private var plugin: LunaSettingsUI? = null
+    private var plugin: DebugWindowUI? = null
     private var dialog: InteractionDialogAPI? = null
 
     init {

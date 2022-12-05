@@ -40,8 +40,6 @@ public class Example extends LunaInteractionPlugin
 *   }
 }
 ```
-
-
 */
 abstract class LunaInteractionPlugin() : InteractionDialogPlugin
 {
@@ -77,7 +75,6 @@ abstract class LunaInteractionPlugin() : InteractionDialogPlugin
         {
             visualPanel.showImageVisual(dialog.interactionTarget.customInteractionDialogImageVisual)
         }
-
         start()
     }
 

@@ -15,6 +15,7 @@ class OpenSettingsFromCMD : BaseCommandPlugin() {
     {
         dialog!!.hideVisualPanel();
         dialog.hideTextPanel();
+        dialog.promptText = ""
 
         var scale = Global.getSettings().screenScaleMult
 

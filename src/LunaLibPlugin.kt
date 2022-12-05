@@ -1,7 +1,13 @@
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
-import lunalib.lunaSettings.LunaSettingsHotkeyListener
+import javafx.application.Application
+import lunalib.KeybindsScript
+import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsLoader
+import lunalib.lunaUtil.LunaMisc
+import lunalib.lunaUtil.campaign.LunaProcgen
+import org.lwjgl.input.Keyboard
+import java.util.*
 
 class LunaLibPlugin : BaseModPlugin()
 {
@@ -9,15 +15,29 @@ class LunaLibPlugin : BaseModPlugin()
     {
         LunaSettingsLoader.storeSaveSettingsInToMemory()
         LunaSettingsLoader.loadSaveSettingDefaults()
+
+        LunaProcgen.random = Random(Global.getSector().seedString.hashCode().toLong())
     }
 
-    override fun onNewGameAfterProcGen() {
+    override fun onNewGameAfterEconomyLoad() {
+        
+    }
+
+    override fun onNewGameAfterTimePass() {
+
     }
 
     override fun onGameLoad(newGame: Boolean)
     {
-        Global.getSector().addTransientScript(LunaSettingsHotkeyListener())
+        LunaProcgen.random = Random(Global.getSector().seedString.hashCode().toLong())
+        Global.getSector().addTransientScript(KeybindsScript())
+
+        var keybind = Keyboard.getKeyName(LunaSettings.getInt("lunalib", "luna_SettingsKeybind", false)!!)
+        LunaMisc.createIntelMessage("LunaLib",
+            "Press $keybind to open the Mod Settings.\n" +
+                    "Use Shift + F2 in case the Keybind is inaccesible.")
     }
+
 
     override fun onApplicationLoad()
     {

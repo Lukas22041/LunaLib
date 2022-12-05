@@ -70,6 +70,7 @@ internal object LunaSettingsLoader
                 "Double" -> default = default.toString().toDouble()
                 "String" -> default = default.toString()
                 "Enum" -> default = default.toString().split(",")
+                "Keycode" -> default = default.toString().toInt()
             }
 
             if (type == "Enum")
