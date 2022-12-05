@@ -381,14 +381,14 @@ internal class ItemTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : De
             {
                 for (filt in filters)
                 {
-                    var filter = filt.trim()
+                    var filter = filt.trim().lowercase()
 
                     if (button.key == "Ships" && button.value.isChecked)
                     {
                         run search@ {
                             Global.getSettings().allShipHullSpecs.forEach {
                                 if (it.hullSize == ShipAPI.HullSize.FIGHTER) return@forEach
-                                if (it.hullName.contains(filter) || it.hullId.contains(filter)) { items.add(it); capCount++ }
+                                if (it.hullName.lowercase().contains(filter) || it.hullId.lowercase().contains(filter)) { items.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }
@@ -397,7 +397,7 @@ internal class ItemTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : De
                     {
                         run search@ {
                             Global.getSettings().allWeaponSpecs.forEach {
-                                if (it.weaponName.contains(filter) || it.weaponId.contains(filter)) { items.add(it); capCount++ }
+                                if (it.weaponName.lowercase().contains(filter) || it.weaponId.lowercase().contains(filter)) { items.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }
@@ -406,7 +406,7 @@ internal class ItemTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : De
                     {
                         run search@ {
                             Global.getSettings().allHullModSpecs.forEach {
-                                if (it.displayName.contains(filter) || it.id.contains(filter)) { items.add(it); capCount++ }
+                                if (it.displayName.lowercase().contains(filter) || it.id.lowercase().contains(filter)) { items.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }
@@ -415,7 +415,7 @@ internal class ItemTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : De
                     {
                         run search@ {
                             Global.getSettings().allFighterWingSpecs.forEach {
-                                if (it.wingName.contains(filter) || it.id.contains(filter)) { items.add(it); capCount++ }
+                                if (it.wingName.lowercase().contains(filter) || it.id.lowercase().contains(filter)) { items.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }
@@ -424,7 +424,7 @@ internal class ItemTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : De
                     {
                         run search@ {
                             Global.getSettings().allCommoditySpecs.forEach {
-                                if (it.name.contains(filter) || it.id.contains(filter)) { items.add(it); capCount++ }
+                                if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter)) { items.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }

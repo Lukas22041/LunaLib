@@ -301,13 +301,13 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                 for (filt in filters)
                 {
 
-                    var filter = filt.trim()
+                    var filter = filt.trim().lowercase()
 
                     if (button.key == "Starsystems" && button.value.isChecked)
                     {
                         run search@ {
                             systems.forEach {
-                                if (it.name.contains(filter) || it.id.contains(filter) || it.tags.any { tag -> tag.contains(filter) }) { entities.add(it); capCount++ }
+                                if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) }) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }
@@ -318,7 +318,7 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                         run search@ {
                             planets.forEach {
                                 if (!it.isStar) return@forEach
-                                if (it.name.contains(filter) || it.id.contains(filter) || it.tags.any { tag -> tag.contains(filter) }) { entities.add(it); capCount++ }
+                                if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) }) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }
@@ -329,7 +329,7 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                         run search@ {
                             planets.forEach {
                                 if (it.isStar) return@forEach
-                                if (it.name.contains(filter) || it.id.contains(filter) || it.tags.any { tag -> tag.contains(filter) } || it.faction.id.contains(filter) || it.faction.displayName.contains(filter)) { entities.add(it); capCount++ }
+                                if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) } || it.faction.id.lowercase().contains(filter) || it.faction.displayName.lowercase().contains(filter)) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }
@@ -340,7 +340,7 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                         run search@ {
                             customEntities.forEach {
                                 if (it.tags.contains("orbital_junk")) return@forEach
-                                if (it.name.contains(filter) || it.id.contains(filter) || it.tags.any { tag -> tag.contains(filter) } || it.faction.id.contains(filter) || it.faction.displayName.contains(filter)) { entities.add(it); capCount++ }
+                                if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) } || it.faction.id.lowercase().contains(filter) || it.faction.displayName.lowercase().contains(filter)) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }
@@ -350,7 +350,7 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                     {
                         run search@ {
                             fleets.forEach {
-                                if (it.name.contains(filter) || it.id.contains(filter) || it.tags.any { tag -> tag.contains(filter) } || it.faction.id.contains(filter) || it.faction.displayName.contains(filter)) { entities.add(it); capCount++ }
+                                if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) } || it.faction.id.lowercase().contains(filter) || it.faction.displayName.lowercase().contains(filter)) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
                         }

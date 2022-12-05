@@ -20,7 +20,7 @@ class LunaLibPlugin : BaseModPlugin()
     }
 
     override fun onNewGameAfterEconomyLoad() {
-        
+
     }
 
     override fun onNewGameAfterTimePass() {
