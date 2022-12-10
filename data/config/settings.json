@@ -1,5 +1,15 @@
  {
  	"ruleCommandPackages":[
  		"lunalib.lunaCMDs",
- 	],			
+ 	],		
+
+	"plugins":{
+		"LunaLibCombatHandler":"lunalib.lunaUtil.combat.CombatHandler",
+	},
+	
+	"graphics":{
+		"luna":{
+			"shockwave":"graphics/lunalib/shockwave.png",	
+		},
+	}
  }

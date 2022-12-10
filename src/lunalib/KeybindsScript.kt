@@ -15,9 +15,9 @@ internal class KeybindsScript : LunaSettingsListener, EveryFrameScript
 
     var keyPressed = false
     var interval = IntervalUtil(1f, 1f)
-    var settingsKeybind = LunaSettings.getInt("lunalib", "luna_SettingsKeybind", false)
-    var debugKeybind = LunaSettings.getInt("lunalib", "luna_DebugKeybind", false)
-    var devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind", false)
+    var settingsKeybind = LunaSettings.getInt("lunalib", "luna_SettingsKeybind")
+    var debugKeybind = LunaSettings.getInt("lunalib", "luna_DebugKeybind")
+    var devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind")
 
     init {
         Global.getSector().listenerManager.addListener(this, true)
@@ -75,8 +75,8 @@ internal class KeybindsScript : LunaSettingsListener, EveryFrameScript
     }
 
     override fun settingsChanged() {
-        settingsKeybind = LunaSettings.getInt("lunalib", "luna_SettingsKeybind", false)
-        debugKeybind = LunaSettings.getInt("lunalib", "luna_DebugKeybind", false)
-        devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind", false)
+        settingsKeybind = LunaSettings.getInt("lunalib", "luna_SettingsKeybind")
+        debugKeybind = LunaSettings.getInt("lunalib", "luna_DebugKeybind")
+        devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind")
     }
 }

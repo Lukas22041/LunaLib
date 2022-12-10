@@ -1,23 +1,23 @@
-modID,fieldID,fieldName,fieldType,defaultValue,fieldTooltip,newGame,minValue,maxValue,tags
+modID,fieldID,fieldName,fieldType,defaultValue,fieldTooltip,minValue,maxValue,tags
 lunalib,luna_SettingsKeybind,Settings Keybind,Keycode,60,"Changes the Keybind for opening this Menu in the Campaign.
-Can always be opened by pressing Shift + F2, even if set to another key.",false,,,
-lunalib,luna_DebugKeybind,Debug Keybind,Keycode,0,Changes the Keybind used to open the Debug Menu.,false,,,
-lunalib,luna_DebugEntries,Debug Menu Entries,Int,25,Controls how many entries can show up in the Debug Menu's Search Screens. Higher quantities will lead to lag.,false,10,500,
-lunalib,luna_DevmodeKeybind,Devmode Keybind,Keycode,0,Changes the keybind for the devmode toggle.,false,,,
-,,,,,,,,,
-lunalib,luna_emptyField,Example Text Field,Text,,,false,,,noHighlight
+Can always be opened by pressing Shift + F2, even if set to another key.",,,
+lunalib,luna_DebugKeybind,Debug Keybind,Keycode,0,Changes the Keybind used to open the Debug Menu.,,,
+lunalib,luna_DebugEntries,Debug Menu Entries,Int,25,Controls how many entries can show up in the Debug Menu's Search Screens. Higher quantities will lead to lag.,10,500,spacing:0.5
+lunalib,luna_DevmodeKeybind,Devmode Keybind,Keycode,0,Changes the keybind for the devmode toggle.,,,spacing:0.5
+,,,,,,,,
+lunalib,luna_emptyField,Example Text Field,Text,,,,,noHighlight
 lunalib,luna_exampleText,Example Text Field,Text,"Any value below is merely an example for Modders. 
 None of the Settings here do anything.
-",,false,,,noHighlight
-lunalib,luna_exampleString,Example String,String,some string,"Strings will accept any characters put in, with no filtering.",false,,,
-lunalib,luna_exampleBoolean,Example Boolean,Boolean,true,"An active Button sets to true, an inactive button sets to false",false,,,
+",,,,noHighlight
+lunalib,luna_exampleString,Example String,String,some string,"Strings will accept any characters put in, with no filtering.",,,
+lunalib,luna_exampleBoolean,Example Boolean,Boolean,true,"An active Button sets to true, an inactive button sets to false",,,
 lunalib,luna_exampleInt,Example Int,Int,100,"Int Fields will only accept whole Numbers, and block any other character from being entered.
-Using the maxValue config, you can change the range of values that can be entered.",false,50,200,
+Using the maxValue config, you can change the range of values that can be entered.",50,200,
 lunalib,luna_exampleDouble,Example Double,Double,10.2,"Doubles allow only numbers and a single decimal dot (.) 
-Using the maxValue config, you can change the range of values that can be entered.",false,0,20,spacing:0.5
+Using the maxValue config, you can change the range of values that can be entered.",0,20,spacing:0.5
 lunalib,luna_exampleEnum,Example Enum,Enum,"Hegemony, Tritach, Pirates, Independent","Enums can be used to create a preset of options. They are stored as Strings, and can be accessed by the getStrings() method. 
 The String behind the first comma will be set as the default value.
 
 Each Entry is seperated by a comma, and all spaces are removed automaticly.  
 
-",false,,,spacing:2
+",,,spacing:2

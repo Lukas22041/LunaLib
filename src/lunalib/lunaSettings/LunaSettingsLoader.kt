@@ -18,7 +18,6 @@ data class LunaSettingsData(
     val fieldType: String,
     val FieldTooltip: String,
     val defaultValue: Any,
-    val newGame: Boolean,
     val minValue: Double,
     val maxValue: Double,
     val tags: List<String>)
@@ -33,9 +32,6 @@ internal object LunaSettingsLoader
 
     @JvmStatic
     var Settings: MutableMap<String, JSONUtils.CommonDataJSONObject> = HashMap()
-
-    @JvmStatic
-    var newGameSettings: MutableMap<String, Map<String, Any>> = HashMap()
 
     @JvmStatic
     var SettingsData: MutableList<LunaSettingsData> = ArrayList()
@@ -83,7 +79,6 @@ internal object LunaSettingsLoader
                 default = list
             }
 
-            var newGame = false
             var minValue = 0.0
             var maxValue = 0.0
 
@@ -92,15 +87,6 @@ internal object LunaSettingsLoader
             for (tag in tagsToBeFiltered)
             {
                 tags.add(tag.trim())
-            }
-
-            try {
-                newGame = rows.getString("newGame").toBoolean()
-            }
-            catch (e: Throwable)
-            {
-                newGame = false
-                log.debug("LunaSettings: No newGame value for for $id, setting to false")
             }
 
             if (type == "Int" || type == "Double")
@@ -124,7 +110,7 @@ internal object LunaSettingsLoader
                 }
             }
 
-            SettingsData.add(LunaSettingsData(modID, id, name, type, tooltip, default, newGame, minValue, maxValue, tags))
+            SettingsData.add(LunaSettingsData(modID, id, name, type, tooltip, default, minValue, maxValue, tags))
             log.debug("LunaSettings: Loaded default settings data: $id, from $modID")
         }
     }
@@ -140,7 +126,6 @@ internal object LunaSettingsLoader
 
             for (default in defaults)
             {
-                if (default.newGame) continue
                 if (default.fieldType == "Text") continue
                 if (default.modID == mod.id)
                 {
@@ -184,38 +169,5 @@ internal object LunaSettingsLoader
                 Settings.put(mod.id, data)
                 log.debug("LunaSettings: Loaded Mod Settings for ${mod.id}")
         }
-    }
-
-    fun loadSaveSettingDefaults()
-    {
-        var mods = Global.getSettings().modManager.enabledModsCopy
-        for (mod in mods)
-        {
-            var saveData: MutableMap<String, Any> = HashMap()
-            for (data in SettingsData)
-            {
-                if (data.modID != mod.id || !data.newGame) continue
-                if (data.fieldType == "Enum")
-                {
-                    saveData.put(data.fieldID, (data.defaultValue as List<String>).get(0))
-                }
-                else
-                {
-                    saveData.put(data.fieldID, data.defaultValue)
-                }
-            }
-            if (saveData.isNotEmpty()) newGameSettings.put(mod.id, saveData)
-
-        }
-    }
-
-    fun storeSaveSettingsInToMemory()
-    {
-        Global.getSector().memoryWithoutUpdate.set("\$LunaSettings", newGameSettings.toMap())
-    }
-
-    fun saveToMemory()
-    {
-
     }
 }

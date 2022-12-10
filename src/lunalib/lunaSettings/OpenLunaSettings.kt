@@ -30,7 +30,6 @@ internal class OpenSettingsPanelInteraction : InteractionDialogPlugin
     }
 
     override fun optionSelected(optionText: String?, optionData: Any?) {
-
     }
 
     override fun optionMousedOver(optionText: String?, optionData: Any?) {

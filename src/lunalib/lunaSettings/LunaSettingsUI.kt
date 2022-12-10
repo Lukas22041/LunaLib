@@ -47,12 +47,14 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     private var intFields: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
     private var doubleFields: MutableMap<LunaSettingsData, TextFieldAPI> = HashMap()
     private var booleanField: MutableMap<LunaSettingsData, ButtonAPI> = HashMap()
+    private var booleanFieldPara: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
 
     private var enumField: MutableMap<LunaSettingsData,ButtonAPI> = HashMap()
     private var enumFieldsPara: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
     private var enumOptions: MutableMap<LunaSettingsData, MutableMap<ButtonAPI, String>> = HashMap()
     private var selectedEnum: LunaSettingsData? = null
     private var isEnumOpen = false
+    private var closeEnum = false
     private var enumPanel: TooltipMakerAPI? = null
 
     private var keyField: MutableMap<LunaSettingsData,ButtonAPI> = HashMap()
@@ -71,8 +73,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     }
 
     private fun reset() {
-
-
         ModsDisplay()
         optionsDisplay()
     }
@@ -94,6 +94,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         intFields.clear()
         doubleFields.clear()
         booleanField.clear()
+        booleanFieldPara.clear()
 
         enumField.clear()
         enumFieldsPara.clear()
@@ -129,7 +130,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             }
         }
 
-
         if (resetButton != null && resetButton!!.isChecked)
         {
             for (map in booleanField)
@@ -150,11 +150,11 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             }
             for (map in enumFieldsPara)
             {
-                map.value.text = "Selected: " + (map.key.defaultValue as List<String>).get(0)
+                map.value.text = "" + (map.key.defaultValue as List<String>).get(0)
             }
             for (map in keyFieldPara)
             {
-                map.value.text = "Current Key: " + Keyboard.getKeyName(map.key.defaultValue as Int)
+                map.value.text = "Keybind: " + Keyboard.getKeyName(map.key.defaultValue as Int)
             }
             resetButton!!.isChecked = false
         }
@@ -186,6 +186,20 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
         if (settingsPanelList != null)
         {
+
+            for (map in booleanField)
+            {
+                var para = booleanFieldPara.get(map.key)
+                if (map.value.isChecked)
+                {
+                    para!!.text = "True"
+                }
+                else
+                {
+                    para!!.text = "False"
+                }
+            }
+
             for (map in enumField)
             {
                 if (map.value.isChecked && !isEnumOpen)
@@ -220,10 +234,17 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     panel!!.removeComponent(enumPanel)
                     isEnumOpen = false
                 }
+                else if (closeEnum)
+                {
+                    panel!!.removeComponent(enumPanel)
+                    map.value.isChecked = false
+                    isEnumOpen = false
+                }
                 else if (selectedEnum != map.key)
                 {
                     map.value.isChecked = false
                 }
+                closeEnum = false
             }
             for (map in enumOptions)
             {
@@ -232,7 +253,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     if (button.key.isChecked)
                     {
 
-                        enumFieldsPara.get(map.key)!!.text = "Selected: ${button.value}"
+                        enumFieldsPara.get(map.key)!!.text = "${button.value}"
                         panel!!.removeComponent(enumPanel)
                         isEnumOpen = false
                         enumOptions.clear()
@@ -353,35 +374,22 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
         settingsPanelList = settingsPanel!!.createUIElement(settingsPanel!!.position.width , pH * 0.80f, true)
 
-        val newGameData = LunaSettingsLoader.SettingsData.filter { it.newGame }
-        val crossData = LunaSettingsLoader.SettingsData.filter { !it.newGame }
+        val data = LunaSettingsLoader.SettingsData
 
-        var spacing = 0f
-        if (newgame) spacing = addOptions(newGameData, true, spacing)
-        addOptions(crossData, false, spacing)
+        addOptions(data)
 
         settingsPanel!!.addUIElement(settingsPanelList)
         panel!!.addComponent(settingsPanel)
     }
 
     //Adds all available configs to the Settings panel
-    private fun addOptions(SettingsData: List<LunaSettingsData>, firstRun: Boolean, spacing: Float) : Float
+    private fun addOptions(SettingsData: List<LunaSettingsData>) : Float
     {
-        var spacing = spacing
-        if (firstRun)
-        {
-            val heading = settingsPanelList!!.addSectionHeading("Save-Specific Settings (Only applies to a new save)", Alignment.MID, 0f)
-            val tooltip = TooltipPreset("Anything in this section will only be saved within the saves and wont be changeable in the middle of a run. ",  pW * 0.4f)
-            settingsPanelList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
-            spacing += heading.position.height
-        }
+        var spacing = 0f
 
-        else
-        {
-            val heading = settingsPanelList!!.addSectionHeading("Global Settings (Applies to all Saves)", Alignment.MID, 0f)
-            heading.position.inTL(0f, spacing)
-            spacing += heading.position.height
-        }
+        val heading = settingsPanelList!!.addSectionHeading("${selectedMod!!.name}' Settings", Alignment.MID, 0f)
+        heading.position.inTL(0f, spacing)
+        spacing += heading.position.height
 
         for (data in SettingsData)
         {
@@ -464,8 +472,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
                     val field = settingsPanelList!!.addTextField(pW * 0.25f, 0f)
 
-                    if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
-                    else field.text = LunaSettings.getInt(data.modID, data.fieldID, false).toString()
+                    field.text = LunaSettings.getInt(data.modID, data.fieldID, false).toString()
                     intFields.put(data, field)
                 }
                 "Double" ->
@@ -473,8 +480,8 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     val spacingPara = settingsPanelList!!.addPara("", 0f)
                     spacingPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - spacingPara.position.height * 2)
                     val field = settingsPanelList!!.addTextField(pW * 0.25f, 0f)
-                    if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
-                    else field.text = LunaSettings.getDouble(data.modID, data.fieldID, false).toString()
+
+                    field.text = LunaSettings.getDouble(data.modID, data.fieldID, false).toString()
                     doubleFields.put(data, field)
                 }
                 "String" ->
@@ -482,34 +489,35 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     val spacingPara = settingsPanelList!!.addPara("", 0f)
                     spacingPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - spacingPara.position.height * 2)
                     val field = settingsPanelList!!.addTextField(pW * 0.25f, 0f)
-                    if (firstRun) field.text = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
-                    else field.text = LunaSettings.getString(data.modID, data.fieldID, false).toString()
+
+                    field.text = LunaSettings.getString(data.modID, data.fieldID, false).toString()
                     stringFields.put(data, field)
                 }
                 "Boolean" ->
                 {
-                    val booleanButton = settingsPanelList!!.addAreaCheckbox("True/False", null,
+                    val booleanButton = settingsPanelList!!.addAreaCheckbox("", null,
                         Misc.getBasePlayerColor(),
                         Misc.getDarkPlayerColor(),
                         Misc.getBrightPlayerColor(),
                         pW * 0.25f,
                         pH * 0.05f,
                         0f)
-                    if (firstRun) booleanButton.isChecked = LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID) as Boolean
-                    else booleanButton.isChecked = LunaSettings.getBoolean(data.modID, data.fieldID, false) ?: false
+
+
+                    booleanButton.isChecked = LunaSettings.getBoolean(data.modID, data.fieldID, false) ?: false
                     booleanButton.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - booleanButton.position.height / 2)
                     booleanField.put(data, booleanButton)
+
+                    var text = "True"
+                    if (!booleanButton.isChecked) text = "False"
+                    var para = settingsPanelList!!.addPara(text, Misc.getBasePlayerColor(), 0f)
+                    para.position.inTL(pW * 0.46f,(spacing + spacingOffset / 2) - para.position.height / 2)
+
+                    booleanFieldPara.put(data, para)
                 }
                 "Enum" ->
                 {
-                    val selectedPara = settingsPanelList!!.addPara("Selected: ", 0f)
-                    selectedPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - pH * 0.05f)
-                    enumFieldsPara.put(data, selectedPara)
-
-                    if (firstRun) selectedPara.text = "Selected: " + LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID).toString()
-                    else selectedPara.text = "Selected: " + LunaSettings.getString(data.modID, data.fieldID, false).toString()
-
-                    val enumButton = settingsPanelList!!.addAreaCheckbox("Select", null,
+                    val enumButton = settingsPanelList!!.addAreaCheckbox("", null,
                         Misc.getBasePlayerColor(),
                         Misc.getDarkPlayerColor(),
                         Misc.getBrightPlayerColor(),
@@ -519,17 +527,17 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
                     enumButton.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - enumButton.position.height / 2)
                     enumField.put(data, enumButton)
+
+                    val selectedPara = settingsPanelList!!.addPara("", Misc.getBasePlayerColor(),0f)
+                    enumFieldsPara.put(data, selectedPara)
+
+                    selectedPara.text = "" + LunaSettings.getString(data.modID, data.fieldID, false).toString()
+                    var test = selectedPara.position.width
+                    selectedPara.position.inTL((enumButton.position.x + pW * 0.01f),(spacing + spacingOffset / 2) - selectedPara.position.height / 2)
                 }
                 "Keycode" ->
                 {
-                    val selectedPara = settingsPanelList!!.addPara("Current Key: ", 0f)
-                    selectedPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - pH * 0.05f)
-                    keyFieldPara.put(data, selectedPara)
-
-                    if (firstRun) selectedPara.text = "Current Key: " + Keyboard.getKeyName(LunaSettingsLoader.newGameSettings.get(selectedMod!!.id)!!.get(data.fieldID) as Int)
-                    else selectedPara.text = "Current Key: " + Keyboard.getKeyName(LunaSettings.getInt(data.modID, data.fieldID, false)!!)
-
-                    val keycodeButton = settingsPanelList!!.addAreaCheckbox("Register Key", null,
+                    val keycodeButton = settingsPanelList!!.addAreaCheckbox("", null,
                         Misc.getBasePlayerColor(),
                         Misc.getDarkPlayerColor(),
                         Misc.getBrightPlayerColor(),
@@ -537,8 +545,15 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                         pH * 0.05f,
                         0f)
 
+
                     keycodeButton.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - keycodeButton.position.height / 2)
                     keyField.put(data, keycodeButton)
+
+                    val selectedPara = settingsPanelList!!.addPara("Keybind: ", Misc.getBasePlayerColor(),0f)
+                    selectedPara.position.inTL(pW * 0.44f,(spacing + spacingOffset / 2) - selectedPara.position.height / 2)
+                    keyFieldPara.put(data, selectedPara)
+
+                    selectedPara.text = "Keybind: " + Keyboard.getKeyName(LunaSettings.getInt(data.modID, data.fieldID, false)!!)
                 }
             }
 
@@ -550,7 +565,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     private fun saveData()
     {
         val data = JSONUtils.loadCommonJSON("LunaSettings/${selectedMod!!.id}.json", "data/config/LunaSettingsDefault.default");
-        val saveData: MutableMap<String, Any> = HashMap()
 
         checkIllegalChar()
 
@@ -559,13 +573,12 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         {
             if (toSave.value.text == "")
             {
-                if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.key.defaultValue)
-                else data.put(toSave.key.fieldID, toSave.key.defaultValue)
+                data.put(toSave.key.fieldID, toSave.key.defaultValue)
             }
             else
             {
-                if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.text.toInt())
-                else data.put(toSave.key.fieldID, toSave.value.text.toInt())
+
+                data.put(toSave.key.fieldID, toSave.value.text.toInt())
             }
         }
 
@@ -574,46 +587,39 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         {
             if (toSave.value.text == "")
             {
-                if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.key.defaultValue)
-                else data.put(toSave.key.fieldID, toSave.key.defaultValue)
+                data.put(toSave.key.fieldID, toSave.key.defaultValue)
             }
             else
             {
-                if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.text.toDouble())
-                else data.put(toSave.key.fieldID, toSave.value.text.toDouble())
+                data.put(toSave.key.fieldID, toSave.value.text.toDouble())
             }
         }
 
         //Saves active String Fields.
         for (toSave in stringFields)
         {
-            if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.text)
-            else data.put(toSave.key.fieldID, toSave.value.text)
+            data.put(toSave.key.fieldID, toSave.value.text)
         }
 
         //Saves Booleans
         for (toSave in booleanField)
         {
-            if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.isChecked)
-            else data.put(toSave.key.fieldID, toSave.value.isChecked)
+            data.put(toSave.key.fieldID, toSave.value.isChecked)
         }
 
         //Saves Enums as Strings
         for (toSave in enumFieldsPara)
         {
-            if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
-            else data.put(toSave.key.fieldID, toSave.value.text.replace("Selected: ", ""))
+            data.put(toSave.key.fieldID, toSave.value.text)
         }
 
         //Saves Keycodes as Ints
         for (toSave in keyFieldPara)
         {
-            if (toSave.key.newGame && newgame) saveData.put(toSave.key.fieldID,  Keyboard.getKeyIndex(toSave.value.text.replace("Current Key: ", "")))
-            else data.put(toSave.key.fieldID, Keyboard.getKeyIndex(toSave.value.text.replace("Current Key: ", "")))
+            data.put(toSave.key.fieldID, Keyboard.getKeyIndex(toSave.value.text.replace("Keybind: ", "")))
         }
 
         data.save()
-        LunaSettingsLoader.newGameSettings.put(selectedMod!!.id, saveData)
         LunaSettingsLoader.Settings.put(selectedMod!!.id, data)
 
         if (!newgame) callSettingsChangedListener()
@@ -688,11 +694,17 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         for (event in events!!) {
             if (event.isConsumed) continue
 
+            if (event.isMouseDownEvent && event.eventValue == 1)
+            {
+                closeEnum = true
+                event.consume()
+            }
+
             if (selectedKey != null && event.isKeyDownEvent && event.eventValue != -1 && event.eventValue != Keyboard.KEY_LSHIFT && event.eventValue != Keyboard.KEY_LCONTROL && event.eventValue != Keyboard.KEY_LMENU)
             {
-                var value = "Current Key: ${Keyboard.getKeyName(event.eventValue)}"
+                var value = "Keybind: ${Keyboard.getKeyName(event.eventValue)}"
 
-                if (event.eventValue == Keyboard.KEY_ESCAPE) value = "Current Key: ${Keyboard.getKeyName(0)}"
+                if (event.eventValue == Keyboard.KEY_ESCAPE) value = "Keybind: ${Keyboard.getKeyName(0)}"
 
                 event.consume()
                 keyFieldPara.get(selectedKey)!!.text = value

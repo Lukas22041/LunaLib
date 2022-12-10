@@ -11,16 +11,16 @@ Listener for LunaSettings. [settingsChanged] gets called whenever settings are s
 ```Java
 public class Example implements LunaSettingsListener
 {
-*   public Example()
+ *   double exampleDouble = LunaSettings.getDouble("lunalib", "luna_testDouble");
+
+ *   public Example()
 *   {
 *   Global.getSector().getListenerManager().addListener(this, true);
 *   }
 
-*   float exampleDouble = LunaSettings.getDouble("lunalib", "luna_testDouble", false);
-
 *   @Override
 *   public void settingsChanged() {
-*   exampleDouble = LunaSettings.getDouble("lunalib", "luna_testDouble", false);
+*   exampleDouble = LunaSettings.getDouble("lunalib", "luna_testDouble");
 *   }
 }
  ```
