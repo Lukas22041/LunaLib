@@ -33,11 +33,6 @@ class LunaLibPlugin : BaseModPlugin()
     {
         LunaProcgen.random = Random(Global.getSector().seedString.hashCode().toLong())
         Global.getSector().addTransientScript(KeybindsScript())
-
-        var keybind = Keyboard.getKeyName(LunaSettings.getInt("lunalib", "luna_SettingsKeybind", false)!!)
-        LunaMisc.createIntelMessage("LunaLib",
-            "Press $keybind to open the Mod Settings.\n" +
-                    "Use Shift + F2 in case the Keybind is inaccesible.")
     }
 
 
