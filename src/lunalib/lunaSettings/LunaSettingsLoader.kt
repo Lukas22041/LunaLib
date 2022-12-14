@@ -126,7 +126,7 @@ internal object LunaSettingsLoader
 
             for (default in defaults)
             {
-                if (default.fieldType == "Text") continue
+                if (default.fieldType == "Text" || default.fieldType == "Header") continue
                 if (default.modID == mod.id)
                 {
                     try

@@ -13,6 +13,7 @@ import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.campaign.CustomCampaignEntity
 import lunalib.lunaSettings.LunaSettings
 import org.json.JSONObject
+import org.lazywizard.lazylib.ext.campaign.contains
 import java.awt.Button
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
@@ -38,11 +39,11 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
 
     var teleportButtons: MutableMap<SectorEntityToken, ButtonAPI> = HashMap()
 
-    var filters = listOf("Starsystems", "Stars", "Planets" ,"Custom Entities", "Fleets")
+    var filters = listOf("Current System", "Starsystems", "Stars", "Planets" ,"Custom Entities", "Fleets")
     companion object
     {
         var lastString = ""
-        var checkedFilters = mutableMapOf("Starsystems" to true, "Stars" to true, "Planets" to true, "Custom Entities" to true, "Fleets" to true)
+        var checkedFilters = mutableMapOf("Current System" to false,"Starsystems" to true, "Stars" to true, "Planets" to true, "Custom Entities" to true, "Fleets" to true)
     }
 
     var cap = 25
@@ -80,6 +81,12 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
             button.isChecked = checkedFilters.get(filter)!!
             filterButtons.put(filter, button)
             spacing += button.position.height
+            if (filter == "Current System")
+            {
+                var tooltip = TooltipPreset("Filters out all entities that arent in the system the player is currently in.", 400f)
+                searchElement!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
+                spacing += button.position.height
+            }
         }
 
         panel.addUIElement(searchElement)
@@ -296,17 +303,31 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                 customEntities.addAll(system.customEntities)
             }
 
+            var currentSystem = false
+            var system: StarSystemAPI? = null
+
+            var curSystemButton = filterButtons.get("Current System")
+            if (curSystemButton != null && curSystemButton!!.isChecked)
+            {
+                val playerfleet = Global.getSector().playerFleet
+                if (!Global.getSector().playerFleet.isInHyperspace)
+                {
+                    system = playerfleet.starSystem
+                    currentSystem = true
+                }
+            }
+
             for (button in filterButtons)
             {
                 for (filt in filters)
                 {
-
                     var filter = filt.trim().lowercase()
 
                     if (button.key == "Starsystems" && button.value.isChecked)
                     {
                         run search@ {
                             systems.forEach {
+                                if (currentSystem && it != system) return@forEach
                                 if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) }) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
@@ -317,6 +338,7 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                     {
                         run search@ {
                             planets.forEach {
+                                if (currentSystem && it.starSystem != system) return@forEach
                                 if (!it.isStar) return@forEach
                                 if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) }) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
@@ -328,6 +350,7 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                     {
                         run search@ {
                             planets.forEach {
+                                if (currentSystem && it.starSystem != system) return@forEach
                                 if (it.isStar) return@forEach
                                 if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) } || it.faction.id.lowercase().contains(filter) || it.faction.displayName.lowercase().contains(filter)) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
@@ -339,6 +362,7 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                     {
                         run search@ {
                             customEntities.forEach {
+                                if (currentSystem && it.starSystem != system) return@forEach
                                 if (it.tags.contains("orbital_junk")) return@forEach
                                 if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) } || it.faction.id.lowercase().contains(filter) || it.faction.displayName.lowercase().contains(filter)) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
@@ -350,6 +374,7 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                     {
                         run search@ {
                             fleets.forEach {
+                                if (currentSystem && it.starSystem != system) return@forEach
                                 if (it.name.lowercase().contains(filter) || it.id.lowercase().contains(filter) || it.tags.any { tag -> tag.lowercase().contains(filter) } || it.faction.id.lowercase().contains(filter) || it.faction.displayName.lowercase().contains(filter)) { entities.add(it); capCount++ }
                                 if (capCount > cap) return@search
                             }
@@ -357,7 +382,6 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
                     }
                 }
             }
-
             reset()
         }
 

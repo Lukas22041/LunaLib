@@ -174,7 +174,7 @@ class CombatHandler : EveryFrameCombatPlugin
             {
                  location = "New Game -> Sector Configuration -> Mod Settings."
             }
-            toDraw!!.draw(Global.getSettings().screenWidth * 0.7f,Global.getSettings().screenHeight * 0.2f);
+            toDraw!!.draw(100f,100f);
             toDraw!!.text = "LunaLib "
             toDraw!!.append(" \n", Misc.getBasePlayerColor())
             toDraw!!.append("Open the Mod Settings Menu with $settingsKeybind in the Campaign, or at $location", Misc.getBasePlayerColor())

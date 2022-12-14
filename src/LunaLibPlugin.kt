@@ -35,7 +35,6 @@ class LunaLibPlugin : BaseModPlugin()
         Global.getSector().addTransientScript(KeybindsScript())
     }
 
-
     override fun onApplicationLoad()
     {
         LunaSettingsLoader.loadDefault()

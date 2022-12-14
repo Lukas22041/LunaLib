@@ -116,7 +116,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         {
             saveButton!!.isChecked = false
             saveData()
-            resetOption()
+            //resetOption()
         }
 
         if (selectedMod != null)
@@ -387,10 +387,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     {
         var spacing = 0f
 
-        val heading = settingsPanelList!!.addSectionHeading("${selectedMod!!.name}' Settings", Alignment.MID, 0f)
-        heading.position.inTL(0f, spacing)
-        spacing += heading.position.height
-
         for (data in SettingsData)
         {
             if (data.modID != selectedMod!!.id) continue
@@ -449,17 +445,25 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
             val tooltip = TooltipPreset("${data.fieldName} ($presetTooltip) $minMaxValue\n\n${data.FieldTooltip}", pW * 0.4f, "${data.fieldName}","Min", "Max")
 
-            if (data.fieldType != "Text")
-            {
-                settingsPanelList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
-                val para = settingsPanelList!!.addPara("${data.fieldName}", 0f)
-                para.position.inTL(pW * 0.10f,(spacing + spacingOffset / 2) - para.position.height / 2)
-            }
-            else
+            var header: LabelAPI? = null
+            if (data.fieldType == "Text")
             {
                 val fieldNamePara = settingsPanelList!!.addPara("${data.defaultValue}", 0f)
                 fieldNamePara.position.inTL(pW * 0.10f,(spacing + spacingOffset / 4))
 
+                //Needs to be done to recalculate where linebreaks are needed, as it doesnt do this after setting the position.
+                fieldNamePara.autoSizeToWidth(settingsPanel!!.position.width - pW * 0.11f)
+            }
+            else if (data.fieldType == "Header")
+            {
+                header = settingsPanelList!!.addSectionHeading("${data.defaultValue}", Alignment.MID, 0f)
+                header.position.inTL(0f, spacing)
+            }
+            else
+            {
+                settingsPanelList!!.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.BELOW)
+                val para = settingsPanelList!!.addPara("${data.fieldName}", 0f)
+                para.position.inTL(pW * 0.10f,(spacing + spacingOffset / 2) - para.position.height / 2)
             }
 
             when (data.fieldType)
@@ -557,7 +561,14 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 }
             }
 
-            spacing += spacingOffset
+            if (header == null)
+            {
+                spacing += spacingOffset
+            }
+            else
+            {
+                spacing += header.position.height
+            }
         }
         return spacing
     }
@@ -735,7 +746,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         for (map in intFields)
         {
             if (map.value.hasFocus()) continue
-            var modifiedString = map.value.text.replace("[^0-9]".toRegex(), "")
+            var modifiedString = map.value.text.replace("[^0-9-]".toRegex(), "")
 
             var value = 0
             try {
@@ -753,7 +764,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         for (map in doubleFields)
         {
             if (map.value.hasFocus()) continue
-            var modifiedString = map.value.text.replace("[^0-9.]".toRegex(), "")
+            var modifiedString = map.value.text.replace("[^0-9.-]".toRegex(), "")
 
             try {
                 if (modifiedString.toDouble() < map.key.minValue) modifiedString = "" + map.key.minValue

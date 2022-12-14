@@ -297,7 +297,9 @@ class FIDOverride(defenders: CampaignFleetAPI, dialog: InteractionDialogAPI, plu
                 memory.set("\$defenderFleetDefeated", true)
                 entity.removeScriptsOfClass(FleetAdvanceScript::class.java)
                 LunInteraction.defeatedDefenders()
-            } else {
+            }
+            else
+            {
                 var persistDefenders = false
                 if (context.isEngagedInHostilities) {
                     persistDefenders = persistDefenders or !Misc.getSnapshotMembersLost(defenders).isEmpty()
@@ -320,7 +322,9 @@ class FIDOverride(defenders: CampaignFleetAPI, dialog: InteractionDialogAPI, plu
                 }
                 dialog.dismiss()
             }
-        } else {
+        }
+        else
+        {
             dialog.dismiss()
         }
     }
