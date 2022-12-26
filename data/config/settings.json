@@ -4,7 +4,7 @@
  	],		
 
 	"plugins":{
-		"LunaLibCombatHandler":"lunalib.lunaUtil.combat.CombatHandler",
+		"LunaLibCombatHandler":"lunalib.CombatHandler",
 	},
 	
 	"graphics":{

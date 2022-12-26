@@ -35,7 +35,7 @@ internal class KeybindsScript : LunaSettingsListener, EveryFrameScript
         if (interval.intervalElapsed())  keyPressed = false
         if (keyPressed) return
 
-        if (Keyboard.isKeyDown(devmodeKeybind!!))
+        if (Keyboard.isKeyDown(devmodeKeybind!!) && !Keyboard.isKeyDown(Keyboard.KEY_NONE))
         {
             Global.getSettings().isDevMode = !Global.getSettings().isDevMode
             DebugFlags.setStandardConfig()
@@ -49,7 +49,7 @@ internal class KeybindsScript : LunaSettingsListener, EveryFrameScript
 
     fun openSettings()
     {
-        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) return
+        if (Keyboard.isKeyDown(Keyboard.KEY_NONE) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) return
         var ui = Global.getSector().campaignUI
         ui.showInteractionDialog(OpenSettingsPanelInteraction(), Global.getSector().playerFleet)
 
@@ -58,7 +58,7 @@ internal class KeybindsScript : LunaSettingsListener, EveryFrameScript
 
     fun openDebug()
     {
-        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) return
+        if (Keyboard.isKeyDown(Keyboard.KEY_NONE) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) return
 
         var ui = Global.getSector().campaignUI
         ui.showInteractionDialog(OpenDebugWindowInteraction(), Global.getSector().playerFleet)

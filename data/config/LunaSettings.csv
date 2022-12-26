@@ -1,5 +1,5 @@
 modID,fieldID,fieldName,fieldType,defaultValue,fieldTooltip,minValue,maxValue,tags
-lunalib,luna_settingsHeader,Example Header,Header,Settings,,,,noHighlight
+lunalib,luna_settingsHeader,Settings Header,Header,Settings,,,,noHighlight
 lunalib,luna_SettingsKeybind,Settings Keybind,Keycode,60,"Changes the Keybind for opening this Menu in the Campaign.
 Can always be opened by pressing Shift + F2, even if set to another key.",,,
 lunalib,luna_DebugKeybind,Debug Keybind,Keycode,0,Changes the Keybind used to open the Debug Menu.,,,
@@ -21,4 +21,10 @@ The String behind the first comma will be set as the default value.
 
 Each Entry is seperated by a comma, and all spaces are removed automaticly.  
 
-",,,spacing:2
+",,,spacing:0.5
+lunalib,luna_exampleKeybind,Example Keybind,Keycode,0,"Lets users register a keybind. The saved keycodes are the same as used by org.lwjgl.input.Keyboard and Starsectors InputEventAPI.
+
+If a user exits the input with ESC, the keycode will be 0. Make sure to set conditions on your Keybinds to ignore Keycodes of 0, as when lwjgl registers a keybind that it has no keycodes set up for, its set to 0.
+This can cause certain keys to trigger unset keybinds otherwise.
+",,,spacing:0.5
+lunalib,luna_exampleColor,Example Color,Color,"30, 230, 150, 255","Strings will accept any characters put in, with no filtering.",,,

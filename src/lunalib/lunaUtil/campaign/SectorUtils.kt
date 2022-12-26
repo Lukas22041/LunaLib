@@ -33,7 +33,6 @@ object SectorUtils
         Global.getSector().starSystems.flatMap { system -> system.planets.filter { planet -> planet.spec.planetType == typeID }}
 
 
-
     /**
      * Returns all Planets that have the input condition.
      * @param conditionID the id of the condition to look for.

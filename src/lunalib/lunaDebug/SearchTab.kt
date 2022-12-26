@@ -291,10 +291,14 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
 
             var capCount = 0
 
-            var systems = Global.getSector().starSystems
+            var systems: MutableList<LocationAPI> = ArrayList()
+            systems.addAll(Global.getSector().starSystems)
+            systems.add(Global.getSector().hyperspace)
+
             var planets: MutableList<PlanetAPI> = ArrayList()
             var fleets: MutableList<CampaignFleetAPI> = ArrayList()
             var customEntities: MutableList<SectorEntityToken> = ArrayList()
+
 
             for (system in systems)
             {
@@ -310,11 +314,8 @@ internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : 
             if (curSystemButton != null && curSystemButton!!.isChecked)
             {
                 val playerfleet = Global.getSector().playerFleet
-                if (!Global.getSector().playerFleet.isInHyperspace)
-                {
-                    system = playerfleet.starSystem
-                    currentSystem = true
-                }
+                system = playerfleet.starSystem
+                currentSystem = true
             }
 
             for (button in filterButtons)

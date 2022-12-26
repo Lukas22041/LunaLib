@@ -19,6 +19,8 @@ import java.awt.Color
 //Do not use this as an example for your own UI.
 class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 {
+    private var uiScale = Global.getSettings().screenScaleMult
+
     private var dialog: InteractionDialogAPI? = null
     private var callbacks: DialogCallbacks? = null
     private var panel: CustomPanelAPI? = null
@@ -61,10 +63,15 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     private var keyFieldPara: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
     private var selectedKey: LunaSettingsData? = null
 
+    private var colorFields: MutableMap<LunaSettingsData, List<TextFieldAPI>> = HashMap()
+    private var colorPreviewPara: MutableMap<LunaSettingsData, LabelAPI> = HashMap()
+
     fun init(panel: CustomPanelAPI?, callbacks: DialogCallbacks?, dialog: InteractionDialogAPI?) {
         this.panel = panel
         this.callbacks = callbacks
         this.dialog = dialog
+
+
 
         pW = this.panel!!.position.width
         pH = this.panel!!.position.height
@@ -105,6 +112,9 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         keyField.clear()
         keyFieldPara.clear()
         selectedKey = null
+
+        colorFields.clear()
+        colorPreviewPara.clear()
 
         settingsPanel = null
         optionsDisplay()
@@ -155,6 +165,15 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             for (map in keyFieldPara)
             {
                 map.value.text = "Keybind: " + Keyboard.getKeyName(map.key.defaultValue as Int)
+            }
+            for (map in colorFields)
+            {
+                var iter = 0
+                for (field in map.value)
+                {
+                    field.text = "" + (map.key.defaultValue as String).split(",").get(iter).trim()
+                    iter++
+                }
             }
             resetButton!!.isChecked = false
         }
@@ -288,6 +307,26 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     selectedKey = map.key
                 }
             }
+
+            for (map in colorFields)
+            {
+                var focus = false
+                for (field in map.value)
+                {
+                    if (field.hasFocus()) focus = true
+                }
+                if (focus) continue
+
+                var rgba = map.value
+                var para = colorPreviewPara.get(map.key)
+                try {
+                    para!!.setHighlightColor(Color(rgba.get(0).text.toInt(), rgba.get(1).text.toInt(), rgba.get(2).text.toInt(), rgba.get(3).text.toInt()))
+                }
+                catch (e: Throwable)
+                {
+
+                }
+            }
         }
     }
 
@@ -372,7 +411,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             0f)
         resetButton!!.position.setLocation(0f, 0f).inTL(pW * 0.35f, pH * 0.03f)
 
-        settingsPanelList = settingsPanel!!.createUIElement(settingsPanel!!.position.width , pH * 0.80f, true)
+        settingsPanelList = settingsPanel!!.createUIElement(settingsPanel!!.position.width, pH * 0.80f, true)
 
         val data = LunaSettingsLoader.SettingsData
 
@@ -383,7 +422,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     }
 
     //Adds all available configs to the Settings panel
-    private fun addOptions(SettingsData: List<LunaSettingsData>) : Float
+    private fun addOptions(SettingsData: List<LunaSettingsData>)
     {
         var spacing = 0f
 
@@ -434,16 +473,18 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 "String" -> "Accepts Letters, Numbers and Characters (i.e Text100*)"
                 "Enum" -> "Press the button to select from a preset of options."
                 "Keycode" -> "Saves the next key pressed after selecting the button."
+                "Color" -> "Saves Color in the Red, Green, Blue, Alpha format"
                 else -> ""
             }
             val minMaxValue: String = when(data.fieldType)
             {
                 "Int" -> "\nMin: ${data.minValue.toInt()}   Max: ${data.maxValue.toInt()}"
                 "Double" -> "\nMin: ${data.minValue}   Max: ${data.maxValue}"
+                "Color" -> "\nMin: 0   Max: 255"
                 else -> ""
             }
 
-            val tooltip = TooltipPreset("${data.fieldName} ($presetTooltip) $minMaxValue\n\n${data.FieldTooltip}", pW * 0.4f, "${data.fieldName}","Min", "Max")
+            val tooltip = TooltipPreset("${data.fieldName} ($presetTooltip) $minMaxValue\n\n${data.fieldTooltip}", pW * 0.4f, "${data.fieldName}","Min", "Max")
 
             var header: LabelAPI? = null
             if (data.fieldType == "Text")
@@ -457,7 +498,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             else if (data.fieldType == "Header")
             {
                 header = settingsPanelList!!.addSectionHeading("${data.defaultValue}", Alignment.MID, 0f)
-                header.position.inTL(0f, spacing)
+                header.position.inTL(1.4f, spacing)
             }
             else
             {
@@ -472,7 +513,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 {
                     val spacingPara = settingsPanelList!!.addPara("", 0f)
                     spacingPara.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - spacingPara.position.height * 2)
-                    var test= spacingPara.position.height
 
                     val field = settingsPanelList!!.addTextField(pW * 0.25f, 0f)
 
@@ -536,7 +576,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     enumFieldsPara.put(data, selectedPara)
 
                     selectedPara.text = "" + LunaSettings.getString(data.modID, data.fieldID, false).toString()
-                    var test = selectedPara.position.width
                     selectedPara.position.inTL((enumButton.position.x + pW * 0.01f),(spacing + spacingOffset / 2) - selectedPara.position.height / 2)
                 }
                 "Keycode" ->
@@ -549,7 +588,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                         pH * 0.05f,
                         0f)
 
-
                     keycodeButton.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - keycodeButton.position.height / 2)
                     keyField.put(data, keycodeButton)
 
@@ -557,7 +595,48 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     selectedPara.position.inTL(pW * 0.44f,(spacing + spacingOffset / 2) - selectedPara.position.height / 2)
                     keyFieldPara.put(data, selectedPara)
 
-                    selectedPara.text = "Keybind: " + Keyboard.getKeyName(LunaSettings.getInt(data.modID, data.fieldID, false)!!)
+                    selectedPara.text = "Keybind: " + Keyboard.getKeyName(LunaSettings.getInt(data.modID, data.fieldID)!!)
+                }
+                "Color" ->
+                {
+                    var savedData = LunaSettings.getString(data.modID, data.fieldID, false)!!.split(",")
+                    var fields: MutableList<TextFieldAPI> = ArrayList()
+
+                    var offset = 0.295f
+                    offset += 0.06f
+
+                    val redPara = settingsPanelList!!.addPara("Red", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+                    redPara.position.inTL(pW * offset,(spacing + spacingOffset / 2) - redPara.position.height * 2)
+                    val redField = settingsPanelList!!.addTextField(pW * 0.05f, 0f)
+                    redField.text = savedData.get(0).trim()
+
+                    offset += 0.06f
+
+                    val greenPara = settingsPanelList!!.addPara("Green", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+                    greenPara.position.inTL(pW * offset,(spacing + spacingOffset / 2) - greenPara.position.height * 2)
+                    val greenField = settingsPanelList!!.addTextField(pW * 0.05f, 0f)
+                    greenField.text = savedData.get(1).trim()
+
+                    offset += 0.06f
+
+                    val bluePara = settingsPanelList!!.addPara("Blue", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+                    bluePara.position.inTL(pW * offset,(spacing + spacingOffset / 2) - bluePara.position.height * 2)
+                    val blueField = settingsPanelList!!.addTextField(pW * 0.05f, 0f)
+                    blueField.text = savedData.get(2).trim()
+
+                    offset += 0.06f
+
+                    val alphaPara = settingsPanelList!!.addPara("Alpha", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+                    alphaPara.position.inTL(pW * offset,(spacing + spacingOffset / 2) - alphaPara.position.height * 2)
+                    val alphaField = settingsPanelList!!.addTextField(pW * 0.05f, 0f)
+                    alphaField.text = savedData.get(3).trim()
+
+                    val previewPara = settingsPanelList!!.addPara("Preview", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Preview")
+                    previewPara.position.inTL(pW * 0.45f,(spacing + spacingOffset / 2) + alphaPara.position.height * 1.3f)
+
+                    fields.addAll(listOf(redField, greenField, blueField, alphaField))
+                    colorFields.put(data, fields)
+                    colorPreviewPara.put(data, previewPara)
                 }
             }
 
@@ -570,7 +649,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                 spacing += header.position.height
             }
         }
-        return spacing
     }
 
     private fun saveData()
@@ -628,6 +706,18 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         for (toSave in keyFieldPara)
         {
             data.put(toSave.key.fieldID, Keyboard.getKeyIndex(toSave.value.text.replace("Keybind: ", "")))
+        }
+
+        for (toSave in colorFields)
+        {
+            var texts: MutableList<String> = ArrayList()
+
+            for (field in toSave.value)
+            {
+                texts.add(field.text)
+            }
+            var text = texts.joinToString()
+            data.put(toSave.key.fieldID, text)
         }
 
         data.save()
@@ -776,6 +866,30 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
             }
 
             map.value.text = modifiedString
+        }
+        for (map in colorFields)
+        {
+            var iter = 0
+            for (field in map.value)
+            {
+                if (field.hasFocus()) continue
+
+                var modifiedString = field.text.replace("[^0-9]".toRegex(), "")
+
+                var value = 0
+                try {
+                    value = modifiedString.toInt()
+                    value = MathUtils.clamp(value, 0, 255)
+                    modifiedString = "$value"
+                }
+                catch (e: Throwable)
+                {
+                    modifiedString = "" + (map.key.defaultValue as String).split(",").get(iter).trim()
+                }
+
+                field.text = modifiedString
+                iter++
+            }
         }
     }
 }

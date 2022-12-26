@@ -1,5 +1,6 @@
 package lunalib.lunaExtensions
 
+import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.*
 import lunalib.lunaUtil.LunaMisc
 import lunalib.lunaUtil.campaign.SectorUtils
@@ -25,6 +26,10 @@ fun SectorAPI.getCustomEntitiesWithType(typeID: String) : List<SectorEntityToken
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun SectorAPI.getSystemsWithTag(tag: String) : List<StarSystemAPI> =
     SectorUtils.getSystemsWithTag(tag)
+
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
+fun SectorAPI.isPlayerInHyperspace() =
+    Global.getSector().playerFleet.isInHyperspace
 
 
 

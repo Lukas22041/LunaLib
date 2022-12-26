@@ -1,13 +1,7 @@
 package lunalib.lunaSettings
 
 import com.fs.starfarer.api.Global
-import com.fs.starfarer.api.campaign.CustomCampaignEntityPlugin
-import com.fs.starfarer.api.campaign.CustomEntitySpecAPI
-import data.scripts.util.MagicSettings
 import org.apache.log4j.Level
-import org.apache.log4j.Logger
-import org.apache.log4j.RollingFileAppender
-import org.apache.log4j.spi.LoggingEvent
 import org.json.JSONArray
 import org.lazywizard.lazylib.JSONUtils
 
@@ -16,7 +10,7 @@ data class LunaSettingsData(
     val fieldID: String,
     val fieldName: String,
     val fieldType: String,
-    val FieldTooltip: String,
+    val fieldTooltip: String,
     val defaultValue: Any,
     val minValue: Double,
     val maxValue: Double,
@@ -44,7 +38,7 @@ internal object LunaSettingsLoader
 
     fun loadDefault()
     {
-        SettingsData.clear()
+        //SettingsData.clear()
         val CSV: JSONArray = Global.getSettings().getMergedSpreadsheetDataForMod("fieldID", "data/config/LunaSettings.csv", "LunaLib")
 
         var data: MutableList<LunaSettingsData> = ArrayList()
@@ -156,18 +150,19 @@ internal object LunaSettingsLoader
 
     fun loadSettings()
     {
+        //Settings.clear()
         var mods = Global.getSettings().modManager.enabledModsCopy
 
         for (mod in mods)
         {
-                var data = JSONUtils.loadCommonJSON("LunaSettings/${mod.id}.json", "data/config/LunaSettingsDefault.default");
-                if (data.length() == 0 || data == null)
-                {
-                    log.debug("LunaSettings: Could not find any mod settings for ${mod.id}, skipping.")
-                    continue
-                }
-                Settings.put(mod.id, data)
-                log.debug("LunaSettings: Loaded Mod Settings for ${mod.id}")
+            var data = JSONUtils.loadCommonJSON("LunaSettings/${mod.id}.json", "data/config/LunaSettingsDefault.default");
+            if (data.length() == 0 || data == null)
+            {
+                log.debug("LunaSettings: Could not find any mod settings for ${mod.id}, skipping.")
+                continue
+            }
+            Settings.put(mod.id, data)
+            log.debug("LunaSettings: Loaded Mod Settings for ${mod.id}")
         }
     }
 }
