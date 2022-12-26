@@ -6,10 +6,4 @@
 	"plugins":{
 		"LunaLibCombatHandler":"lunalib.CombatHandler",
 	},
-	
-	"graphics":{
-		"luna":{
-			"shockwave":"graphics/lunalib/shockwave.png",	
-		},
-	}
  }
