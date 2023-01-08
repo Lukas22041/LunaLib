@@ -1,5 +1,6 @@
 package lunalib.lunaExtensions
 
+import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.*
 import lunalib.lunaUtil.LunaMisc
@@ -30,6 +31,48 @@ fun SectorAPI.getSystemsWithTag(tag: String) : List<StarSystemAPI> =
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun SectorAPI.isPlayerInHyperspace() =
     Global.getSector().playerFleet.isInHyperspace
+
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)
+ *
+ * Allows adding a script to the sector through an input lambda*/
+fun SectorAPI.addScript(runWhilePaused: Boolean = false, lambda: () -> Unit) : EveryFrameScriptLambda
+{
+    var script = object : EveryFrameScriptLambda(runWhilePaused) {
+
+        init {
+            this.runWhilePaused = runWhilePaused
+            this.isScriptDone = false
+        }
+
+        override fun advance(amount: Float) {
+            lambda()
+        }
+    }
+    Global.getSector().addScript(script)
+    return script
+}
+
+/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)
+ *
+ * Allows adding a script to the sector through an input lambda*/
+fun SectorAPI.addTransientScript(runWhilePaused: Boolean = false, lambda: () -> Unit) : EveryFrameScriptLambda
+{
+    var script = object : EveryFrameScriptLambda(runWhilePaused) {
+
+        init {
+            this.runWhilePaused = runWhilePaused
+            this.isScriptDone = false
+        }
+
+        override fun advance(amount: Float) {
+            lambda()
+        }
+    }
+    Global.getSector().addTransientScript(script)
+    return script
+}
+
+
 
 
 

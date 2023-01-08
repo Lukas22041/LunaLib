@@ -1,9 +1,16 @@
 import com.fs.starfarer.api.BaseModPlugin
+import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry
+import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin
 import lunalib.KeybindsScript
+import lunalib.lunaExtensions.addTransientScript
+import lunalib.lunaExtensions.getMarkets
 import lunalib.lunaSettings.LunaSettingsLoader
 import lunalib.lunaUtil.campaign.LunaProcgen
+import java.lang.invoke.MethodHandle
 import java.util.*
+
 
 class LunaLibPlugin : BaseModPlugin()
 {
@@ -13,11 +20,6 @@ class LunaLibPlugin : BaseModPlugin()
     }
 
     override fun onNewGameAfterEconomyLoad() {
-
-    }
-
-    override fun onNewGameAfterTimePass() {
-
     }
 
     override fun onGameLoad(newGame: Boolean)
@@ -33,3 +35,4 @@ class LunaLibPlugin : BaseModPlugin()
         LunaSettingsLoader.loadSettings()
     }
 }
+

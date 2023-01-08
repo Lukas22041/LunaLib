@@ -197,7 +197,8 @@ object LunaSettings
     }
 
      /**
-     Class used for creating Settings at Runtime. This is not recommended over the usual approach through LunaSettings.CSV
+     Class used for creating Settings at Runtime. This is not recommended over the usual approach through LunaSettings.CSV.
+
      Main use is for Settings that should only appear when another mod is loaded, or to dynamicly create Settings.
      I.e creating a setting that changes behaviour for every Faction that has been loaded.
      ```java
