@@ -1,9 +1,12 @@
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.campaign.FactionAPI
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry
 import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin
 import lunalib.KeybindsScript
+import lunalib.OpenDebugWindowDelegate
+import lunalib.lunaDebug.DebugWindowUI
 import lunalib.lunaExtensions.addTransientScript
 import lunalib.lunaExtensions.getMarkets
 import lunalib.lunaSettings.LunaSettingsLoader
@@ -26,6 +29,8 @@ class LunaLibPlugin : BaseModPlugin()
     {
         LunaProcgen.random = Random(Global.getSector().seedString.hashCode().toLong())
         Global.getSector().addTransientScript(KeybindsScript())
+
+
     }
 
     override fun onApplicationLoad()

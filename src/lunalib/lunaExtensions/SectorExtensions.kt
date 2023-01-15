@@ -1,9 +1,7 @@
 package lunalib.lunaExtensions
 
-import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.*
-import lunalib.lunaUtil.LunaMisc
 import lunalib.lunaUtil.campaign.SectorUtils
 
 //File for Kotlin Extension Functions of SectorAPI. This is only useable in Kotlin, and not Java.
@@ -35,7 +33,7 @@ fun SectorAPI.isPlayerInHyperspace() =
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)
  *
  * Allows adding a script to the sector through an input lambda*/
-fun SectorAPI.addScript(runWhilePaused: Boolean = false, lambda: () -> Unit) : EveryFrameScriptLambda
+fun SectorAPI.addScript(runWhilePaused: Boolean = false, function: () -> Unit) : EveryFrameScriptLambda
 {
     var script = object : EveryFrameScriptLambda(runWhilePaused) {
 
@@ -45,7 +43,7 @@ fun SectorAPI.addScript(runWhilePaused: Boolean = false, lambda: () -> Unit) : E
         }
 
         override fun advance(amount: Float) {
-            lambda()
+            function()
         }
     }
     Global.getSector().addScript(script)
@@ -55,7 +53,7 @@ fun SectorAPI.addScript(runWhilePaused: Boolean = false, lambda: () -> Unit) : E
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)
  *
  * Allows adding a script to the sector through an input lambda*/
-fun SectorAPI.addTransientScript(runWhilePaused: Boolean = false, lambda: () -> Unit) : EveryFrameScriptLambda
+fun SectorAPI.addTransientScript(runWhilePaused: Boolean = false, function: () -> Unit) : EveryFrameScriptLambda
 {
     var script = object : EveryFrameScriptLambda(runWhilePaused) {
 
@@ -65,7 +63,7 @@ fun SectorAPI.addTransientScript(runWhilePaused: Boolean = false, lambda: () -> 
         }
 
         override fun advance(amount: Float) {
-            lambda()
+            function()
         }
     }
     Global.getSector().addTransientScript(script)
