@@ -1,4 +1,4 @@
-package lunalib.RuleCMD
+package lunalib.lunaCMDs
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.InteractionDialogAPI

@@ -3,9 +3,6 @@ package lunalib.lunaUtil.campaign
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CampaignFleetAPI
 import com.fs.starfarer.api.campaign.SectorEntityToken
-import com.fs.starfarer.api.campaign.rules.MemoryAPI
-import lunalib.lunaExtensions.getArray
-import lunalib.lunaExtensions.getList
 import org.lwjgl.util.vector.Vector2f
 
 //Inspired by Wisps Memory delegate, but in a format more useable in Java.

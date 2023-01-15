@@ -1,17 +1,8 @@
 package lunalib.lunaUtil
 
 import com.fs.starfarer.api.Global
-import com.fs.starfarer.api.campaign.FactionAPI
-import com.fs.starfarer.api.campaign.PlanetAPI
-import com.fs.starfarer.api.campaign.SectorEntityToken
-import com.fs.starfarer.api.campaign.StarSystemAPI
-import com.fs.starfarer.api.campaign.econ.MarketAPI
-import com.fs.starfarer.api.combat.ShipHullSpecAPI
 import com.fs.starfarer.api.combat.ShipVariantAPI
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel
-import com.fs.starfarer.api.loading.FighterWingSpecAPI
-import com.fs.starfarer.api.loading.HullModSpecAPI
-import com.fs.starfarer.api.loading.WeaponSpecAPI
 import com.fs.starfarer.api.util.Misc
 import java.awt.Color
 import kotlin.random.Random

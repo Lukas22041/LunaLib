@@ -6,7 +6,7 @@
     "version": "1.2.0",
     "description": "Library including useful utilities for mod devs",
     "gameVersion": "0.95.1a-RC6",
-	"jars":["jars/LunaLib.jar"],
+	"jars":["jars/LunaLib.jar", "jars/LunaLib-Kotlin.jar"],
 	"modPlugin":"LunaLibPlugin",
 	"dependencies": [
 		{

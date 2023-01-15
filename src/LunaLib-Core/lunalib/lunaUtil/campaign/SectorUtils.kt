@@ -5,7 +5,6 @@ import com.fs.starfarer.api.campaign.FactionAPI
 import com.fs.starfarer.api.campaign.PlanetAPI
 import com.fs.starfarer.api.campaign.SectorEntityToken
 import com.fs.starfarer.api.campaign.StarSystemAPI
-import lunalib.lunaUtil.LunaMisc
 
 /**
 A class containing a collection of different Utilities for Sector related stuff.

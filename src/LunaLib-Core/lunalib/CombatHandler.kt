@@ -3,17 +3,11 @@ package lunalib
 import com.fs.starfarer.api.GameState
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.combat.*
-import com.fs.starfarer.api.combat.ShipAPI.HullSize
-import com.fs.starfarer.api.graphics.SpriteAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.lunaSettings.LunaSettings
-import org.lazywizard.lazylib.MathUtils
-import org.lazywizard.lazylib.VectorUtils
-import org.lazywizard.lazylib.combat.CombatUtils
 import org.lazywizard.lazylib.ui.LazyFont
 import org.lwjgl.input.Keyboard
-import org.lwjgl.util.vector.Vector2f
 
 
 class CombatHandler : EveryFrameCombatPlugin

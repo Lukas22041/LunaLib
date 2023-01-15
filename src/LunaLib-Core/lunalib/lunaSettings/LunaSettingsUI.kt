@@ -571,7 +571,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     var test = settingsPanel!!.createCustomPanel(35f, 0f, slider)
                     settingsPanelList!!.addCustom(test, 1f,)
                     test.position.inTL(pW * 0.46f, (spacing + spacingOffset / 2))
-
                 }
                 "Enum" ->
                 {

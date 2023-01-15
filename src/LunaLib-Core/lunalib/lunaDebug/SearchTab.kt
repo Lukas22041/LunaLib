@@ -3,8 +3,6 @@ package lunalib.lunaDebug
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.*
 import com.fs.starfarer.api.campaign.JumpPointAPI.JumpDestination
-import com.fs.starfarer.api.fleet.FleetAPI
-import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.ButtonAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.TextFieldAPI
@@ -12,11 +10,6 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.campaign.CustomCampaignEntity
 import lunalib.lunaSettings.LunaSettings
-import org.json.JSONObject
-import org.lazywizard.lazylib.ext.campaign.contains
-import java.awt.Button
-import java.awt.Toolkit
-import java.awt.datatransfer.StringSelection
 
 
 internal class SearchTab(panel: CustomPanelAPI, dialog: InteractionDialogAPI) : DebugTab(panel, dialog)

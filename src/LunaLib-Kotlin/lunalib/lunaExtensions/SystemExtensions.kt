@@ -4,7 +4,6 @@ import com.fs.starfarer.api.campaign.LocationAPI
 import com.fs.starfarer.api.campaign.StarSystemAPI
 import com.fs.starfarer.api.impl.campaign.procgen.StarAge
 import com.fs.starfarer.api.util.Misc
-import lunalib.lunaUtil.LunaMisc
 import lunalib.lunaUtil.campaign.SystemUtils
 
 //File for Kotlin Extension Functions of StarSystemAPI and LocationAPI. This is only useable in Kotlin, and not Java.

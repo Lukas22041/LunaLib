@@ -1,22 +1,14 @@
 package lunalib.lunaDebug
 
-import com.fs.starfarer.api.Global
-import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
-import com.fs.starfarer.api.combat.ShipHullSpecAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.Misc
-import lunalib.lunaSettings.*
-import lunalib.lunaSettings.LunaSettingsLoader
-import org.lazywizard.lazylib.JSONUtils
-import org.lazywizard.lazylib.MathUtils
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import java.awt.Color
-import kotlinx.coroutines.*
 
 //Probably the worst code ive ever written, it works, but at some point it should probably be rewritten.
 //Do not use this as an example for your own UI.

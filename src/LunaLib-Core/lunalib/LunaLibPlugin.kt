@@ -30,7 +30,9 @@ class LunaLibPlugin : BaseModPlugin()
         LunaProcgen.random = Random(Global.getSector().seedString.hashCode().toLong())
         Global.getSector().addTransientScript(KeybindsScript())
 
-
+        Global.getSector().addTransientScript {
+            playerFleet.cargo.credits.add(1f)
+        }
     }
 
     override fun onApplicationLoad()

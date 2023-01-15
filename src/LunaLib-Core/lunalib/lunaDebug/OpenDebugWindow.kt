@@ -9,7 +9,6 @@ import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate.DialogCallbacks
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
-import data.scripts.util.MagicRender
 import lunalib.lunaDebug.DebugWindowUI
 
 
