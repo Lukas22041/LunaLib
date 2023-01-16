@@ -13,21 +13,18 @@ fun MemoryAPI.isNotNull(key: String) =
     this.get(key) != null
 
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
-fun MemoryAPI.getList(key: String) : List<*>? {
-    if (this.get(key) is List<*>) return this.get(key) as List<*>
-    else return null
+fun <T> MemoryAPI.getList(key: String) : List<T>? {
+    return this.get(key) as List<T> ?: return null
 }
 
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
-fun MemoryAPI.getMap(key: String) : Map<*, *>? {
-    if (this.get(key) is Map<*, *>) return this.get(key) as Map<*, *>?
-    else return null
+fun <T, K> MemoryAPI.getMap(key: String) : Map<T, K>? {
+    return this.get(key) as Map<T, K>? ?: return null
 }
 
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
-fun MemoryAPI.getArray(key: String) : Array<*>? {
-    if (this.get(key) is Array<*>) return this.get(key) as Array<*>
-    else return null
+fun <T> MemoryAPI.getArray(key: String) : Array<T>? {
+    return this.get(key) as Array<T> ?: return null
 }
 
 

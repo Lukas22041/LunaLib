@@ -2,17 +2,18 @@ import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.FactionAPI
+import com.fs.starfarer.api.campaign.rules.MemoryAPI
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry
 import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin
 import lunalib.KeybindsScript
 import lunalib.OpenDebugWindowDelegate
 import lunalib.lunaDebug.DebugWindowUI
-import lunalib.lunaExtensions.addTransientScript
-import lunalib.lunaExtensions.getMarkets
+import lunalib.lunaExtensions.*
 import lunalib.lunaSettings.LunaSettingsLoader
 import lunalib.lunaUtil.campaign.LunaProcgen
-import java.lang.invoke.MethodHandle
+import java.io.Console
 import java.util.*
+import java.util.logging.Logger
 
 
 class LunaLibPlugin : BaseModPlugin()
@@ -29,10 +30,6 @@ class LunaLibPlugin : BaseModPlugin()
     {
         LunaProcgen.random = Random(Global.getSector().seedString.hashCode().toLong())
         Global.getSector().addTransientScript(KeybindsScript())
-
-        Global.getSector().addTransientScript {
-            playerFleet.cargo.credits.add(1f)
-        }
     }
 
     override fun onApplicationLoad()
@@ -42,4 +39,5 @@ class LunaLibPlugin : BaseModPlugin()
         LunaSettingsLoader.loadSettings()
     }
 }
+
 

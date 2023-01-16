@@ -33,7 +33,7 @@ fun SectorAPI.isPlayerInHyperspace() =
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)
  *
  * Allows adding a script to the sector through an input lambda*/
-fun SectorAPI.addScript(runWhilePaused: Boolean = false, function: SectorAPI.() -> Unit) : EveryFrameScriptLambda
+fun SectorAPI.addScript(runWhilePaused: Boolean = false, function: (amount: Float) -> Unit) : EveryFrameScriptLambda
 {
     var script = object : EveryFrameScriptLambda(runWhilePaused) {
 
@@ -43,7 +43,7 @@ fun SectorAPI.addScript(runWhilePaused: Boolean = false, function: SectorAPI.() 
         }
 
         override fun advance(amount: Float) {
-            function()
+            function(amount)
         }
     }
     Global.getSector().addScript(script)
@@ -53,7 +53,7 @@ fun SectorAPI.addScript(runWhilePaused: Boolean = false, function: SectorAPI.() 
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)
  *
  * Allows adding a script to the sector through an input lambda*/
-fun SectorAPI.addTransientScript(runWhilePaused: Boolean = false, function: SectorAPI.() -> Unit) : EveryFrameScriptLambda
+fun SectorAPI.addTransientScript(runWhilePaused: Boolean = false, function: (amount: Float) -> Unit) : EveryFrameScriptLambda
 {
     var script = object : EveryFrameScriptLambda(runWhilePaused) {
 
@@ -63,7 +63,7 @@ fun SectorAPI.addTransientScript(runWhilePaused: Boolean = false, function: Sect
         }
 
         override fun advance(amount: Float) {
-            function()
+            function(amount)
         }
     }
     Global.getSector().addTransientScript(script)
