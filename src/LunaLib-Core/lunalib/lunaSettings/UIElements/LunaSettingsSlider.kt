@@ -5,7 +5,6 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.util.Misc
 import org.lwjgl.opengl.GL11
-import java.awt.Color
 
 class LunaSettingsSlider(var width: Float, var height: Float) : CustomUIPanelPlugin
 {
