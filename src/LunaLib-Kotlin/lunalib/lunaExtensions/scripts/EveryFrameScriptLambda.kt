@@ -1,4 +1,4 @@
-package lunalib.lunaExtensions
+package lunalib.lunaExtensions.scripts
 
 import com.fs.starfarer.api.EveryFrameScript
 

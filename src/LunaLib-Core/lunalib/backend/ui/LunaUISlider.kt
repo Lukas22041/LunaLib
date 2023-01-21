@@ -1,4 +1,4 @@
-package lunalib.lunaSettings.UIElements
+package lunalib.backend.ui
 
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.input.InputEventAPI
@@ -6,16 +6,16 @@ import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.util.Misc
 import org.lwjgl.opengl.GL11
 
-class LunaSettingsSlider(var width: Float, var height: Float) : CustomUIPanelPlugin
+class LunaUISlider(var width: Float, var height: Float) : CustomUIPanelPlugin
 {
 
     var position: PositionAPI? = null
     var sliderPositionX = 0f
     var heldDown = false
 
-    var onClickFunctions: MutableList<LunaSettingsSlider.() -> Unit> = ArrayList()
+    var onClickFunctions: MutableList<LunaUISlider.() -> Unit> = ArrayList()
         private set
-    var onHeldFunctions: MutableList<LunaSettingsSlider.() -> Unit> = ArrayList()
+    var onHeldFunctions: MutableList<LunaUISlider.() -> Unit> = ArrayList()
         private set
 
     override fun positionChanged(position: PositionAPI?) {
@@ -25,12 +25,12 @@ class LunaSettingsSlider(var width: Float, var height: Float) : CustomUIPanelPlu
     override fun renderBelow(alphaMult: Float) {
     }
 
-    fun onClick(function: LunaSettingsSlider.() -> Unit)
+    fun onClick(function: LunaUISlider.() -> Unit)
     {
         onClickFunctions.add(function)
     }
 
-    fun onHeld(function: LunaSettingsSlider.() -> Unit)
+    fun onHeld(function: LunaUISlider.() -> Unit)
     {
         onHeldFunctions.add(function)
     }

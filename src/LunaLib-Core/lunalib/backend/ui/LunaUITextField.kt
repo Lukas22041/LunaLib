@@ -8,7 +8,7 @@ import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector2f
 
-class LunaTextField(key: Any, data: Any?, group: String, panel: TooltipMakerAPI) : LunaBaseUIElement(key, data, group, panel) {
+class LunaUITextField(key: Any, data: Any?, group: String, panel: TooltipMakerAPI) : LunaBaseUIElement(key, data, group, panel) {
 
     var borderColor = Misc.getDarkPlayerColor()
 

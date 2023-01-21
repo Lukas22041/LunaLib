@@ -1,4 +1,4 @@
-package lunalib
+package lunalib.backend.scripts
 
 import com.fs.starfarer.api.GameState
 import com.fs.starfarer.api.Global

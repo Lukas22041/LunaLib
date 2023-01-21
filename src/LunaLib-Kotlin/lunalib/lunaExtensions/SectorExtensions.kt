@@ -3,7 +3,7 @@ package lunalib.lunaExtensions
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.*
 import lunalib.lunaUtil.campaign.SectorUtils
-import lunalib.lunaExtensions.EveryFrameScriptLambda
+import lunalib.lunaExtensions.scripts.EveryFrameScriptLambda
 
 //File for Kotlin Extension Functions of SectorAPI. This is only useable in Kotlin, and not Java.
 

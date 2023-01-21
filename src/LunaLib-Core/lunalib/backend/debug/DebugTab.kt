@@ -1,8 +1,7 @@
-package lunalib.lunaDebug
+package lunalib.backend.debug
 
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
-import com.fs.starfarer.api.ui.TooltipMakerAPI
 
 abstract class DebugTab(var panel: CustomPanelAPI, var dialog: InteractionDialogAPI)
 {

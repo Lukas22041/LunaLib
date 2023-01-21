@@ -1,13 +1,14 @@
-package lunalib
+package lunalib.backend.scripts
 
 import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CoreUITabId
 import com.fs.starfarer.api.impl.campaign.DebugFlags
 import com.fs.starfarer.api.util.IntervalUtil
+import lunalib.OpenDebugWindowInteraction
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsListener
-import lunalib.lunaSettings.OpenSettingsPanelInteraction
+import lunalib.backend.settings.OpenSettingsPanelInteraction
 import org.lwjgl.input.Keyboard
 
 internal class KeybindsScript : LunaSettingsListener, EveryFrameScript

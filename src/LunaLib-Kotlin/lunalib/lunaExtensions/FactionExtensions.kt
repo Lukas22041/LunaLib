@@ -33,18 +33,6 @@ fun FactionAPI.getKnownFightersSpecs() : List<FighterWingSpecAPI> =
     FactionUtils.getKnownFighterSpecs(this.id)
 
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
-fun FactionAPI.getNumHostileMarkets(from: SectorEntityToken, maxDist: Float) =
-    Misc.getNumHostileMarkets(this, from, maxDist)
-
-/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
-fun FactionAPI.isPirateFaction() =
-    Misc.isPirateFaction(this)
-
-/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
-fun FactionAPI.isDecentralized() =
-    Misc.isDecentralized(this)
-
-/** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.existsInSector() =
     FactionUtils.existsInSector(this.id)
 

@@ -1,4 +1,4 @@
-package lunalib.lunaDebug
+package lunalib.backend.debug
 
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate

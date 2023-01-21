@@ -1,4 +1,4 @@
-package lunalib.lunaSettings
+package lunalib.backend.settings
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
@@ -9,7 +9,9 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipCreator
 import com.fs.starfarer.api.util.Misc
-import lunaSettings.UIElements.LunaTextField
+import lunaSettings.UIElements.LunaUITextField
+import lunalib.lunaSettings.LunaSettings
+import lunalib.lunaSettings.LunaSettingsListener
 import org.lazywizard.lazylib.JSONUtils
 import org.lazywizard.lazylib.MathUtils
 import org.lwjgl.input.Keyboard
@@ -571,7 +573,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     settingsPanelList!!.addCustom(test, 1f,)
                     test.position.inTL(pW * 0.46f, (spacing + spacingOffset / 2))*/
 
-                    var testui = LunaTextField("Test", null, "TestGroup", settingsPanelList!!).apply {
+                    var testui = LunaUITextField("Test", null, "TestGroup", settingsPanelList!!).apply {
 
                     }
 
@@ -631,7 +633,8 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     selectedPara.position.inTL(pW * 0.44f,(spacing + spacingOffset / 2) - selectedPara.position.height / 2)
                     keyFieldPara.put(data, selectedPara)
 
-                    selectedPara.text = "Keybind: " + Keyboard.getKeyName(LunaSettings.getInt(data.modID, data.fieldID)!!)
+                    selectedPara.text = "Keybind: " + Keyboard.getKeyName(LunaSettings.getInt(data.modID,
+                        data.fieldID)!!)
                 }
                 "Color" ->
                 {

@@ -1,6 +1,8 @@
 package lunalib.lunaSettings
 
 import com.fs.starfarer.api.Global
+import lunalib.backend.settings.LunaSettingsData
+import lunalib.backend.settings.LunaSettingsLoader
 import org.apache.log4j.Level
 import java.awt.Color
 

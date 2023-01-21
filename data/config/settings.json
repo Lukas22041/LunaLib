@@ -1,9 +1,9 @@
  {
  	"ruleCommandPackages":[
- 		"lunalib.lunaCMDs",
+ 		"lunalib.backend.cmds",
  	],		
 
 	"plugins":{
-		"LunaLibCombatHandler":"lunalib.CombatHandler",
+		"LunaLibCombatHandler":"lunalib.backend.scripts.CombatHandler",
 	},
  }

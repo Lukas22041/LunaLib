@@ -2,16 +2,14 @@ package lunalib
 
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
-import lunalib.lunaSettings.LunaSettingsLoader
-import lunalib.lunaUtil.campaign.LunaProcgen
-import java.util.*
+import lunalib.backend.scripts.KeybindsScript
+import lunalib.backend.settings.LunaSettingsLoader
 
 
 class LunaLibPlugin : BaseModPlugin()
 {
     override fun onNewGame()
     {
-        LunaProcgen.random = Random(Global.getSector().seedString.hashCode().toLong())
     }
 
     override fun onNewGameAfterEconomyLoad() {
@@ -19,7 +17,6 @@ class LunaLibPlugin : BaseModPlugin()
 
     override fun onGameLoad(newGame: Boolean)
     {
-        LunaProcgen.random = Random(Global.getSector().seedString.hashCode().toLong())
         Global.getSector().addTransientScript(KeybindsScript())
     }
 
