@@ -9,7 +9,7 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipCreator
 import com.fs.starfarer.api.util.Misc
-import lunalib.lunaSettings.UIElements.LunaSettingsSlider
+import lunaSettings.UIElements.LunaTextField
 import org.lazywizard.lazylib.JSONUtils
 import org.lazywizard.lazylib.MathUtils
 import org.lwjgl.input.Keyboard
@@ -548,7 +548,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                         pH * 0.05f,
                         0f)
 
-
                     booleanButton.isChecked = LunaSettings.getBoolean(data.modID, data.fieldID, false) ?: false
                     booleanButton.position.inTL(pW * 0.35f,(spacing + spacingOffset / 2) - booleanButton.position.height / 2)
                     booleanField.put(data, booleanButton)
@@ -559,7 +558,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
                     booleanFieldPara.put(data, para)*/
 
-                    var slider = LunaSettingsSlider(pW * 0.25f / 2, pH * 0.015f)
+                   /* var slider = LunaSettingsSlider(pW * 0.25f / 2, pH * 0.015f)
                     slider.onClick {
                         //position!!.setSize(35f, 100f)
                     }
@@ -570,7 +569,31 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
                     var test = settingsPanel!!.createCustomPanel(35f, 0f, slider)
                     settingsPanelList!!.addCustom(test, 1f,)
-                    test.position.inTL(pW * 0.46f, (spacing + spacingOffset / 2))
+                    test.position.inTL(pW * 0.46f, (spacing + spacingOffset / 2))*/
+
+                    var testui = LunaTextField("Test", null, "TestGroup", settingsPanelList!!).apply {
+
+                    }
+
+                    /*testui.onHover {
+                        spacingButton.position.setSize(spacingButton.position.width, spacingButton.position.height + 1)
+                    }*/
+
+                    var test = settingsPanel!!.createCustomPanel(200f, 30f, testui)
+                    settingsPanelList!!.addCustom(test, 0f)
+                    test.position.inTL(pW * 0.46f, (spacing + (spacingOffset / 2) - test.position.height / 2))
+
+                    var para = testui.addParagraph("Test", Misc.getBasePlayerColor())
+                    para!!.position.inTL(pW * 0.465f, (spacing + (spacingOffset / 2)- para.position.height / 2 ))
+
+
+                    //Sets TestUI to top left
+                    //test.position.inTL(0f, spacing)
+
+
+
+
+
                 }
                 "Enum" ->
                 {
