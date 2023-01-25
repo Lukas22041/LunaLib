@@ -10,7 +10,7 @@ import com.fs.starfarer.api.util.Misc
 import lunalib.lunaUtil.campaign.FactionUtils
 
 
-//File for Kotlin Extension Functions of FactionAPI. This is only useable in Kotlin, and not Java.
+//File for Kotlin Extension Functions of FactionAPI.
 
 /** (**LunaLib Extension Function**) [LunaExtensions on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/LunaExtensions)*/
 fun FactionAPI.getMarketsCopy() : List<MarketAPI> =

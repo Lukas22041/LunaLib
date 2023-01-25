@@ -1,7 +1,8 @@
-package lunaSettings.UIElements
+package lunalib.backend.ui
 
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.input.InputEventAPI
+import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.LabelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
@@ -10,11 +11,13 @@ import org.lwjgl.opengl.GL11
 import java.awt.Color
 import java.util.WeakHashMap
 
-abstract class LunaBaseUIElement(var key: Any, var data: Any?, var group: String, var panel: TooltipMakerAPI) : CustomUIPanelPlugin
+abstract class LunaBaseUIElement(var width: Float = 0f, var height: Float = 0f, var key: Any, var group: String, var panel: CustomPanelAPI, var uiElement: TooltipMakerAPI) : CustomUIPanelPlugin
 {
     companion object {
         var selectedMap: MutableMap<String, LunaBaseUIElement?> = WeakHashMap()
     }
+
+    var lunaElement: CustomPanelAPI? = null
 
     private var onClickFunctions: MutableList<LunaBaseUIElement.(InputEventAPI) -> Unit> = ArrayList()
     private var onClickOutsideFunctions: MutableList<LunaBaseUIElement.(InputEventAPI) -> Unit> = ArrayList()
@@ -29,7 +32,6 @@ abstract class LunaBaseUIElement(var key: Any, var data: Any?, var group: String
     private var onSelectFunction: MutableList<LunaBaseUIElement.() -> Unit> = ArrayList()
 
     var paragraph: LabelAPI? = null
-
     var position: PositionAPI? = null
 
     var posX: Float = 0f
@@ -42,17 +44,17 @@ abstract class LunaBaseUIElement(var key: Any, var data: Any?, var group: String
     var centerY: Float = 0f
         private set
 
-    var width: Float = 0f
-        private set
-    var height: Float = 0f
-        private set
-
     var baseColor = Misc.getBasePlayerColor()
     var brightColor = Misc.getBrightPlayerColor()
     var darkColor = Misc.getDarkPlayerColor()
 
     var isHeld = false
     var isHovering = false
+
+    init {
+        lunaElement = panel.createCustomPanel(width, height, this)
+        uiElement.addCustom(lunaElement, 0f)
+    }
 
     fun isSelected() : Boolean
     {
@@ -116,7 +118,7 @@ abstract class LunaBaseUIElement(var key: Any, var data: Any?, var group: String
 
     fun addParagraph(text: String, color: Color) : LabelAPI?
     {
-        paragraph = panel.addPara("Test", 0f, color, color)
+        paragraph = uiElement.addPara("Test", 0f, color, color)
         return paragraph
     }
 
@@ -236,9 +238,9 @@ abstract class LunaBaseUIElement(var key: Any, var data: Any?, var group: String
             else if (event.isMouseEvent && isHeld)
             {
                 //sliderPositionX = event.x.toFloat() - position!!.centerX
-                for (onClick in onHeldFunctions)
+                for (onHeld in onHeldFunctions)
                 {
-                    onClick(event)
+                    onHeld(event)
                 }
                 event.consume()
             }

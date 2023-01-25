@@ -5,8 +5,8 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.campaign.rules.MemoryAPI
 import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin
 import com.fs.starfarer.api.util.Misc
-import lunalib.backend.settings.LunaSettingsUI
-import lunalib.backend.settings.OpenSettingsPanelDelegate
+import lunalib.backend.ui.settings.LunaSettingsUI
+import lunalib.backend.ui.settings.OpenSettingsPanelDelegate
 
 // Used to open the LunaSettingsUI from Rules.CSV
 // Not part of the other rules utilities.

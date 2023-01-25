@@ -8,7 +8,7 @@ import com.fs.starfarer.api.util.IntervalUtil
 import lunalib.OpenDebugWindowInteraction
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsListener
-import lunalib.backend.settings.OpenSettingsPanelInteraction
+import lunalib.backend.ui.settings.OpenSettingsPanelInteraction
 import org.lwjgl.input.Keyboard
 
 internal class KeybindsScript : LunaSettingsListener, EveryFrameScript

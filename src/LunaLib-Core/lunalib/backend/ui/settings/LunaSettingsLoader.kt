@@ -1,4 +1,4 @@
-package lunalib.backend.settings
+package lunalib.backend.ui.settings
 
 import com.fs.starfarer.api.Global
 import org.apache.log4j.Level

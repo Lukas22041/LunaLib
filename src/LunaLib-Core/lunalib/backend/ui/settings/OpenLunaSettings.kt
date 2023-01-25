@@ -1,4 +1,4 @@
-package lunalib.backend.settings
+package lunalib.backend.ui.settings
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin

@@ -1,4 +1,4 @@
-package lunalib.backend.settings
+package lunalib.backend.ui.settings
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
@@ -9,7 +9,7 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipCreator
 import com.fs.starfarer.api.util.Misc
-import lunaSettings.UIElements.LunaUITextField
+import lunalib.backend.ui.*
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsListener
 import org.lazywizard.lazylib.JSONUtils
@@ -17,6 +17,8 @@ import org.lazywizard.lazylib.MathUtils
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import java.awt.Color
+
+
 
 //Probably the worst code ive ever written, it works, but at some point it should probably be rewritten.
 //Do not use this as an example for your own UI.
@@ -560,41 +562,38 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
                     booleanFieldPara.put(data, para)*/
 
-                   /* var slider = LunaSettingsSlider(pW * 0.25f / 2, pH * 0.015f)
-                    slider.onClick {
-                        //position!!.setSize(35f, 100f)
-                    }
 
-                    slider.onHeld {
-                        position!!.setSize(position!!.width + 1, position!!.height)
-                    }
 
-                    var test = settingsPanel!!.createCustomPanel(35f, 0f, slider)
-                    settingsPanelList!!.addCustom(test, 1f,)
-                    test.position.inTL(pW * 0.46f, (spacing + spacingOffset / 2))*/
 
-                    var testui = LunaUITextField("Test", null, "TestGroup", settingsPanelList!!).apply {
 
-                    }
-
-                    /*testui.onHover {
-                        spacingButton.position.setSize(spacingButton.position.width, spacingButton.position.height + 1)
+                    /*var testui = LunaUITextField(200f, 30f,"Test", null, "TestGroup", settingsPanel!!, settingsPanelList!!, Filters.Int)
+                    testui.run {
+                        lunaElement!!.position.inTL(pW * 0.46f, (spacing + (spacingOffset / 2) - height / 2))
                     }*/
 
-                    var test = settingsPanel!!.createCustomPanel(200f, 30f, testui)
-                    settingsPanelList!!.addCustom(test, 0f)
-                    test.position.inTL(pW * 0.46f, (spacing + (spacingOffset / 2) - test.position.height / 2))
 
-                    var para = testui.addParagraph("Test", Misc.getBasePlayerColor())
-                    para!!.position.inTL(pW * 0.465f, (spacing + (spacingOffset / 2)- para.position.height / 2 ))
+                    var testui = LunaUISlider(Color(255, 255, 255),-10f, 10f, 200f, 40f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
+                    testui.run {
+                        lunaElement!!.position.inTL(pW * 0.46f, (spacing + + 100))
+                    }
+
+                    var testui2 = LunaUISlider(1,0f, 10f, 200f, 40f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
+                    testui2.run {
+                        lunaElement!!.position.inTL(pW * 0.46f, (spacing  + 200))
+                    }
+
+                    var testui3 = LunaUISlider(1f,-10f, 10f, 200f, 40f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
+                    testui3.run {
+                        lunaElement!!.position.inTL(pW * 0.46f, (spacing + 300))
+                    }
+
+
+
+
 
 
                     //Sets TestUI to top left
                     //test.position.inTL(0f, spacing)
-
-
-
-
 
                 }
                 "Enum" ->

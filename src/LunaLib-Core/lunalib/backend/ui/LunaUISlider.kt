@@ -1,128 +1,151 @@
 package lunalib.backend.ui
 
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
-import com.fs.starfarer.api.input.InputEventAPI
+import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
+import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
+import org.lazywizard.lazylib.MathUtils
 import org.lwjgl.opengl.GL11
-
-class LunaUISlider(var width: Float, var height: Float) : CustomUIPanelPlugin
-{
-
-    var position: PositionAPI? = null
-    var sliderPositionX = 0f
-    var heldDown = false
-
-    var onClickFunctions: MutableList<LunaUISlider.() -> Unit> = ArrayList()
-        private set
-    var onHeldFunctions: MutableList<LunaUISlider.() -> Unit> = ArrayList()
-        private set
-
-    override fun positionChanged(position: PositionAPI?) {
-        this.position = position
-    }
-
-    override fun renderBelow(alphaMult: Float) {
-    }
-
-    fun onClick(function: LunaUISlider.() -> Unit)
-    {
-        onClickFunctions.add(function)
-    }
-
-    fun onHeld(function: LunaUISlider.() -> Unit)
-    {
-        onHeldFunctions.add(function)
-    }
-
-    override fun render(alphaMult: Float) {
-        val playercolor = Misc.getDarkPlayerColor()
-
-        if (position != null)
-        {
-            //Box
-            GL11.glPushMatrix()
-
-            GL11.glTranslatef(0f, 0f, 0f)
-            GL11.glRotatef(0f, 0f, 0f, 1f)
-
-            GL11.glDisable(GL11.GL_TEXTURE_2D)
-            GL11.glEnable(GL11.GL_BLEND)
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE)
-            GL11.glColor4ub(playercolor.red.toByte(), playercolor.green.toByte(), playercolor.blue.toByte(), playercolor.alpha.toByte())
-
-            GL11.glEnable(GL11.GL_LINE_SMOOTH)
-            GL11.glBegin(GL11.GL_LINE_STRIP)
-
-            GL11.glVertex2f(position!!.centerX + width, position!!.centerY + height)
-            GL11.glVertex2f(position!!.centerX + width, position!!.centerY - height)
-            GL11.glVertex2f(position!!.centerX - width, position!!.centerY - height)
-            GL11.glVertex2f(position!!.centerX - width, position!!.centerY + height)
-            GL11.glVertex2f(position!!.centerX + width, position!!.centerY + height)
-
-            GL11.glEnd()
+import org.lwjgl.util.vector.Vector2f
+import java.awt.Color
+import java.math.BigDecimal
+import java.math.RoundingMode
+import kotlin.math.round
 
 
-            //Slider
-            GL11.glPushMatrix()
+class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaBaseUIElement(width, height, key, group, panel, uiElement) {
 
-            GL11.glTranslatef(0f, 0f, 0f)
-            GL11.glRotatef(0f, 0f, 0f, 1f)
+    var borderColor = Misc.getDarkPlayerColor()
+    var sliderPosX = 0f
+    var level = 0f
 
-            GL11.glDisable(GL11.GL_TEXTURE_2D)
-            GL11.glEnable(GL11.GL_BLEND)
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE)
-            GL11.glColor4ub(playercolor.red.toByte(), playercolor.green.toByte(), playercolor.blue.toByte(), playercolor.alpha.toByte())
-
-            GL11.glEnable(GL11.GL_LINE_SMOOTH)
-            GL11.glBegin(GL11.GL_LINE_STRIP)
-
-            var sliderPos = position!!.centerX + sliderPositionX
-            var sliderWidth = width / 20
-            GL11.glVertex2f(sliderPos + sliderWidth, position!!.centerY + height)
-            GL11.glVertex2f(sliderPos + sliderWidth, position!!.centerY - height)
-            GL11.glVertex2f(sliderPos - sliderWidth, position!!.centerY - height)
-            GL11.glVertex2f(sliderPos - sliderWidth, position!!.centerY + height)
-            GL11.glVertex2f(sliderPos + sliderWidth, position!!.centerY + height)
-
-            GL11.glEnd()
+    init {
+        onClick {event ->
+            if (event.eventValue == 0 && event.x.toFloat() in (position!!.centerX - width)..(position!!.centerX + width) && event.y.toFloat() in (posY)..(posY + height / 2))
+            {
+                Global.getSoundPlayer().playSound("ui_button_pressed", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+            }
+        }
+        onHeld {event ->
+            if (event.isMouseEvent && event.x.toFloat() in (position!!.centerX - width)..(position!!.centerX + width) && event.y.toFloat() in (posY)..(posY + height / 2))
+            {
+                setSelected()
+                borderColor = Misc.getBrightPlayerColor().darker()
+                sliderPosX = event.x.toFloat() - position!!.centerX
+                event.consume()
+            }
+        }
+        onNotHeld {
+            unselect()
+            borderColor = Misc.getDarkPlayerColor().brighter()
         }
     }
 
     override fun advance(amount: Float) {
+        super.advance(amount)
 
+        if (paragraph != null)
+        {
+            when (value)
+            {
+                is Color -> {
+                    var color = Color.getHSBColor(level, 1f, 1f)
+                    paragraph!!.setHighlight(paragraph!!.text)
+                    paragraph!!.setHighlightColor(color!!)
+                    value = color as T
+                }
+                is Number -> {
+                    var scale = (((maxValue - minValue) * (level - 0) / (1 - 0) ) + minValue)
+                    if (value is Int)
+                    {
+                        value = scale.toInt() as T
+                    }
+                    else if (value is Double || value is Float)
+                    {
+                        var multiplier = 1.0
+                        repeat(2) { multiplier *= 10 }
+                        value = (round(scale * multiplier) / multiplier) as T
+                    }
+                    else
+                    {
+                        value = scale as T
+                    }
+
+                    paragraph!!.text = "Value: $value"
+                    paragraph!!.setHighlight("Value:")
+                    paragraph!!.setHighlightColor(Misc.getHighlightColor())
+                }
+            }
+
+        }
     }
 
-    override fun processInput(events: MutableList<InputEventAPI>?)
-    {
-        for (event in events!!)
+
+    override fun positionChanged(position: PositionAPI) {
+        super.positionChanged(position)
+
+        if (paragraph == null && lunaElement != null)
         {
-            if (event.isMouseDownEvent && position != null)
-            {
-                if (event.x.toFloat() in (position!!.centerX - width)..(position!!.centerX + width) && event.y.toFloat() in (position!!.centerY - height)..(position!!.centerY + height))
-                {
-                    sliderPositionX = event.x.toFloat() - position!!.centerX
-                    event.consume()
-                    heldDown = true
-                    for (onClick in onClickFunctions)
-                    {
-                        onClick()
-                    }
-                }
+            var pan = lunaElement!!.createUIElement(width, height, false)
+            uiElement.addComponent(pan)
+            lunaElement!!.addUIElement(pan)
+            pan.position.inTL(0f, 0f)
+            paragraph = pan.addPara("Color", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+        }
+
+        if (paragraph != null)
+        {
+            paragraph!!.position.inTL((width / 2 - paragraph!!.computeTextWidth(paragraph!!.text) / 2) , 0f )
+        }
+    }
+
+    override fun renderBelow(alphaMult: Float) {
+        if (position != null)
+        {
+            createGLRectangle(darkColor, alphaMult)  {
+                GL11.glRectf(posX, posY , posX + width, posY + height / 2)
             }
-            else if (event.isMouseUpEvent)
-            {
-                heldDown = false
+            createGLRectangle(darkColor.brighter(), alphaMult)  {
+                var sliderWidth = width / 20
+                var sliderPos = centerX + sliderPosX
+                var min = centerX - width / 2 + width / 20
+                var max = centerX + width / 2 - width / 20
+                sliderPos = MathUtils.clamp(sliderPos, min, max)
+
+                GL11.glRectf(sliderPos - sliderWidth, posY , sliderPos + sliderWidth, posY + height / 2)
             }
-            else if (event.isMouseEvent && heldDown)
-            {
-                sliderPositionX = event.x.toFloat() - position!!.centerX
-                event.consume()
-                for (onClick in onHeldFunctions)
-                {
-                    onClick()
-                }
+        }
+    }
+
+    override fun render(alphaMult: Float) {
+        if (position != null)
+        {
+            createGLLines(darkColor, alphaMult) {
+
+                GL11.glVertex2f(posX, posY)
+                GL11.glVertex2f(posX, posY + height / 2)
+                GL11.glVertex2f(posX + width, posY + height / 2)
+                GL11.glVertex2f(posX + width, posY)
+                GL11.glVertex2f(posX, posY)
+            }
+
+            createGLLines(borderColor, alphaMult) {
+                var sliderPos = centerX + sliderPosX
+                var min = centerX - width / 2 + width / 20
+                var max = centerX + width / 2 - width / 20
+                sliderPos = MathUtils.clamp(sliderPos, min, max)
+
+                var sliderWidth = width / 20
+                level = (sliderPos - min) / (max - min)
+
+                GL11.glVertex2f(sliderPos + sliderWidth, posY + height / 2)
+                GL11.glVertex2f(sliderPos + sliderWidth, posY)
+                GL11.glVertex2f(sliderPos - sliderWidth, posY)
+                GL11.glVertex2f(sliderPos - sliderWidth, posY + height / 2)
+                GL11.glVertex2f(sliderPos + sliderWidth, posY + height / 2)
             }
         }
     }
 }
+
