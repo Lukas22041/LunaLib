@@ -1,9 +1,9 @@
-package lunalib.backend.ui
+package lunalib.backend.ui.components
 
 import com.fs.starfarer.api.Global
-import com.fs.starfarer.api.SettingsAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
+import com.fs.starfarer.api.ui.LabelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
@@ -17,9 +17,13 @@ enum class Filters {
     None, Double, Int
 }
 
-class LunaUITextField(width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI, var filter: Filters) : LunaBaseUIElement(width, height, key, group, panel, uiElement) {
+class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var borderColor = Misc.getDarkPlayerColor()
+    var slider: LunaUISlider<T>? = null
+    var paragraph: LabelAPI? = null
+    private var default = value
+    private var init = false
 
     init {
         onClick {
@@ -48,7 +52,7 @@ class LunaUITextField(width: Float, height: Float, key: Any, group: String, pane
         onUpdate {
             if (isSelected())
             {
-                borderColor = Misc.getBasePlayerColor()
+                borderColor = Misc.getDarkPlayerColor().brighter().brighter()
             }
             else
             {
@@ -69,11 +73,29 @@ class LunaUITextField(width: Float, height: Float, key: Any, group: String, pane
             uiElement.addComponent(pan)
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
-            paragraph = pan.addPara("Test", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+            paragraph = pan.addPara("", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+
+        }
+
+        if (slider == null && value is Number)
+        {
+            var pan = lunaElement!!.createUIElement(width, height, false)
+            uiElement.addComponent(pan)
+            lunaElement!!.addUIElement(pan)
+            pan.position.inTL(0f, 0f)
+            slider = LunaUISlider(value,false, minValue, maxValue, width, height * 0.75f,"", group, panel, pan!!)
+            slider!!.lunaElement!!.position.inTL(0f, height + 1)
+            slider!!.onHeld {
+                try {
+                    paragraph!!.text = slider!!.value.toString()
+                }
+                catch (e: Throwable) { }
+            }
         }
 
         if (paragraph != null)
         {
+
             paragraph!!.position.inTL(5f, height / 2 - paragraph!!.position.height / 2)
         }
     }
@@ -86,6 +108,7 @@ class LunaUITextField(width: Float, height: Float, key: Any, group: String, pane
             createGLRectangle(darkColor, alphaMult)  {
                 GL11.glRectf(posX, posY, posX + width, posY + height)
             }
+
         }
     }
 
@@ -105,6 +128,19 @@ class LunaUITextField(width: Float, height: Float, key: Any, group: String, pane
     }
 
     override fun advance(amount: Float) {
+
+        if (paragraph != null)
+        {
+            if (!isSelected())
+            {
+                if (paragraph!!.text == "")
+                {
+                    paragraph!!.text = value.toString()
+                }
+            }
+        }
+
+
         super.advance(amount)
     }
 
@@ -127,6 +163,10 @@ class LunaUITextField(width: Float, height: Float, key: Any, group: String, pane
                 isCooldown = false
             }
             return
+        }
+        if (paragraph != null)
+        {
+           paragraph!!.text = paragraph!!.text.replace("_", "")
         }
 
         if (isSelected() && paragraph != null)
@@ -160,52 +200,34 @@ class LunaUITextField(width: Float, height: Float, key: Any, group: String, pane
                     event.consume()
                     continue
                 }
-                if (paragraph!!.computeTextWidth(paragraph!!.text) > width - 20)
-                {
-                    Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
-                    continue
-                }
                 if (event.eventValue == 15) continue
+                if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) continue
                 if (event.isKeyboardEvent && !event.isKeyUpEvent)
                 {
-                    var char = event.eventChar
-                    if (char != '0' && char != '&' && char != '%')
+                    if (paragraph!!.computeTextWidth(paragraph!!.text) > (width - 20) - paragraph!!.computeTextWidth("_"))
                     {
-                        if (filter == Filters.None)
+                        Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                        continue
+                    }
+                    var char = event.eventChar
+                    if (char != '&' && char != '%')
+                    {
+                        if (value is String)
                         {
                             paragraph!!.text += char
                             isCooldown = true
                             cooldown = 1f
                             event.consume()
                             Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                            value = paragraph!!.text.toString() as T
                             break
                         }
-                        else if (filter == Filters.Double)
-                        {
-                            if (DOUBLE_PATTERN.matcher(paragraph!!.text + char).matches() || char == '-' && paragraph!!.text.isEmpty())
-                            {
-                                paragraph!!.text += char
-                                paragraph!!.text = paragraph!!.text.replace("[^0-9.-]".toRegex(), "")
-                                isCooldown = true
-                                cooldown = 1f
-                                event.consume()
-                                Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
-                                break
-                            }
-                            else
-                            {
-                                isCooldown = true
-                                cooldown = 1f
-                                event.consume()
-                                Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
-                                break
-                            }
-                        }
-                        else if (filter == Filters.Int)
+                        else if (value is Int)
                         {
                             isCooldown = true
                             cooldown = 1f
                             event.consume()
+                            if (char == '_') continue
                             if (char == '-' && paragraph!!.text.isNotEmpty())
                             {
                                 Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
@@ -221,11 +243,81 @@ class LunaUITextField(width: Float, height: Float, key: Any, group: String, pane
                             {
                                 Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
                             }
+                            try {
+                                value = paragraph!!.text.toInt() as T
+                                slider!!.value = value
+
+                                if (value as Int > maxValue)
+                                {
+                                    paragraph!!.text = maxValue.toInt().toString()
+                                }
+                                if (minValue > value as Int)
+                                {
+                                    paragraph!!.text = minValue.toInt().toString()
+                                }
+
+                                var level = (value as Int - minValue) / (maxValue - minValue)
+                                level -= 0.5f
+                                var scale = slider!!.width
+
+                                slider!!.sliderPosX = ((slider!!.width)  * level)
+                            }
+                            catch (e: Throwable) { }
                             break
+                        }
+                        else if (value is Number)
+                        {
+                            if (DOUBLE_PATTERN.matcher(paragraph!!.text + char).matches() || char == '-' && paragraph!!.text.isEmpty())
+                            {
+                                paragraph!!.text += char
+                                paragraph!!.text = paragraph!!.text.replace("[^0-9.-]".toRegex(), "")
+                                isCooldown = true
+                                cooldown = 1f
+                                event.consume()
+                                Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                                try {
+                                    value = paragraph!!.text.toDouble() as T
+                                    if (value as Double > maxValue)
+                                    {
+                                        paragraph!!.text = maxValue.toString()
+                                    }
+                                    if (minValue > value as Double)
+                                    {
+                                        paragraph!!.text = minValue.toString()
+                                    }
+
+                                    slider!!.value = value
+
+                                    var level = (value as Double - minValue) / (maxValue - minValue)
+                                    level -= 0.5f
+                                    var scale = slider!!.width
+
+                                    slider!!.sliderPosX = (((slider!!.width)  * level).toFloat())
+                                }
+                                catch (e: Throwable) {}
+                                break
+                            }
+                            else
+                            {
+                                isCooldown = true
+                                cooldown = 1f
+                                event.consume()
+                                Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                                break
+                            }
                         }
                     }
                 }
             }
+        }
+        if (paragraph != null)
+        {
+            var tempText = paragraph!!.text
+            if (isSelected())
+            {
+                tempText += "_"
+            }
+            paragraph!!.text = tempText
         }
     }
 }

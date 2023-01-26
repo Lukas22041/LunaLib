@@ -1,9 +1,8 @@
-package lunalib.backend.ui
+package lunalib.backend.ui.components
 
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
-import com.fs.starfarer.api.ui.LabelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
@@ -11,27 +10,26 @@ import org.lwjgl.opengl.GL11
 import java.awt.Color
 import java.util.WeakHashMap
 
-abstract class LunaBaseUIElement(var width: Float = 0f, var height: Float = 0f, var key: Any, var group: String, var panel: CustomPanelAPI, var uiElement: TooltipMakerAPI) : CustomUIPanelPlugin
+abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, var key: Any, var group: String, var panel: CustomPanelAPI, var uiElement: TooltipMakerAPI) : CustomUIPanelPlugin
 {
     companion object {
-        var selectedMap: MutableMap<String, LunaBaseUIElement?> = WeakHashMap()
+        var selectedMap: MutableMap<String, LunaUIBaseElement?> = WeakHashMap()
     }
 
     var lunaElement: CustomPanelAPI? = null
 
-    private var onClickFunctions: MutableList<LunaBaseUIElement.(InputEventAPI) -> Unit> = ArrayList()
-    private var onClickOutsideFunctions: MutableList<LunaBaseUIElement.(InputEventAPI) -> Unit> = ArrayList()
+    private var onClickFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
+    private var onClickOutsideFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
 
-    private var onHeldFunctions: MutableList<LunaBaseUIElement.(InputEventAPI) -> Unit> = ArrayList()
-    private var onNotHeldFunctions: MutableList<LunaBaseUIElement.(InputEventAPI) -> Unit> = ArrayList()
+    private var onHeldFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
+    private var onNotHeldFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
 
-    private var onHoverFunctions: MutableList<LunaBaseUIElement.(InputEventAPI) -> Unit> = ArrayList()
-    private var onNotHoverFunctions: MutableList<LunaBaseUIElement.(InputEventAPI) -> Unit> = ArrayList()
+    private var onHoverFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
+    private var onNotHoverFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
 
-    private var onUpdateFunction: MutableList<LunaBaseUIElement.(List<InputEventAPI>) -> Unit> = ArrayList()
-    private var onSelectFunction: MutableList<LunaBaseUIElement.() -> Unit> = ArrayList()
+    private var onUpdateFunction: MutableList<LunaUIBaseElement.(List<InputEventAPI>) -> Unit> = ArrayList()
+    private var onSelectFunction: MutableList<LunaUIBaseElement.() -> Unit> = ArrayList()
 
-    var paragraph: LabelAPI? = null
     var position: PositionAPI? = null
 
     var posX: Float = 0f
@@ -63,40 +61,40 @@ abstract class LunaBaseUIElement(var width: Float = 0f, var height: Float = 0f, 
         return false
     }
 
-    fun onClick(function: LunaBaseUIElement.(InputEventAPI) -> Unit)
+    fun onClick(function: LunaUIBaseElement.(InputEventAPI) -> Unit)
     {
         onClickFunctions.add(function)
     }
-    fun onClickOutside(function: LunaBaseUIElement.(InputEventAPI) -> Unit)
+    fun onClickOutside(function: LunaUIBaseElement.(InputEventAPI) -> Unit)
     {
         onClickOutsideFunctions.add(function)
     }
 
-    fun onHeld(function: LunaBaseUIElement.(InputEventAPI) -> Unit)
+    fun onHeld(function: LunaUIBaseElement.(InputEventAPI) -> Unit)
     {
         onHeldFunctions.add(function)
     }
-    fun onNotHeld(function: LunaBaseUIElement.(InputEventAPI) -> Unit)
+    fun onNotHeld(function: LunaUIBaseElement.(InputEventAPI) -> Unit)
     {
         onNotHeldFunctions.add(function)
     }
 
 
-    fun onHover(function: LunaBaseUIElement.(InputEventAPI) -> Unit)
+    fun onHover(function: LunaUIBaseElement.(InputEventAPI) -> Unit)
     {
         onHoverFunctions.add(function)
     }
-    fun onNotHover(function: LunaBaseUIElement.(InputEventAPI) -> Unit)
+    fun onNotHover(function: LunaUIBaseElement.(InputEventAPI) -> Unit)
     {
         onNotHoverFunctions.add(function)
     }
 
-    fun onUpdate(function: LunaBaseUIElement.(List<InputEventAPI>) -> Unit)
+    fun onUpdate(function: LunaUIBaseElement.(List<InputEventAPI>) -> Unit)
     {
         onUpdateFunction.add(function)
     }
 
-    fun onSelect(function: LunaBaseUIElement.() -> Unit)
+    fun onSelect(function: LunaUIBaseElement.() -> Unit)
     {
         onSelectFunction.add(function)
     }
@@ -112,14 +110,10 @@ abstract class LunaBaseUIElement(var width: Float = 0f, var height: Float = 0f, 
 
     fun unselect()
     {
-        selectedMap.set(group, null)
-    }
-
-
-    fun addParagraph(text: String, color: Color) : LabelAPI?
-    {
-        paragraph = uiElement.addPara("Test", 0f, color, color)
-        return paragraph
+        if (selectedMap.get(group) == this)
+        {
+            selectedMap.set(group, null)
+        }
     }
 
     override fun positionChanged(position: PositionAPI) {
