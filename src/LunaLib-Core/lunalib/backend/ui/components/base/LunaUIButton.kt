@@ -56,6 +56,9 @@ class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float,
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
             buttonText = pan.addPara("", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+
+            if (!regularButton)
+            buttonText!!.position.inTL(5f, 5f)
         }
 
         if (buttonText != null)
@@ -64,11 +67,6 @@ class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float,
             {
                 buttonText!!.position.inTL(width / 2 - buttonText!!.computeTextWidth(buttonText!!.text) / 2, height / 2 - buttonText!!.computeTextHeight(buttonText!!.text) / 2)
             }
-            else
-            {
-                buttonText!!.position.inTL(5f, 5f)
-            }
-
         }
     }
 

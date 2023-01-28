@@ -18,6 +18,9 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
     private var modsPanel: CustomPanelAPI? = null
     private var modsPanelPlugin: LunaSettingsUIModsPanel? = null
 
+    private var settingsPanel: CustomPanelAPI? = null
+    private var settingsPanelPlugin: LunaSettingsUISettingsPanel? = null
+
     private var width = 0f
     private var height = 0f
 
@@ -35,11 +38,16 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
         panel.addUIElement(element)
 
         modsPanelPlugin = LunaSettingsUIModsPanel()
-        modsPanel = panel.createCustomPanel(200f, height * 0.95f, modsPanelPlugin)
+        modsPanel = panel.createCustomPanel(250f, height * 0.96f, modsPanelPlugin)
         panel.addComponent(modsPanel)
         modsPanel!!.position.inTL(0f, 20f)
         modsPanelPlugin!!.init(panel, modsPanel!!)
 
+        settingsPanelPlugin = LunaSettingsUISettingsPanel()
+        settingsPanel = panel.createCustomPanel(width - 240, height * 0.96f, settingsPanelPlugin)
+        panel.addComponent(settingsPanel)
+        settingsPanel!!.position.inTL(240f, 20f)
+        settingsPanelPlugin!!.init(panel, settingsPanel!!)
 
        /* pW = this.panel!!.position.width
         pH = this.panel!!.position.height
@@ -75,6 +83,8 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
                 callbacks!!.dismissDialog()
 
                 if (!newGame) dialog!!.dismiss()
+
+                LunaSettingsUIModsPanel.selectedMod = null
 
                 return@forEach
             }

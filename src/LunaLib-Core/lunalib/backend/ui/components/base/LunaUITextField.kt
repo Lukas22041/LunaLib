@@ -119,7 +119,7 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
         {
             if (!isSelected())
             {
-                if (paragraph!!.text == "")
+                if (paragraph!!.text == "" && value !is String)
                 {
                     paragraph!!.text = value.toString()
                 }

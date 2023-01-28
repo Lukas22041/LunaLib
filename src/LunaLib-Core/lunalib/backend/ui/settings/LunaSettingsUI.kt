@@ -353,7 +353,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
         modsPanelList!!.position.inTL(0f, header!!.position.height)
 
         val modsWithData = LunaSettingsLoader.SettingsData.map { it.modID }.distinct()
-
         val mods: List<ModSpecAPI> = Global.getSettings().modManager.enabledModsCopy.filter { modsWithData.contains( it.id) }
         var spacing = 0f
         for (mod in mods)
@@ -565,10 +564,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
                     booleanFieldPara.put(data, para)*/
 
-
-
-
-
                     var TextSlider = LunaUITextFieldWithSlider(5,-500f, 500f, 200f, 30f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!).run {
                         lunaElement!!.position.inTL(pW * 0.46f, (spacing + 100))
                     }
@@ -585,7 +580,6 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                         this.buttonText!!.setHighlight("Test")
                         this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
                     }
-
 
                     LunaUIColorPicker(Color.getHSBColor(0.2f, 1f, 1f), false, 200f, 80f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!).run {
                         lunaElement!!.position.inTL(pW * 0.46f, (spacing + 400))
