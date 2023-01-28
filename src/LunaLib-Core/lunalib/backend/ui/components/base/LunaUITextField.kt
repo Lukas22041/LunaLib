@@ -1,4 +1,4 @@
-package lunalib.backend.ui.components
+package lunalib.backend.ui.components.base
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.input.InputEventAPI
@@ -10,6 +10,9 @@ import com.fs.starfarer.api.util.Misc
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector2f
+import java.awt.Toolkit
+import java.awt.datatransfer.DataFlavor
+import java.awt.datatransfer.StringSelection
 import java.util.regex.Pattern
 
 
@@ -77,25 +80,8 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
 
         }
 
-        if (slider == null && value is Number)
-        {
-            var pan = lunaElement!!.createUIElement(width, height, false)
-            uiElement.addComponent(pan)
-            lunaElement!!.addUIElement(pan)
-            pan.position.inTL(0f, 0f)
-            slider = LunaUISlider(value,false, minValue, maxValue, width, height * 0.75f,"", group, panel, pan!!)
-            slider!!.lunaElement!!.position.inTL(0f, height + 1)
-            slider!!.onHeld {
-                try {
-                    paragraph!!.text = slider!!.value.toString()
-                }
-                catch (e: Throwable) { }
-            }
-        }
-
         if (paragraph != null)
         {
-
             paragraph!!.position.inTL(5f, height / 2 - paragraph!!.position.height / 2)
         }
     }
@@ -182,10 +168,29 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                     continue
                 }
                 if (event.eventValue == Keyboard.KEY_LSHIFT) continue
-                if (event.eventValue == Keyboard.KEY_LCONTROL && Keyboard.isKeyDown(Keyboard.KEY_BACK))
+                if (event.eventValue == Keyboard.KEY_X && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
                 {
                     paragraph!!.text = ""
+                    Global.getSoundPlayer().playSound("ui_target_reticle", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
                     event.consume()
+                    continue
+                }
+                if (event.eventValue == Keyboard.KEY_C && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+                {
+                    Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(paragraph!!.text), StringSelection(""))
+                    Global.getSoundPlayer().playSound("ui_create_waypoint", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                    event.consume()
+                    continue
+                }
+                if (event.eventValue == Keyboard.KEY_V && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+                {
+                    try {
+                        paragraph!!.text = Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String
+                    }
+                    catch (e :Throwable) {}
+                    Global.getSoundPlayer().playSound("ui_create_waypoint", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                    event.consume()
+                    continue
                 }
                 if (event.isModifierKey) continue
                 if (event.eventValue == Keyboard.KEY_BACK)
@@ -245,8 +250,6 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                             }
                             try {
                                 value = paragraph!!.text.toInt() as T
-                                slider!!.value = value
-
                                 if (value as Int > maxValue)
                                 {
                                     paragraph!!.text = maxValue.toInt().toString()
@@ -255,12 +258,6 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                                 {
                                     paragraph!!.text = minValue.toInt().toString()
                                 }
-
-                                var level = (value as Int - minValue) / (maxValue - minValue)
-                                level -= 0.5f
-                                var scale = slider!!.width
-
-                                slider!!.sliderPosX = ((slider!!.width)  * level)
                             }
                             catch (e: Throwable) { }
                             break
@@ -272,7 +269,7 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                                 paragraph!!.text += char
                                 paragraph!!.text = paragraph!!.text.replace("[^0-9.-]".toRegex(), "")
                                 isCooldown = true
-                                cooldown = 1f
+                                cooldown = 1.5f
                                 event.consume()
                                 Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
                                 try {
@@ -285,14 +282,6 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                                     {
                                         paragraph!!.text = minValue.toString()
                                     }
-
-                                    slider!!.value = value
-
-                                    var level = (value as Double - minValue) / (maxValue - minValue)
-                                    level -= 0.5f
-                                    var scale = slider!!.width
-
-                                    slider!!.sliderPosX = (((slider!!.width)  * level).toFloat())
                                 }
                                 catch (e: Throwable) {}
                                 break

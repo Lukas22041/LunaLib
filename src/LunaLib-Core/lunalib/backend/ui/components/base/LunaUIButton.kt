@@ -1,4 +1,4 @@
-package lunalib.backend.ui.components
+package lunalib.backend.ui.components.base
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ui.CustomPanelAPI
@@ -21,9 +21,13 @@ class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float,
             if (it.eventValue == 0)
             {
                 setSelected()
-                value = !value
+
+                if (regularButton)
+                {
+                    value = !value
+                    unselect()
+                }
                 Global.getSoundPlayer().playSound("ui_button_pressed", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
-                unselect()
             }
         }
 
@@ -56,7 +60,15 @@ class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float,
 
         if (buttonText != null)
         {
-            buttonText!!.position.inTL(width / 2 - buttonText!!.computeTextWidth(buttonText!!.text) / 2, height / 2 - buttonText!!.computeTextHeight(buttonText!!.text) / 2)
+            if (regularButton)
+            {
+                buttonText!!.position.inTL(width / 2 - buttonText!!.computeTextWidth(buttonText!!.text) / 2, height / 2 - buttonText!!.computeTextHeight(buttonText!!.text) / 2)
+            }
+            else
+            {
+                buttonText!!.position.inTL(5f, 5f)
+            }
+
         }
     }
 
@@ -71,8 +83,12 @@ class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float,
                 buttonText!!.position.inTL(width / 2 - buttonText!!.computeTextWidth(buttonText!!.text) / 2, height / 2 - buttonText!!.computeTextHeight(buttonText!!.text) / 2)
             }
         }
-        if (!value) backgroundColor = Misc.getDarkPlayerColor().darker()
-        else backgroundColor = Misc.getDarkPlayerColor()
+
+        if (regularButton)
+        {
+            if (!value) backgroundColor = Misc.getDarkPlayerColor().darker()
+            else backgroundColor = Misc.getDarkPlayerColor()
+        }
     }
 
     override fun renderBelow(alphaMult: Float) {

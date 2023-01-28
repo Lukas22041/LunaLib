@@ -2,7 +2,6 @@ package lunalib
 
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
-import lunalib.backend.MemoryTest
 import lunalib.backend.scripts.KeybindsScript
 import lunalib.backend.ui.settings.LunaSettingsLoader
 

@@ -9,9 +9,10 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipCreator
 import com.fs.starfarer.api.util.Misc
-import lunalib.backend.ui.components.LunaUIButton
-import lunalib.backend.ui.components.LunaUISlider
-import lunalib.backend.ui.components.LunaUITextField
+import lunalib.backend.ui.components.base.LunaUIButton
+import lunalib.backend.ui.components.LunaUIColorPicker
+import lunalib.backend.ui.components.LunaUITextFieldWithSlider
+import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsListener
 import org.lazywizard.lazylib.JSONUtils
@@ -568,8 +569,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
 
 
-                    var TestTextField = LunaUITextField(5,0f, 10f, 200f, 30f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
-                    TestTextField.run {
+                    var TextSlider = LunaUITextFieldWithSlider(5,-500f, 500f, 200f, 30f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!).run {
                         lunaElement!!.position.inTL(pW * 0.46f, (spacing + 100))
                     }
 
@@ -580,14 +580,16 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
                     LunaUIButton(false, true,200f, 30f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
                     LunaUIButton(false, true,200f, 30f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
                     LunaUIButton(false, true,200f, 30f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
-                    LunaUIButton(false, true,200f, 30f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
-                    LunaUIButton(false, true,200f, 30f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
-
-                    LunaUISlider(Color.getHSBColor(0.5f, 1f, 1f), false,0f, 1f, 200f, 20f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!).run {
-                        lunaElement!!.position.inTL(pW * 0.46f, (spacing + 400))
+                    LunaUIButton(false, false,200f, 30f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!).run {
+                        this.buttonText!!.text = "Test"
+                        this.buttonText!!.setHighlight("Test")
+                        this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
                     }
 
 
+                    LunaUIColorPicker(Color.getHSBColor(0.2f, 1f, 1f), false, 200f, 80f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!).run {
+                        lunaElement!!.position.inTL(pW * 0.46f, (spacing + 400))
+                    }
 
                     /*   var testui2 = LunaUISlider(Color(255, 255, 255),false, -10f, 10f, 200f, 40f,"Test", "TestGroup", settingsPanel!!, settingsPanelList!!)
                        testui2.run {

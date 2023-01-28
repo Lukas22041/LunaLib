@@ -1,4 +1,4 @@
-package lunalib.backend.ui.components
+package lunalib.backend.ui.components.base
 
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.input.InputEventAPI
@@ -41,6 +41,9 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
         private set
     var centerY: Float = 0f
         private set
+
+    var borderAlpha = 1f
+    var backgroundAlpha = 1f
 
     var baseColor = Misc.getBasePlayerColor()
     var brightColor = Misc.getBrightPlayerColor()
@@ -146,7 +149,7 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
         GL11.glColor4f(color.red / 255f,
             color.green / 255f,
             color.blue / 255f,
-            color.alpha / 255f * alphaMult)
+            color.alpha / 255f * (alphaMult * borderAlpha))
 
         GL11.glEnable(GL11.GL_LINE_SMOOTH)
         GL11.glBegin(GL11.GL_LINE_STRIP)
@@ -166,10 +169,12 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
         GL11.glColor4f(color.red / 255f,
             color.green / 255f,
             color.blue / 255f,
-            color.alpha / 255f)
+            color.alpha / 255f * (alphaMult * backgroundAlpha))
+
 
         function()
 
+        GL11.glEnd()
         GL11.glPopMatrix()
     }
 
