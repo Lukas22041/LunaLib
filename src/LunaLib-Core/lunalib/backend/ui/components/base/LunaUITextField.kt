@@ -25,6 +25,7 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
     var borderColor = Misc.getDarkPlayerColor()
     var slider: LunaUISlider<T>? = null
     var paragraph: LabelAPI? = null
+    var resetParagraphIfEmpty = true
     private var default = value
     private var init = false
 
@@ -119,7 +120,7 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
         {
             if (!isSelected())
             {
-                if (paragraph!!.text == "" && value !is String)
+                if (paragraph!!.text == "" && resetParagraphIfEmpty)
                 {
                     paragraph!!.text = value.toString()
                 }

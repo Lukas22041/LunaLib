@@ -8,6 +8,8 @@ import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
+import lunalib.backend.ui.settings.LunaSettingsData
+import lunalib.backend.ui.settings.LunaSettingsLoader
 
 class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 {
@@ -61,37 +63,34 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         subpanelElement!!.addSpacer(30f)
 
         var spacing = 10f
-        var list = listOf("Test3","Test","Test","Test3","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",)
-        for (entry in list)
-        {
+        for (data in LunaSettingsLoader.SettingsData) {
+            if (data.modID != selectedMod!!.id) continue
 
             var headerSpace = 0f
             if (entry == "Test3")
             {
                 headerSpace = 20f
-                if (spacing >= 11f)
-                {
+                if (spacing >= 11f) {
                     subpanelElement!!.addSpacer(headerSpace)
                     spacing += headerSpace
-
+                }
             }
-            var settingPanTest = LunaUIPlaceholder(width - 20 , 100f + headerSpace, "empty", "none", subpanel!!, subpanelElement!!)
-            settingPanTest.position!!.inTL(10f, spacing)
+            var cardPanel = LunaUIPlaceholder(width - 20 , 100f + headerSpace, "empty", "none", subpanel!!, subpanelElement!!)
+            cardPanel.position!!.inTL(10f, spacing)
 
             if (entry == "Test3")
             {
-                var headerElement = settingPanTest.lunaElement!!.createUIElement(width - 20, 100f, false)
+                var headerElement = cardPanel.lunaElement!!.createUIElement(width - 20, 100f, false)
                 headerElement.position.inTL(0f, 0f)
-                settingPanTest.uiElement.addComponent(headerElement)
-                settingPanTest.lunaElement!!.addUIElement(headerElement)
+                cardPanel.uiElement.addComponent(headerElement)
+                cardPanel.lunaElement!!.addUIElement(headerElement)
                 headerElement.addSectionHeading("Heading", Alignment.MID, 0f)
             }
 
-
-            var descriptionElement = settingPanTest.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
+            var descriptionElement = cardPanel.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
             descriptionElement.position.inTL(0f, headerSpace)
-            settingPanTest.uiElement.addComponent(descriptionElement)
-            settingPanTest.lunaElement!!.addUIElement(descriptionElement)
+            cardPanel.uiElement.addComponent(descriptionElement)
+            cardPanel.lunaElement!!.addUIElement(descriptionElement)
 
             descriptionElement.addSpacer(5f)
 
@@ -99,10 +98,62 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             name.setHighlight("Name here")
             var description = descriptionElement.addPara("This is a description for what should be here if a mod would be loaded, and im running out of things to write here.",0f)
 
-            var interactbleElement = settingPanTest.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
+            var interactbleElement = cardPanel.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
             interactbleElement.position.inTL(10f + width / 2, headerSpace)
-            settingPanTest.uiElement.addComponent(interactbleElement)
-            settingPanTest.lunaElement!!.addUIElement(interactbleElement)
+            cardPanel.uiElement.addComponent(interactbleElement)
+            cardPanel.lunaElement!!.addUIElement(interactbleElement)
+
+            interactbleElement.addSpacer(5f)
+
+            interactbleElement.addPara("Test", 0f)
+
+            spacing += cardPanel.height
+
+            createCard(data, headerSpace)
+        }
+
+        var list = listOf("Test3","Test","Test","Test3","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",)
+        for (entry in list)
+        {
+
+            if (entry == "Test3")
+            {
+                headerSpace = 20f
+                if (spacing >= 11f) {
+                    subpanelElement!!.addSpacer(headerSpace)
+                    spacing += headerSpace
+                }
+            }
+            var cardPanel = LunaUIPlaceholder(width - 20 , 100f + headerSpace, "empty", "none", subpanel!!, subpanelElement!!)
+            cardPanel.position!!.inTL(10f, spacing)
+
+            if (entry == "Test3")
+            {
+                var headerElement = cardPanel.lunaElement!!.createUIElement(width - 20, 100f, false)
+                headerElement.position.inTL(0f, 0f)
+                cardPanel.uiElement.addComponent(headerElement)
+                cardPanel.lunaElement!!.addUIElement(headerElement)
+                headerElement.addSectionHeading("Heading", Alignment.MID, 0f)
+            }
+
+
+
+
+            var descriptionElement = cardPanel.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
+            descriptionElement.position.inTL(0f, headerSpace)
+            cardPanel.uiElement.addComponent(descriptionElement)
+            cardPanel.lunaElement!!.addUIElement(descriptionElement)
+
+            descriptionElement.addSpacer(5f)
+
+            var name = descriptionElement.addPara("Name here", 0f)
+            name.setHighlight("Name here")
+            var description = descriptionElement.addPara("This is a description for what should be here if a mod would be loaded, and im running out of things to write here.",0f)
+
+            var interactbleElement = cardPanel.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
+            interactbleElement.position.inTL(10f + width / 2, headerSpace)
+            cardPanel.uiElement.addComponent(interactbleElement)
+            cardPanel.lunaElement!!.addUIElement(interactbleElement)
 
             interactbleElement.addSpacer(5f)
 
@@ -115,14 +166,17 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             settingsElements.add(settingsElement)*/
 
             //subpanelElement!!.addSpacer(100f)
-            spacing += settingPanTest.height
+            //spacing += settingPanTest.height
+            spacing += cardPanel.height
 
-            if (entry == "Test3")
-            {
-            }
         }
 
         subpanel!!.addUIElement(subpanelElement)
+    }
+
+    fun createCard(data: LunaSettingsData, extraSpacing: Float)
+    {
+
     }
 
     override fun advance(amount: Float) {
