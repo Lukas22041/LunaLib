@@ -12,14 +12,22 @@ import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
+import lunalib.backend.ui.components.LunaUIColorPicker
+import lunalib.backend.ui.components.LunaUIKeybindButton
 import lunalib.backend.ui.components.LunaUITextFieldWithSlider
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUITextField
+import lunalib.backend.ui.settings.LunaSettingsData
 import lunalib.backend.ui.settings.LunaSettingsLoader
+import lunalib.backend.ui.settings.LunaSettingsUI
+import lunalib.lunaSettings.LunaSettingsListener
+import org.lazywizard.lazylib.JSONUtils
+import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
+import java.awt.Color
 
-class LunaSettingsUIModsPanel() : CustomUIPanelPlugin
+class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
 {
 
     var parentPanel: CustomPanelAPI? = null
@@ -45,6 +53,20 @@ class LunaSettingsUIModsPanel() : CustomUIPanelPlugin
         var selectedMod: ModSpecAPI? = null
     }
 
+    private fun callSettingsChangedListener(data: ModSpecAPI)
+    {
+        val listeners = Global.getSector().listenerManager.getListeners(LunaSettingsListener::class.java)
+        for (listener in listeners)
+        {
+            try {
+                listener.settingsChanged(data.id)
+            }
+            catch (e: Throwable) {
+                Global.getLogger(this.javaClass).debug("Failed to call LunaSettings listener for ${data.id}")
+            }
+        }
+    }
+
     fun init(parentPanel: CustomPanelAPI, panel: CustomPanelAPI)
     {
         this.parentPanel = parentPanel
@@ -60,31 +82,116 @@ class LunaSettingsUIModsPanel() : CustomUIPanelPlugin
 
         panelElement!!.addSpacer(3f)
 
-        saveButton = LunaUIButton(false, false,width - 15, 30f,"Test", "SaveButton", panel!!, panelElement!!).apply {
-            this.buttonText!!.text = "Save"
-            this.buttonText!!.setHighlight("Save")
+        saveButton = LunaUIButton(false, false,width - 15, 30f,"Test", "SettingGroup", panel!!, panelElement!!).apply {
+            this.buttonText!!.text = "Save current mod"
+            this.buttonText!!.setHighlight("Save current mod")
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
 
             onUpdate {
                 var button = this as LunaUIButton
-                if (selectedMod != null)
+                if (LunaSettingsUISettingsPanel.unsaved)
                 {
                     button.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+                    this.buttonText!!.setHighlight("Save current mod")
                 }
                 else
                 {
                     button.buttonText!!.setHighlightColor(Misc.getBasePlayerColor())
+                    this.buttonText!!.setHighlight("Save current mod")
                 }
+            }
+            onClick {
+                if (selectedMod == null) return@onClick
+                LunaSettingsUISettingsPanel.unsaved = false
+                val data = JSONUtils.loadCommonJSON("LunaSettings/${selectedMod!!.id}.json", "data/config/LunaSettingsDefault.default");
+                for (element in LunaSettingsUISettingsPanel.addedElements)
+                {
+                    var setting = (element.key as LunaSettingsData)
+                    if (element is LunaUITextField<*>)
+                    {
+                        data.put(setting.fieldID, element.value)
+                    }
+                    if (element is LunaUITextFieldWithSlider<*>)
+                    {
+                        data.put(setting.fieldID, element.value)
+                    }
+                    if (element is LunaUIColorPicker)
+                    {
+                        var color = element.value
+                        var hex = String.format("#%02x%02x%02x", color!!.red, color!!.green, color.blue);
+                        data.put(setting.fieldID, hex)
+                    }
+                    if (element is LunaUIButton)
+                    {
+                        data.put(setting.fieldID, element.value)
+                    }
+                    if (element is LunaUIKeybindButton)
+                    {
+                        data.put(setting.fieldID, element.keycode)
+                    }
+                }
+                data.save()
+                LunaSettingsLoader.Settings.put(selectedMod!!.id, data)
+
+                if (!newGame) callSettingsChangedListener(selectedMod!!)
             }
         }
 
         panelElement!!.addSpacer(3f)
 
-        resetButton = LunaUIButton(false, false,width - 15, 30f,"Test", "ResetButton", panel!!, panelElement!!).apply {
-            this.buttonText!!.text = "Reset"
+        resetButton = LunaUIButton(false, false,width - 15, 30f,"Test", "SettingGroup", panel!!, panelElement!!).apply {
+            this.buttonText!!.text = "Reset to default"
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+        }
+        resetButton!!.onClick {
+            if (selectedMod == null) return@onClick
+            for (element in LunaSettingsUISettingsPanel.addedElements)
+            {
+                if (element is LunaUITextField<*>)
+                {
+                    element.updateValue((element.key as LunaSettingsData).defaultValue)
+                }
+                if (element is LunaUITextFieldWithSlider<*>)
+                {
+                    element.updateValue((element.key as LunaSettingsData).defaultValue)
+                }
+                if (element is LunaUIColorPicker)
+                {
+                    try {
+                        var text = (element.key as LunaSettingsData).defaultValue as String
+                        if (!text.contains("#"))
+                        {
+                            text = "#$text"
+                        }
+                        var color = Color.decode(text.trim().uppercase())
+                        element.updateValue(color, text)
+                    } catch (e: Throwable) {}
+                }
+                if (element is LunaUIButton)
+                {
+                    element.value = (element.key as LunaSettingsData).defaultValue as Boolean
+                }
+                if (element is LunaUIKeybindButton)
+                {
+                    var value = (element.key as LunaSettingsData).defaultValue as Int
+                    element.keycode = value
+
+                    if (value == 0)
+                    {
+                        element.button!!.buttonText!!.text = "Key: None"
+                        element.button!!.buttonText!!.setHighlight("None")
+                    }
+                    else
+                    {
+                        element.button!!.buttonText!!.text = "Key: ${Keyboard.getKeyName(value!!)}"
+                        element.button!!.buttonText!!.setHighlight("${Keyboard.getKeyName(value!!)}")
+                    }
+                    element.button!!.buttonText!!.position.inTL(element.width / 2 - element.button!!.buttonText!!.computeTextWidth(element.button!!.buttonText!!.text) / 2, element.height / 2 - element.button!!.buttonText!!.computeTextHeight(element.button!!.buttonText!!.text) / 2)
+
+                }
+            }
         }
 
         panelElement!!.addSpacer(4f)
@@ -187,28 +294,7 @@ class LunaSettingsUIModsPanel() : CustomUIPanelPlugin
     }
 
     override fun render(alphaMult: Float) {
-        /*val playercolor = Misc.getDarkPlayerColor()
 
-        GL11.glPushMatrix()
-
-        GL11.glTranslatef(0f, 0f, 0f)
-        GL11.glRotatef(0f, 0f, 0f, 1f)
-
-        GL11.glDisable(GL11.GL_TEXTURE_2D)
-        GL11.glEnable(GL11.GL_BLEND)
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE)
-        GL11.glColor4ub(playercolor.red.toByte(), playercolor.green.toByte(), playercolor.blue.toByte(), playercolor.alpha.toByte())
-
-        GL11.glEnable(GL11.GL_LINE_SMOOTH)
-        GL11.glBegin(GL11.GL_LINE_STRIP)
-
-        GL11.glVertex2f(panel!!.position.x, panel!!.position.y)
-        GL11.glVertex2f(panel!!.position.x + panel!!.position.width, panel!!.position.y)
-        GL11.glVertex2f(panel!!.position.x + panel!!.position.width, panel!!.position.y + panel!!.position.height)
-        GL11.glVertex2f(panel!!.position.x, panel!!.position.y + panel!!.position.height)
-        GL11.glVertex2f(panel!!.position.x, panel!!.position.y)
-
-        GL11.glEnd()*/
     }
 
     override fun advance(amount: Float) {

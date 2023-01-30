@@ -56,7 +56,7 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
         onUpdate {
             if (isSelected())
             {
-                borderColor = Misc.getDarkPlayerColor().brighter().brighter()
+                borderColor = Misc.getDarkPlayerColor().brighter()
             }
             else
             {
@@ -66,6 +66,12 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
         onSelect {
 
         }
+    }
+
+    fun updateValue(newValue: Any)
+    {
+        value = newValue as T
+        paragraph!!.text = (newValue as T).toString()
     }
 
     override fun positionChanged(position: PositionAPI) {
@@ -124,6 +130,34 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                 {
                     paragraph!!.text = value.toString()
                 }
+            }
+            if (value is Int && !isSelected())
+            {
+                try {
+                    value = paragraph!!.text.toInt() as T
+                    if (value as Int > maxValue)
+                    {
+                        paragraph!!.text = maxValue.toInt().toString()
+                    }
+                    if (minValue > value as Int)
+                    {
+                        paragraph!!.text = minValue.toInt().toString()
+                    }
+                } catch (e: Throwable) {}
+            }
+            else if (value is Number && !isSelected())
+            {
+                try {
+                    value = paragraph!!.text.toDouble() as T
+                    if (value as Double > maxValue)
+                    {
+                        paragraph!!.text = maxValue.toString()
+                    }
+                    if (minValue > value as Double)
+                    {
+                        paragraph!!.text = minValue.toString()
+                    }
+                } catch (e: Throwable) {}
             }
         }
 
@@ -200,8 +234,8 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                     {
                         paragraph!!.text = paragraph!!.text.substring(0, paragraph!!.text.length - 1)
                         isCooldown = true
+                        cooldown = 8f
                         Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
-                        cooldown = 4f
                     }
                     event.consume()
                     continue
@@ -222,7 +256,7 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                         {
                             paragraph!!.text += char
                             isCooldown = true
-                            cooldown = 1f
+                            cooldown = 2f
                             event.consume()
                             Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
                             value = paragraph!!.text.toString() as T
@@ -231,7 +265,7 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                         else if (value is Int)
                         {
                             isCooldown = true
-                            cooldown = 1f
+                            cooldown = 2f
                             event.consume()
                             if (char == '_') continue
                             if (char == '-' && paragraph!!.text.isNotEmpty())
@@ -249,18 +283,6 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                             {
                                 Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
                             }
-                            try {
-                                value = paragraph!!.text.toInt() as T
-                                if (value as Int > maxValue)
-                                {
-                                    paragraph!!.text = maxValue.toInt().toString()
-                                }
-                                if (minValue > value as Int)
-                                {
-                                    paragraph!!.text = minValue.toInt().toString()
-                                }
-                            }
-                            catch (e: Throwable) { }
                             break
                         }
                         else if (value is Number)
@@ -270,21 +292,10 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                                 paragraph!!.text += char
                                 paragraph!!.text = paragraph!!.text.replace("[^0-9.-]".toRegex(), "")
                                 isCooldown = true
-                                cooldown = 1.5f
+                                cooldown = 2f
                                 event.consume()
                                 Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
-                                try {
-                                    value = paragraph!!.text.toDouble() as T
-                                    if (value as Double > maxValue)
-                                    {
-                                        paragraph!!.text = maxValue.toString()
-                                    }
-                                    if (minValue > value as Double)
-                                    {
-                                        paragraph!!.text = minValue.toString()
-                                    }
-                                }
-                                catch (e: Throwable) {}
+
                                 break
                             }
                             else

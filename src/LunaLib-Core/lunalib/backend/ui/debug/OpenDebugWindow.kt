@@ -9,7 +9,7 @@ import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate.DialogCallbacks
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
-import lunalib.backend.debug.DebugWindowUI
+import lunalib.backend.ui.debug.DebugWindowUI
 
 
 internal class OpenDebugWindowInteraction : InteractionDialogPlugin

@@ -183,8 +183,11 @@ object LunaSettings
         {
             try {
                 var text = LunaSettingsLoader.Settings.get(ModID)!!.getString(FieldID)
-                var rgba = text.split(",")
-                var color = Color(rgba.get(0).trim().toInt(), rgba.get(1).trim().toInt(), rgba.get(2).trim().toInt(), rgba.get(3).trim().toInt())
+                if (!text.contains("#"))
+                {
+                    text = "#$text"
+                }
+                var color = Color.decode(text.trim().uppercase())
                 return color
             }
             catch(e: Throwable) {

@@ -26,6 +26,6 @@ public class Example implements LunaSettingsListener
  ```
  */
 interface LunaSettingsListener {
-    abstract fun settingsChanged()
+    abstract fun settingsChanged(modID: String)
 }
 

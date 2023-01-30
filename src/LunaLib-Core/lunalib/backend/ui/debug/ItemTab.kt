@@ -1,4 +1,4 @@
-package lunalib.backend.debug
+package lunalib.backend.ui.debug
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.*

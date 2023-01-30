@@ -47,8 +47,10 @@ class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Fl
             textField = LunaUITextField("",0f, 1f, width, height * 0.3f,"Test", group, panel, pan!!)
             textField!!.lunaElement!!.position.inTL(0f, 0f)
             textField!!.value = String.format("#%02x%02x%02x", value!!.red, value!!.green, value!!.blue);
+            textField!!.borderAlpha = 0.5f
 
             hueSlider = LunaUISlider(h, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
+            hueSlider!!.borderAlpha = 0.5f
             hueSlider!!.onHeld {
                 try {
                     h = hueSlider!!.value
@@ -60,6 +62,7 @@ class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Fl
             }
 
             satSlider = LunaUISlider(s, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
+            satSlider!!.borderAlpha = 0.5f
             satSlider!!.onHeld {
                 try {
                     s = satSlider!!.value
@@ -71,6 +74,7 @@ class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Fl
             }
 
             brightSlider = LunaUISlider(b, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
+            brightSlider!!.borderAlpha = 0.5f
             brightSlider!!.onHeld {
                 try {
                     b = brightSlider!!.value
@@ -126,6 +130,22 @@ class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Fl
         createGLRectangle(value!!, alphaMult) {
             GL11.glRectf(posX + width + 5, posY, posX + width + width / 8, posY + height)
         }
+    }
+
+    fun updateValue(newValue: Color, hex: String)
+    {
+
+        h = Color.RGBtoHSB(newValue!!.red, newValue!!.green, newValue!!.blue, null).get(0)
+        s = Color.RGBtoHSB(newValue!!.red, newValue!!.green, newValue!!.blue, null).get(1)
+        b = Color.RGBtoHSB(newValue!!.red, newValue!!.green, newValue!!.blue, null).get(2)
+
+        value = Color.getHSBColor(h, s, b)
+
+
+        textField!!.paragraph!!.text = hex
+        hueSlider!!.setSliderPositionByValue(h)
+        satSlider!!.setSliderPositionByValue(s)
+        brightSlider!!.setSliderPositionByValue(b)
     }
 
     override fun render(alphaMult: Float) {

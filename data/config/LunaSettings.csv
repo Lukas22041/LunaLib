@@ -16,15 +16,8 @@ lunalib,luna_exampleInt,Example Int,Int,100,"Int Fields will only accept whole N
 Using the maxValue config, you can change the range of values that can be entered.",50,200,
 lunalib,luna_exampleDouble,Example Double,Double,10.2,"Doubles allow only numbers and a single decimal dot (.) 
 Using the maxValue config, you can change the range of values that can be entered.",0,20,spacing:0.5
-lunalib,luna_exampleEnum,Example Enum,Enum,"Hegemony, Tritach, Pirates, Independent","Enums can be used to create a preset of options. They are stored as Strings, and can be accessed by the getStrings() method. 
-The String behind the first comma will be set as the default value.
-
-Each Entry is seperated by a comma, and all spaces are removed automaticly.  
-
-",,,spacing:0.5
 lunalib,luna_exampleKeybind,Example Keybind,Keycode,0,"Lets users register a keybind. The saved keycodes are the same as used by org.lwjgl.input.Keyboard and Starsectors InputEventAPI.
 
 If a user exits the input with ESC, the keycode will be 0. Make sure to set conditions on your Keybinds to ignore Keycodes of 0, as when lwjgl registers a keybind that it has no keycodes set up for, its set to 0.
-This can cause certain keys to trigger unset keybinds otherwise.
-",,,spacing:0.5
-lunalib,luna_exampleColor,Example Color,Color,"30, 230, 150, 255","Strings will accept any characters put in, with no filtering.",,,
+This can cause certain keys to trigger unset keybinds otherwise.",,,spacing:0.5
+lunalib,luna_newExampleColor,Example Color,Color,#f22e6e,"Strings will accept any characters put in, with no filtering.",,,

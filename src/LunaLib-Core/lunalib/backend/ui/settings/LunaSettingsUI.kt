@@ -779,11 +779,11 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
 
     private fun callSettingsChangedListener()
     {
-        val listeners = Global.getSector().listenerManager.getListeners(LunaSettingsListener::class.java)
+        /*val listeners = Global.getSector().listenerManager.getListeners(LunaSettingsListener::class.java)
         for (listener in listeners)
         {
             listener.settingsChanged()
-        }
+        }*/
     }
 
     override fun render(alphaMult: Float)
@@ -945,7 +945,7 @@ class LunaSettingsUI(newGame: Boolean) : CustomUIPanelPlugin
     }
 }
 
-private class TooltipPreset(var text: String, var width: Float, vararg highlights: String) : TooltipCreator
+class TooltipPreset(var text: String, var width: Float, vararg highlights: String) : TooltipCreator
 {
 
     var Highlights = highlights

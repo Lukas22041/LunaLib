@@ -7,12 +7,26 @@ import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
+import com.fs.starfarer.api.util.Misc
+import lunalib.backend.ui.components.LunaUIColorPicker
+import lunalib.backend.ui.components.LunaUIKeybindButton
+import lunalib.backend.ui.components.LunaUITextFieldWithSlider
+import lunalib.backend.ui.components.base.LunaUIBaseElement
+import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
+import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.ui.settings.LunaSettingsData
 import lunalib.backend.ui.settings.LunaSettingsLoader
+import lunalib.backend.ui.settings.TooltipPreset
+import lunalib.lunaSettings.LunaSettings
+import java.awt.Color
 
 class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 {
+
+    enum class SettingsType {
+        String, Int, Double, Boolean, Color, Keycode, Text, Header, //Enum
+    }
 
     var parentPanel: CustomPanelAPI? = null
 
@@ -21,12 +35,18 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
     var subpanel: CustomPanelAPI? = null
     var subpanelElement: TooltipMakerAPI? = null
-    var settingsPanels: MutableList<CustomPanelAPI?> = ArrayList()
 
     var width = 0f
     var height = 0f
 
     var selectedMod: ModSpecAPI? = null
+
+    companion object
+    {
+        var unsaved = false
+        var addedElements: MutableList<LunaUIBaseElement> = ArrayList()
+    }
+
 
     fun init(parentPanel: CustomPanelAPI, panel: CustomPanelAPI)
     {
@@ -44,10 +64,11 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
     fun recreatePanel()
     {
+        addedElements.clear()
+        unsaved = false
         if (selectedMod == null) return
         if (subpanel != null)
         {
-            settingsPanels.clear()
             panel!!.removeComponent(subpanel)
         }
         subpanel = panel!!.createCustomPanel(width, height, null)
@@ -58,125 +79,203 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         subpanelElement!!.position.inTL(0f, 0f)
         subpanelElement!!.addSpacer(2f)
 
-        //subpanelElement!!.addPara("Test", 0f)
-
-        subpanelElement!!.addSpacer(30f)
+        subpanelElement!!.addSpacer(100f)
 
         var spacing = 10f
         for (data in LunaSettingsLoader.SettingsData) {
             if (data.modID != selectedMod!!.id) continue
 
-            var headerSpace = 0f
-            if (entry == "Test3")
+            var requiredSpacing = 50f
+            var renderBackground = true
+
+            if (data.fieldType == "Header")
             {
-                headerSpace = 20f
-                if (spacing >= 11f) {
-                    subpanelElement!!.addSpacer(headerSpace)
-                    spacing += headerSpace
+                requiredSpacing = 20f
+                renderBackground = false
+                if (spacing >= requiredSpacing + 1) {
+                    spacing += 20f
+                    subpanelElement!!.addSpacer(20f)
                 }
             }
-            var cardPanel = LunaUIPlaceholder(width - 20 , 100f + headerSpace, "empty", "none", subpanel!!, subpanelElement!!)
+            var cardPanel = LunaUIPlaceholder(renderBackground, width - 20 , requiredSpacing, "empty", "none", subpanel!!, subpanelElement!!)
             cardPanel.position!!.inTL(10f, spacing)
 
-            if (entry == "Test3")
+            if (data.fieldType == SettingsType.Header.toString())
             {
-                var headerElement = cardPanel.lunaElement!!.createUIElement(width - 20, 100f, false)
+                var headerElement = cardPanel.lunaElement!!.createUIElement(width - 20, requiredSpacing, false)
                 headerElement.position.inTL(0f, 0f)
                 cardPanel.uiElement.addComponent(headerElement)
                 cardPanel.lunaElement!!.addUIElement(headerElement)
-                headerElement.addSectionHeading("Heading", Alignment.MID, 0f)
+                var header = headerElement.addSectionHeading("${data.defaultValue}", Alignment.MID, 0f)
+                spacing += header.position.height
+
             }
-
-            var descriptionElement = cardPanel.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
-            descriptionElement.position.inTL(0f, headerSpace)
-            cardPanel.uiElement.addComponent(descriptionElement)
-            cardPanel.lunaElement!!.addUIElement(descriptionElement)
-
-            descriptionElement.addSpacer(5f)
-
-            var name = descriptionElement.addPara("Name here", 0f)
-            name.setHighlight("Name here")
-            var description = descriptionElement.addPara("This is a description for what should be here if a mod would be loaded, and im running out of things to write here.",0f)
-
-            var interactbleElement = cardPanel.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
-            interactbleElement.position.inTL(10f + width / 2, headerSpace)
-            cardPanel.uiElement.addComponent(interactbleElement)
-            cardPanel.lunaElement!!.addUIElement(interactbleElement)
-
-            interactbleElement.addSpacer(5f)
-
-            interactbleElement.addPara("Test", 0f)
-
-            spacing += cardPanel.height
-
-            createCard(data, headerSpace)
-        }
-
-        var list = listOf("Test3","Test","Test","Test3","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",)
-        for (entry in list)
-        {
-
-            if (entry == "Test3")
+            else if (data.fieldType == SettingsType.Text.toString())
             {
-                headerSpace = 20f
-                if (spacing >= 11f) {
-                    subpanelElement!!.addSpacer(headerSpace)
-                    spacing += headerSpace
+                var descriptionElement = cardPanel.lunaElement!!.createUIElement(width - 20, requiredSpacing / 2, false)
+                descriptionElement.position.inTL(0f, 0f)
+                cardPanel.uiElement.addComponent(descriptionElement)
+                cardPanel.lunaElement!!.addUIElement(descriptionElement)
+
+                descriptionElement.addSpacer(5f)
+                var description = descriptionElement.addPara("${data.defaultValue}",0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+
+                var textWidth = description.computeTextWidth(description.text)
+                var textHeight = description.computeTextHeight(description.text)
+                var ratio = textWidth / description.position.width
+                var extraSpace = textHeight * ratio
+                var increase = extraSpace * 0.95f
+
+                cardPanel!!.position!!.setSize(cardPanel!!.position!!.width, cardPanel!!.position!!.height  + increase)
+                subpanelElement!!.addSpacer(increase)
+
+                spacing += cardPanel.height
+
+                //to create a small gap
+                spacing += 5f
+                subpanelElement!!.addSpacer(5f)
+            }
+            else
+            {
+                var descriptionElement = cardPanel.lunaElement!!.createUIElement(width * 0.6f - 20, requiredSpacing, false)
+                descriptionElement.addTooltipToPrevious(TooltipPreset("", width), TooltipMakerAPI.TooltipLocation.BELOW)
+                descriptionElement.position.inTL(0f, 0f)
+                cardPanel.uiElement.addComponent(descriptionElement)
+                cardPanel.lunaElement!!.addUIElement(descriptionElement)
+
+                descriptionElement.addSpacer(5f)
+
+                var name = descriptionElement.addPara("${data.fieldName}", 0f)
+                name.setHighlight("${data.fieldName}")
+                descriptionElement.addSpacer(3f)
+
+                var description = descriptionElement.addPara("${data.fieldTooltip}",0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+
+                var textWidth = description.computeTextWidth(description.text)
+                var textHeight = description.computeTextHeight(description.text)
+                var ratio = textWidth / description.position.width
+                var extraSpace = textHeight * ratio
+                var increase = extraSpace * 0.95f
+
+                cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + increase)
+                subpanelElement!!.addSpacer(increase)
+
+
+
+                var interactbleElement = cardPanel.lunaElement!!.createUIElement(width * 0.4f - 20, requiredSpacing, false)
+
+                interactbleElement.position.inTL(10f + width * 0.6f, 0f)
+                cardPanel.uiElement.addComponent(interactbleElement)
+                cardPanel.lunaElement!!.addUIElement(interactbleElement)
+
+                interactbleElement.addSpacer(5f)
+
+                when (data.fieldType)
+                {
+                    SettingsType.Int.toString(), SettingsType.Double.toString(),  SettingsType.String.toString() -> createTextFieldCard(data, cardPanel, interactbleElement)
+                    SettingsType.Boolean.toString() -> createButtonCard(data, cardPanel, interactbleElement)
+                    SettingsType.Color.toString() -> createColorCard(data, cardPanel, interactbleElement)
+                    SettingsType.Keycode.toString() -> createKeybindCard(data, cardPanel, interactbleElement)
                 }
+
+                //interactbleElement.addPara("Test", 0f)
+
+                spacing += cardPanel.height
+
+                //to create a small gap
+                spacing += 5f
+                subpanelElement!!.addSpacer(5f)
             }
-            var cardPanel = LunaUIPlaceholder(width - 20 , 100f + headerSpace, "empty", "none", subpanel!!, subpanelElement!!)
-            cardPanel.position!!.inTL(10f, spacing)
-
-            if (entry == "Test3")
-            {
-                var headerElement = cardPanel.lunaElement!!.createUIElement(width - 20, 100f, false)
-                headerElement.position.inTL(0f, 0f)
-                cardPanel.uiElement.addComponent(headerElement)
-                cardPanel.lunaElement!!.addUIElement(headerElement)
-                headerElement.addSectionHeading("Heading", Alignment.MID, 0f)
-            }
-
-
-
-
-            var descriptionElement = cardPanel.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
-            descriptionElement.position.inTL(0f, headerSpace)
-            cardPanel.uiElement.addComponent(descriptionElement)
-            cardPanel.lunaElement!!.addUIElement(descriptionElement)
-
-            descriptionElement.addSpacer(5f)
-
-            var name = descriptionElement.addPara("Name here", 0f)
-            name.setHighlight("Name here")
-            var description = descriptionElement.addPara("This is a description for what should be here if a mod would be loaded, and im running out of things to write here.",0f)
-
-            var interactbleElement = cardPanel.lunaElement!!.createUIElement(width / 2 - 20, 100f, false)
-            interactbleElement.position.inTL(10f + width / 2, headerSpace)
-            cardPanel.uiElement.addComponent(interactbleElement)
-            cardPanel.lunaElement!!.addUIElement(interactbleElement)
-
-            interactbleElement.addSpacer(5f)
-
-            interactbleElement.addPara("Test", 0f)
-
-            //element.addim
-
-            //settingsElement.position.inTL(0f, spacing)
-            /*settingsElement.addPara("Test", 0f)
-            settingsElements.add(settingsElement)*/
-
-            //subpanelElement!!.addSpacer(100f)
-            //spacing += settingPanTest.height
-            spacing += cardPanel.height
-
         }
 
         subpanel!!.addUIElement(subpanelElement)
     }
 
-    fun createCard(data: LunaSettingsData, extraSpacing: Float)
+    fun createTextFieldCard(data: LunaSettingsData, cardPanel: LunaUIPlaceholder,  interactbleElement: TooltipMakerAPI)
     {
+        //interactbleElement.addPara("Test", 0f)
 
+        if (data.fieldType == SettingsType.String.toString())
+        {
+            var value = LunaSettings.getString(data.modID, data.fieldID).toString()
+            var textField = LunaUITextField(value,0f, 0f, 200f, 30f,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
+            textField.position!!.inTL(50f, cardPanel.height / 2 - textField.height / 2)
+            textField.onUpdate {
+                if (textField.value != LunaSettings.getString(data.modID, data.fieldID).toString())
+                {
+                    unsaved = true
+                }
+            }
+            addedElements.add(textField)
+        }
+        if (data.fieldType == SettingsType.Double.toString())
+        {
+            var value = LunaSettings.getDouble(data.modID, data.fieldID)
+            var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, 30f,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
+            textField.position!!.inTL(50f, cardPanel.height / 2 - textField.height * 0.75f)
+            textField.onUpdate {
+                if (textField.value != LunaSettings.getDouble(data.modID, data.fieldID))
+                {
+                    unsaved = true
+                }
+            }
+            addedElements.add(textField)
+        }
+        if (data.fieldType == SettingsType.Int.toString())
+        {
+            var value = LunaSettings.getInt(data.modID, data.fieldID)
+            var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, 30f, data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
+            textField.position!!.inTL(50f, cardPanel.height / 2 - textField.height * 0.75f)
+            textField.onUpdate {
+                if (textField.value != LunaSettings.getInt(data.modID, data.fieldID))
+                {
+                    unsaved = true
+                }
+            }
+            addedElements.add(textField)
+        }
+    }
+
+    fun createButtonCard(data: LunaSettingsData, cardPanel: LunaUIPlaceholder,  interactbleElement: TooltipMakerAPI)
+    {
+        var value = LunaSettings.getBoolean(data.modID, data.fieldID)
+        var button = LunaUIButton(value!!, true,200f, 30f, data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
+        button.position!!.inTL(50f, cardPanel.height / 2 - button.height / 2)
+        button.onClick {
+            unsaved = true
+        }
+        addedElements.add(button)
+    }
+
+    fun createColorCard(data: LunaSettingsData, cardPanel: LunaUIPlaceholder,  interactbleElement: TooltipMakerAPI)
+    {
+        cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + 50f)
+        subpanelElement!!.addSpacer(50f)
+
+        var value = LunaSettings.getColor(data.modID, data.fieldID)
+        var picker = LunaUIColorPicker(value, false, 200f, 80f,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
+        picker.position!!.inTL(50f, cardPanel.height / 2 - picker.height / 2)
+        picker.onUpdate {
+            if (picker.value != LunaSettings.getColor(data.modID, data.fieldID))
+            {
+                unsaved = true
+            }
+        }
+        addedElements.add(picker)
+    }
+
+    fun createKeybindCard(data: LunaSettingsData, cardPanel: LunaUIPlaceholder,  interactbleElement: TooltipMakerAPI)
+    {
+        var value = LunaSettings.getInt(data.modID, data.fieldID)
+        var button = LunaUIKeybindButton(value!!, false, 200f, 30f,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
+        button.position!!.inTL(50f, cardPanel.height / 2 - button.height / 2)
+        button.onUpdate {
+            if (button.keycode != LunaSettings.getInt(data.modID, data.fieldID))
+            {
+                unsaved = true
+            }
+        }
+        addedElements.add(button)
     }
 
     override fun advance(amount: Float) {
@@ -197,34 +296,23 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
     override fun render(alphaMult: Float) {
 
-       /* val playercolor = Misc.getDarkPlayerColor()
-
-        GL11.glPushMatrix()
-
-        GL11.glTranslatef(0f, 0f, 0f)
-        GL11.glRotatef(0f, 0f, 0f, 1f)
-
-        GL11.glDisable(GL11.GL_TEXTURE_2D)
-        GL11.glEnable(GL11.GL_BLEND)
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE)
-        GL11.glColor4ub(playercolor.red.toByte(), playercolor.green.toByte(), playercolor.blue.toByte(), playercolor.alpha.toByte())
-
-        GL11.glEnable(GL11.GL_LINE_SMOOTH)
-        GL11.glBegin(GL11.GL_LINE_STRIP)
-
-        GL11.glVertex2f(panel!!.position.x, panel!!.position.y)
-        GL11.glVertex2f(panel!!.position.x + panel!!.position.width, panel!!.position.y)
-        GL11.glVertex2f(panel!!.position.x + panel!!.position.width, panel!!.position.y + panel!!.position.height)
-        GL11.glVertex2f(panel!!.position.x, panel!!.position.y + panel!!.position.height)
-        GL11.glVertex2f(panel!!.position.x, panel!!.position.y)
-
-        GL11.glEnd()*/
     }
-
-
 
     override fun processInput(events: MutableList<InputEventAPI>) {
 
+    }
 
+    private fun String.trimAfter(cap: Int, addText: Boolean = true) : String
+    {
+        return if (this.length <= cap)
+        {
+            this
+        }
+        else
+        {
+            var text = ""
+            if (addText) text = "..."
+            this.substring(0, cap).trim() + "..."
+        }
     }
 }

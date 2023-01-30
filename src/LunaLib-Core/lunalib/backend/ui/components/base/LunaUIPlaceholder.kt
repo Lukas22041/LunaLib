@@ -8,7 +8,7 @@ import com.fs.starfarer.api.util.Misc
 import org.lwjgl.opengl.GL11
 
 
-class LunaUIPlaceholder(width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+class LunaUIPlaceholder(var renderBackground: Boolean,width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var addedBackgroundImage: Boolean = false
 
@@ -27,19 +27,25 @@ class LunaUIPlaceholder(width: Float, height: Float, key: Any, group: String, pa
     }
 
     override fun renderBelow(alphaMult: Float) {
-        createGLRectangle(darkColor, alphaMult * 0.5f) {
-            GL11.glRectf(posX, posY , posX + width, posY + height)
+        if (renderBackground)
+        {
+            createGLRectangle(darkColor, alphaMult * 0.5f) {
+                GL11.glRectf(posX, posY , posX + width, posY + height)
+            }
         }
     }
 
     override fun render(alphaMult: Float) {
-        createGLLines(darkColor, alphaMult)
+        if (renderBackground)
         {
-            GL11.glVertex2f(posX, posY)
-            GL11.glVertex2f(posX, posY + height)
-            GL11.glVertex2f(posX + width, posY + height)
-            GL11.glVertex2f(posX + width, posY)
-            GL11.glVertex2f(posX, posY)
+            createGLLines(darkColor, alphaMult)
+            {
+                GL11.glVertex2f(posX, posY)
+                GL11.glVertex2f(posX, posY + height)
+                GL11.glVertex2f(posX + width, posY + height)
+                GL11.glVertex2f(posX + width, posY)
+                GL11.glVertex2f(posX, posY)
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package lunalib.backend.ui.components
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
+import com.sun.org.apache.bcel.internal.generic.GOTO
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUISlider
 import lunalib.backend.ui.components.base.LunaUITextField
@@ -12,10 +13,6 @@ class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minValue: Float
     var textField: LunaUITextField<T>? = null
     var valueSlider: LunaUISlider<T>? = null
 
-
-    init {
-
-    }
 
     override fun positionChanged(position: PositionAPI) {
         super.positionChanged(position)
@@ -27,8 +24,10 @@ class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minValue: Float
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
 
-            textField = LunaUITextField(value as T,minValue, maxValue, 200f, 30f,"Test", "TestGroup", panel, pan!!)
+            textField = LunaUITextField(value as T,minValue, maxValue, 200f, 30f,"Test", group, panel, pan!!)
             textField!!.position!!.inTL(0f, 0f)
+            textField!!.borderAlpha = 0.5f
+
             textField!!.onUpdate {
                 if (textField!!.isSelected())
                 {
@@ -39,17 +38,10 @@ class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minValue: Float
                             if (text != "")
                             {
                                 var curValue = text.toDouble() as T
-
+                                value = curValue
                                 valueSlider!!.value = curValue
 
-                                var min = centerX - width / 2 + width / 20
-                                var max = centerX + width / 2 - width / 20
-
-                                var level = (curValue as Double - minValue) / (maxValue - minValue)
-                                level -= 0.5f
-                                var scale = max - min
-
-                                valueSlider!!.sliderPosX = ((scale  * level).toFloat())
+                                valueSlider!!.setSliderPositionByValue(curValue)
                             }
                         } catch (e: Throwable) {}
                     }
@@ -60,17 +52,10 @@ class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minValue: Float
                             if (text != "")
                             {
                                 var curValue = text.toFloat() as T
-
+                                value = curValue
                                 valueSlider!!.value = curValue
 
-                                var min = centerX - width / 2 + width / 20
-                                var max = centerX + width / 2 - width / 20
-
-                                var level = (curValue as Float - minValue) / (maxValue - minValue)
-                                level -= 0.5f
-                                var scale = max - min
-
-                                valueSlider!!.sliderPosX = ((scale  * level).toFloat())
+                                valueSlider!!.setSliderPositionByValue(curValue)
                             }
                         } catch (e: Throwable) {}
                     }
@@ -81,20 +66,10 @@ class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minValue: Float
                             if (text != "")
                             {
                                 var curValue = text.toInt() as T
-
+                                value = curValue
                                 valueSlider!!.value = curValue
 
-                                var min = centerX - width / 2 + width / 20
-                                var max = centerX + width / 2 - width / 20
-
-                                var level = (curValue as Int - minValue) / (maxValue - minValue)
-                                level -= 0.5f
-                                var scale = max - min
-
-                                valueSlider!!.sliderPosX = ((scale  * level).toFloat())
-
-
-
+                                valueSlider!!.setSliderPositionByValue(curValue)
                             }
                         } catch (e: Throwable) {}
                     }
@@ -102,13 +77,22 @@ class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minValue: Float
             }
 
             valueSlider = LunaUISlider(value as T, minValue, maxValue, width, height * 0.65f,"", group, panel, pan!!)
+            valueSlider!!.borderAlpha = 0.5f
             valueSlider!!.onHeld {
                 try {
                     textField!!.paragraph!!.text = valueSlider!!.value.toString()
+                    value = valueSlider!!.value
                 }
                 catch (e: Throwable) { }
             }
         }
+    }
+
+    fun updateValue(newValue: Any)
+    {
+        value = newValue as T
+        textField!!.paragraph!!.text = value.toString()
+        valueSlider!!.setSliderPositionByValue(value!!)
     }
 
     override fun renderBelow(alphaMult: Float) {

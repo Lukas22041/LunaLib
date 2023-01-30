@@ -7,6 +7,7 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
+import lunalib.backend.scripts.LunaKeybinds
 import org.lwjgl.input.Keyboard
 
 class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
@@ -37,7 +38,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
         element.position.inTL(0f, 0f)
         panel.addUIElement(element)
 
-        modsPanelPlugin = LunaSettingsUIModsPanel()
+        modsPanelPlugin = LunaSettingsUIModsPanel(newGame)
         modsPanel = panel.createCustomPanel(250f, height * 0.96f, modsPanelPlugin)
         panel.addComponent(modsPanel)
         modsPanel!!.position.inTL(0f, 20f)
@@ -71,9 +72,35 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
 
     }
 
+    companion object {
+        var closeCooldown = 0
+    }
+
     override fun processInput(events: MutableList<InputEventAPI>) {
 
+        if (closeCooldown > 1)
+        {
+            closeCooldown--
+            return
+        }
+
         events.forEach { event ->
+            if (event.isKeyDownEvent && event.eventValue == LunaKeybinds.settingsKeybind)
+            {
+                event.consume()
+
+                dialog!!.showTextPanel()
+                dialog!!.showVisualPanel()
+                callbacks!!.dismissDialog()
+
+                if (!newGame) dialog!!.dismiss()
+
+                LunaSettingsUIModsPanel.selectedMod = null
+                LunaSettingsUISettingsPanel.addedElements.clear()
+
+                closeCooldown = 30
+                return@forEach
+            }
             if (event.isKeyDownEvent && event.eventValue == Keyboard.KEY_ESCAPE)
             {
                 event.consume()
@@ -85,10 +112,10 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
                 if (!newGame) dialog!!.dismiss()
 
                 LunaSettingsUIModsPanel.selectedMod = null
+                LunaSettingsUISettingsPanel.addedElements.clear()
 
                 return@forEach
             }
         }
-
     }
 }

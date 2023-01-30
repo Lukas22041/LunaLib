@@ -22,29 +22,7 @@ class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, 
 
     init {
 
-        when (value) {
-            is Int -> {
-                var level = (value as Int - minValue) / (maxValue - minValue)
-                level -= 0.5f
-                var scale = super.width
-
-                sliderPosX = ((super.width)  * level).toFloat()
-            }
-            is Double -> {
-                var level = (value as Double - minValue) / (maxValue - minValue)
-                level -= 0.5f
-                var scale = super.width
-
-                sliderPosX = ((super.width)  * level).toFloat()
-            }
-            is Float -> {
-                var level = (value as Float - minValue) / (maxValue - minValue)
-                level -= 0.5f
-                var scale = super.width
-
-                sliderPosX = ((super.width)  * level).toFloat()
-            }
-        }
+        setSliderPositionByValue(value)
 
         onClick {event ->
             if (event.eventValue == 0 && event.x.toFloat() in (position!!.centerX - width)..(position!!.centerX + width) && event.y.toFloat() in (posY)..(posY + height ))
@@ -77,6 +55,33 @@ class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, 
         }
         onNotHover {
             sliderCenterColor = Misc.getDarkPlayerColor().brighter()
+        }
+    }
+
+    fun setSliderPositionByValue(curValue: T)
+    {
+        var min = centerX - width / 2 + width / 20
+        var max = centerX + width / 2 - width / 20
+        if (curValue is Float)
+        {
+            var level = (curValue - minValue) / (maxValue - minValue)
+            level -= 0.5f
+            var scale = max - min
+            sliderPosX = ((scale  * level).toFloat())
+        }
+        if (curValue is Int)
+        {
+            var level = (curValue - minValue) / (maxValue - minValue)
+            level -= 0.5f
+            var scale = max - min
+            sliderPosX = ((scale  * level).toFloat())
+        }
+        if (curValue is Double)
+        {
+            var level = (curValue - minValue) / (maxValue - minValue)
+            level -= 0.5f
+            var scale = max - min
+            sliderPosX = ((scale  * level).toFloat())
         }
     }
 

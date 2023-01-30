@@ -25,8 +25,8 @@ internal class OpenSettingsPanelInteractionV2 : InteractionDialogPlugin
 
         var scale = Global.getSettings().screenScaleMult
 
-        dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.7f,
-            Global.getSettings().screenHeight * 0.7f,
+        dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.8f,
+            Global.getSettings().screenHeight * 0.8f,
             OpenSettingsPanelDelegateV2(LunaSettingsUIMainPanel(false), dialog))
     }
 

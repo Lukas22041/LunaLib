@@ -53,7 +53,9 @@ internal class KeybindsScript : LunaSettingsListener, EveryFrameScript
     {
         if (Keyboard.isKeyDown(Keyboard.KEY_NONE) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) return
         var ui = Global.getSector().campaignUI
-        ui.showInteractionDialog(OpenSettingsPanelInteraction(), Global.getSector().playerFleet)
+
+        ui.showInteractionDialog(OpenSettingsPanelInteractionV2(), Global.getSector().playerFleet)
+        //ui.showInteractionDialog(OpenSettingsPanelInteraction(), Global.getSector().playerFleet)
 
 
         keyPressed = true
@@ -64,8 +66,7 @@ internal class KeybindsScript : LunaSettingsListener, EveryFrameScript
         if (Keyboard.isKeyDown(Keyboard.KEY_NONE) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) return
 
         var ui = Global.getSector().campaignUI
-        /*ui.showInteractionDialog(OpenDebugWindowInteraction(), Global.getSector().playerFleet)*/
-        ui.showInteractionDialog(OpenSettingsPanelInteractionV2(), Global.getSector().playerFleet)
+        ui.showInteractionDialog(OpenDebugWindowInteraction(), Global.getSector().playerFleet)
 
         keyPressed = true
     }
@@ -78,7 +79,7 @@ internal class KeybindsScript : LunaSettingsListener, EveryFrameScript
         return true
     }
 
-    override fun settingsChanged() {
+    override fun settingsChanged(modID: String) {
         settingsKeybind = LunaSettings.getInt("lunalib", "luna_SettingsKeybind")
         debugKeybind = LunaSettings.getInt("lunalib", "luna_DebugKeybind")
         devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind")
