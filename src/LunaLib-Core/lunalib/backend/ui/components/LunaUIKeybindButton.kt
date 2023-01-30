@@ -11,7 +11,7 @@ import lunalib.backend.ui.components.base.LunaUIButton
 import org.lwjgl.input.Keyboard
 import org.lwjgl.util.vector.Vector2f
 
-class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var button: LunaUIButton? = null
 
@@ -28,14 +28,11 @@ class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean, width: 
 
             button = LunaUIButton(false, false, width, height,"Test", group, panel!!, pan!!)
             button!!.buttonText!!.text = "Key: ${Keyboard.getKeyName(keycode!!)}"
-            button!!.buttonText!!.setHighlight("${Keyboard.getKeyName(keycode!!)}")
             if (keycode == 0)
             {
                 button!!.buttonText!!.text = "Key: None"
-                button!!.buttonText!!.setHighlight("None")
             }
             button!!.borderAlpha = 0.5f
-            button!!.buttonText!!.setHighlightColor(Misc.getHighlightColor())
             button!!.position!!.inTL(0f,0f)
             button!!.onClick {
                 setSelected()
@@ -52,6 +49,21 @@ class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean, width: 
                 {
                     button!!.borderColor = Misc.getDarkPlayerColor()
                 }
+                if (keycode == 0)
+                {
+                    button!!.backgroundAlpha = 0.25f
+                }
+                else
+                {
+                    button!!.backgroundAlpha = 1f
+                }
+            }
+
+            button!!.onHover {
+                button!!.backgroundColor = Misc.getDarkPlayerColor().brighter()
+            }
+            button!!.onNotHover {
+                button!!.backgroundColor = Misc.getDarkPlayerColor()
             }
 
         }
@@ -79,10 +91,9 @@ class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean, width: 
                 {
                     keycode = 0
                     button!!.buttonText!!.text = "Key: None"
-                    button!!.buttonText!!.setHighlight("None")
                     button!!.unselect()
                     button!!.buttonText!!.position.inTL(width / 2 - button!!.buttonText!!.computeTextWidth(button!!.buttonText!!.text) / 2, height / 2 - button!!.buttonText!!.computeTextHeight(button!!.buttonText!!.text) / 2)
-                    Global.getSoundPlayer().playSound("ui_button_pressed", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
                     event.consume()
                     continue
                 }
@@ -93,9 +104,8 @@ class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean, width: 
 
                     if (event.eventValue == Keyboard.KEY_ESCAPE) keycode = 0
                     button!!.buttonText!!.text = "Key: ${Keyboard.getKeyName(keycode!!)}"
-                    button!!.buttonText!!.setHighlight("${Keyboard.getKeyName(keycode!!)}")
                     button!!.buttonText!!.position.inTL(width / 2 - button!!.buttonText!!.computeTextWidth(button!!.buttonText!!.text) / 2, height / 2 - button!!.buttonText!!.computeTextHeight(button!!.buttonText!!.text) / 2)
-                    Global.getSoundPlayer().playSound("ui_button_pressed", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
 
                     event.consume()
                     continue

@@ -1,5 +1,6 @@
 package lunalib.backend.ui.settings
 
+import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.input.InputEventAPI
@@ -16,8 +17,9 @@ import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.lunaSettings.LunaSettings
+import java.awt.Color
 
-class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
+internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 {
 
     enum class SettingsType {
@@ -140,11 +142,13 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
                 descriptionElement.addSpacer(5f)
 
-                var name = descriptionElement.addPara("${data.fieldName}", 0f)
-                name.setHighlight("${data.fieldName}")
+                var name = descriptionElement.addPara("${data.fieldName}", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+                //name.setHighlight("${data.fieldName}")
                 descriptionElement.addSpacer(3f)
 
-                var description = descriptionElement.addPara("${data.fieldTooltip}",0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+                var color = Misc.getBasePlayerColor()
+                color = Color(color.red, color.green, color.blue, 230)
+                var description = descriptionElement.addPara("${data.fieldDescription}",0f, color, color)
 
                 var textWidth = description.computeTextWidth(description.text)
                 var textHeight = description.computeTextHeight(description.text)
@@ -180,8 +184,10 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 //to create a small gap
                 spacing += 5f
                 subpanelElement!!.addSpacer(5f)
+
             }
         }
+
 
         subpanel!!.addUIElement(subpanelElement)
     }

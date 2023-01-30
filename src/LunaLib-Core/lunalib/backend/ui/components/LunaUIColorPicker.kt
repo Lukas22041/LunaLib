@@ -11,7 +11,7 @@ import lunalib.backend.ui.components.base.LunaUITextField
 import org.lwjgl.opengl.GL11
 import java.awt.Color
 
-class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+internal class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var textField: LunaUITextField<String>? = null
 
@@ -49,6 +49,8 @@ class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Fl
             textField!!.value = String.format("#%02x%02x%02x", value!!.red, value!!.green, value!!.blue);
             textField!!.borderAlpha = 0.5f
 
+            pan.addSpacer(4f)
+
             hueSlider = LunaUISlider(h, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
             hueSlider!!.borderAlpha = 0.5f
             hueSlider!!.onHeld {
@@ -60,6 +62,9 @@ class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Fl
                 }
                 catch (e: Throwable) { }
             }
+
+            pan.addSpacer(4f)
+
 
             satSlider = LunaUISlider(s, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
             satSlider!!.borderAlpha = 0.5f
@@ -73,6 +78,8 @@ class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Fl
                 catch (e: Throwable) { }
             }
 
+            pan.addSpacer(4f)
+
             brightSlider = LunaUISlider(b, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
             brightSlider!!.borderAlpha = 0.5f
             brightSlider!!.onHeld {
@@ -84,6 +91,7 @@ class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Fl
                 }
                 catch (e: Throwable) { }
             }
+
 
             textField!!.onUpdate {
                 if (textField!!.isSelected())
@@ -115,20 +123,24 @@ class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Fl
             }
 
             huePara = pan.addPara("Hue", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
-            huePara!!.position.inTL((width / 2 - huePara!!.computeTextWidth(huePara!!.text) / 2) , height * 0.31f )
+            huePara!!.position.inTL((width / 2 - huePara!!.computeTextWidth(huePara!!.text) / 2) , height * 0.31f + 4)
 
             satPara = pan.addPara("Saturation", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
-            satPara!!.position.inTL((width / 2 - satPara!!.computeTextWidth(satPara!!.text) / 2) , height * 0.31f + height * 0.23f)
+            satPara!!.position.inTL((width / 2 - satPara!!.computeTextWidth(satPara!!.text) / 2) , height * 0.31f + height * 0.23f + 8)
 
             brightPara = pan.addPara("Brightness", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
-            brightPara!!.position.inTL((width / 2 - brightPara!!.computeTextWidth(brightPara!!.text) / 2) , height * 0.31f + height * 0.46f)
+            brightPara!!.position.inTL((width / 2 - brightPara!!.computeTextWidth(brightPara!!.text) / 2) , height * 0.31f + height * 0.46f + 12)
+
+            // for the extra gaps between sliders
+            panel.position.setSize(panel.position.width, panel.position.height + 12)
+            uiElement.addSpacer(12f)
         }
     }
 
     override fun renderBelow(alphaMult: Float) {
 
         createGLRectangle(value!!, alphaMult) {
-            GL11.glRectf(posX + width + 5, posY, posX + width + width / 8, posY + height)
+            GL11.glRectf(posX + width + 5, posY - 12, posX + width + width / 8, posY + height)
         }
     }
 

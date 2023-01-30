@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11
 import java.awt.Color
 import java.util.WeakHashMap
 
-abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, var key: Any, var group: String, var panel: CustomPanelAPI, var uiElement: TooltipMakerAPI) : CustomUIPanelPlugin
+internal abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, var key: Any, var group: String, var panel: CustomPanelAPI, var uiElement: TooltipMakerAPI) : CustomUIPanelPlugin
 {
     companion object {
         var selectedMap: MutableMap<String, LunaUIBaseElement?> = WeakHashMap()
@@ -25,6 +25,7 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
     private var onNotHeldFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
 
     private var onHoverFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
+    private var onHoverEnterFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
     private var onNotHoverFunctions: MutableList<LunaUIBaseElement.(InputEventAPI) -> Unit> = ArrayList()
 
     private var onUpdateFunction: MutableList<LunaUIBaseElement.(List<InputEventAPI>) -> Unit> = ArrayList()
@@ -86,6 +87,10 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
     fun onHover(function: LunaUIBaseElement.(InputEventAPI) -> Unit)
     {
         onHoverFunctions.add(function)
+    }
+    fun onHoverEnter(function: LunaUIBaseElement.(InputEventAPI) -> Unit)
+    {
+        onHoverEnterFunctions.add(function)
     }
     fun onNotHover(function: LunaUIBaseElement.(InputEventAPI) -> Unit)
     {
@@ -171,7 +176,6 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
             color.blue / 255f,
             color.alpha / 255f * (alphaMult * backgroundAlpha))
 
-
         function()
 
         GL11.glEnd()
@@ -183,6 +187,8 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
 
     }
 
+    var hoverEnter = false
+
     override fun processInput(events: MutableList<InputEventAPI>) {
         for (event in events)
         {
@@ -190,6 +196,14 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
             {
                 if (event.x.toFloat() in posX..(posX + width) && event.y.toFloat() in posY..(posY +height))
                 {
+                    if (hoverEnter == false)
+                    {
+                        hoverEnter = true
+                        for (onHoverEnter in onHoverEnterFunctions)
+                        {
+                            onHoverEnter(event)
+                        }
+                    }
                     for (onHover in onHoverFunctions)
                     {
                         isHovering = true
@@ -198,6 +212,7 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
                 }
                 else
                 {
+                    hoverEnter = false
                     for (onNotHover in onNotHoverFunctions)
                     {
                         isHovering = false

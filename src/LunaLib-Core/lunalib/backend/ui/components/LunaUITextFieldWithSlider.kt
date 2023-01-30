@@ -8,7 +8,7 @@ import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUISlider
 import lunalib.backend.ui.components.base.LunaUITextField
 
-class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+internal class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var textField: LunaUITextField<T>? = null
     var valueSlider: LunaUISlider<T>? = null

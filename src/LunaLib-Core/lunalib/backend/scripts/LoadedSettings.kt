@@ -4,7 +4,7 @@ import com.fs.starfarer.api.Global
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsListener
 
-class LunaKeybinds : LunaSettingsListener
+class LoadedSettings : LunaSettingsListener
 {
     companion object {
         var settingsKeybind = LunaSettings.getInt("lunalib", "luna_SettingsKeybind")

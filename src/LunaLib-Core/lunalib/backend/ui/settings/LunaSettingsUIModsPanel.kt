@@ -14,12 +14,13 @@ import lunalib.backend.ui.components.LunaUITextFieldWithSlider
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUITextField
+import lunalib.backend.ui.components.util.TooltipHelper
 import lunalib.lunaSettings.LunaSettingsListener
 import org.lazywizard.lazylib.JSONUtils
 import org.lwjgl.input.Keyboard
 import java.awt.Color
 
-class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
+internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
 {
 
     var parentPanel: CustomPanelAPI? = null
@@ -79,7 +80,11 @@ class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
             this.buttonText!!.setHighlight("Save current mod")
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+            this.uiElement.addTooltipToPrevious(TooltipHelper("Saves the currently selected mods settings. If you switch to another mod without saving, the changes are lost. Glows yellow if there are unchanged saves.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
 
+            onHoverEnter {
+                Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+            }
             onUpdate {
                 var button = this as LunaUIButton
                 if (LunaSettingsUISettingsPanel.unsaved)
@@ -136,6 +141,10 @@ class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
             this.buttonText!!.text = "Reset to default"
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+            this.uiElement.addTooltipToPrevious(TooltipHelper("Resets every option in the currently selected mod back to it's default value. Still needs to be manualy saved.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
+        }
+        resetButton!!.onHoverEnter {
+            Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
         }
         resetButton!!.onClick {
             if (selectedMod == null) return@onClick
@@ -186,9 +195,9 @@ class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
             }
         }
 
-        panelElement!!.addSpacer(4f)
+        panelElement!!.addSpacer(2f)
 
-        var searchField = LunaUITextField("",0f, 0f, width - 15, 30f,"Empty", "ModsButtons", panel, panelElement!!).apply {
+        var searchField = LunaUITextField("",0f, 0f, width - 15, 30f,"Empty", "Search", panel, panelElement!!).apply {
             onUpdate {
                 var field = this as LunaUITextField<String>
                 if (field.paragraph != null && isSelected() && currentSearchText != field.paragraph!!.text.replace("_", ""))
@@ -206,6 +215,13 @@ class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
         var para = pan.addPara("Search Mod", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
         para.position.inTL(para.position.width / 2 - para.computeTextWidth(para.text) / 2 , para.position.height  - para.computeTextHeight(para.text) / 2)
 
+        searchField.run {
+            this.uiElement.addTooltipToPrevious(TooltipHelper("Select and type in a mods name to filter out all mods that dont match the name or id.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
+
+        }
+        searchField.onHoverEnter {
+            Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+        }
         searchField.onUpdate {
             var button = this as LunaUITextField<String>
             button.resetParagraphIfEmpty = false
@@ -216,6 +232,14 @@ class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
             else
             {
                 para.text = ""
+            }
+            if (isSelected())
+            {
+                backgroundAlpha = 1f
+            }
+            else
+            {
+                backgroundAlpha = 0.5f
             }
         }
 
@@ -231,10 +255,10 @@ class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
         {
             panel!!.removeComponent(subpanel)
         }
-        subpanel = panel!!.createCustomPanel(width, height - 98, null)
-        subpanel!!.position.inTL(0f, 98f)
+        subpanel = panel!!.createCustomPanel(width, height - 96, null)
+        subpanel!!.position.inTL(0f, 96f)
         panel!!.addComponent(subpanel)
-        subpanelElement = subpanel!!.createUIElement(width, height - 98, true)
+        subpanelElement = subpanel!!.createUIElement(width, height - 96, true)
 
         subpanelElement!!.position.inTL(0f, 0f)
         subpanelElement!!.addSpacer(5f)
@@ -254,6 +278,8 @@ class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
                 //this.position!!.inTL(0f,0f)
                 this.backgroundAlpha = 0.5f
 
+                if (selectedMod == mod) this.setSelected()
+
                 onUpdate {
                     if (this.isSelected())
                     {
@@ -263,6 +289,10 @@ class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
                     {
                         this.backgroundAlpha = 0.5f
                     }
+                }
+
+                onHoverEnter {
+                    Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
                 }
 
                 onSelect {

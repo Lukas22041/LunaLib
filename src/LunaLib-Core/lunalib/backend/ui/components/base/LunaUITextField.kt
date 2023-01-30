@@ -20,7 +20,7 @@ enum class Filters {
     None, Double, Int
 }
 
-class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var borderColor = Misc.getDarkPlayerColor()
     var slider: LunaUISlider<T>? = null
@@ -34,13 +34,16 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
             if (it.eventValue == 0)
             {
                 setSelected()
-                Global.getSoundPlayer().playSound("ui_button_pressed", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
             }
         }
         onClickOutside {
             unselect()
         }
 
+        onHoverEnter {
+            Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+        }
         onHover {
             darkColor = Misc.getDarkPlayerColor().brighter()
         }
@@ -121,6 +124,7 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
     }
 
     override fun advance(amount: Float) {
+        super.advance(amount)
 
         if (paragraph != null)
         {
@@ -159,32 +163,24 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                     }
                 } catch (e: Throwable) {}
             }
+
+
+
         }
-
-
-        super.advance(amount)
     }
 
-    var isCooldown = false
-    var cooldown = 5f
+
     val Digits = "(\\p{Digit}+)"
     val HexDigits = "(\\p{XDigit}+)"
 
     val DOUBLE_PATTERN =
         Pattern.compile("[\\x00-\\x20]*[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)" + "([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|" + "(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))" + "[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*")
 
+
     override fun processInput(events: MutableList<InputEventAPI>) {
         super.processInput(events)
 
-        if (isCooldown)
-        {
-            cooldown--
-            if (cooldown < 0)
-            {
-                isCooldown = false
-            }
-            return
-        }
+
         if (paragraph != null)
         {
            paragraph!!.text = paragraph!!.text.replace("_", "")
@@ -192,28 +188,27 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
 
         if (isSelected() && paragraph != null)
         {
-
             for (event in events) {
                 if (event.isConsumed) continue
                 if (event.eventValue == Keyboard.KEY_ESCAPE || event.eventValue == 28 || event.eventValue == 156)
                 {
                     unselect()
                     event.consume()
-                    Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                    Global.getSoundPlayer().playUISound("ui_typer_buzz", 1f, 1f)
                     continue
                 }
                 if (event.eventValue == Keyboard.KEY_LSHIFT) continue
                 if (event.eventValue == Keyboard.KEY_X && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
                 {
                     paragraph!!.text = ""
-                    Global.getSoundPlayer().playSound("ui_target_reticle", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                    Global.getSoundPlayer().playUISound("ui_target_reticle", 1f, 1f)
                     event.consume()
                     continue
                 }
                 if (event.eventValue == Keyboard.KEY_C && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
                 {
                     Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(paragraph!!.text), StringSelection(""))
-                    Global.getSoundPlayer().playSound("ui_create_waypoint", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                    Global.getSoundPlayer().playUISound("ui_create_waypoint", 1f, 1f)
                     event.consume()
                     continue
                 }
@@ -223,30 +218,31 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                         paragraph!!.text = Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String
                     }
                     catch (e :Throwable) {}
-                    Global.getSoundPlayer().playSound("ui_create_waypoint", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                    Global.getSoundPlayer().playUISound("ui_create_waypoint", 1f, 1f)
                     event.consume()
                     continue
                 }
                 if (event.isModifierKey) continue
                 if (event.eventValue == Keyboard.KEY_BACK)
                 {
-                    if (paragraph!!.text.length != 0)
+                    if (event.isKeyDownEvent)
                     {
-                        paragraph!!.text = paragraph!!.text.substring(0, paragraph!!.text.length - 1)
-                        isCooldown = true
-                        cooldown = 8f
-                        Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                        if (paragraph!!.text.isNotEmpty())
+                        {
+                            paragraph!!.text = paragraph!!.text.substring(0, paragraph!!.text.length - 1)
+                            Global.getSoundPlayer().playUISound("ui_typer_type", 1f, 1f)
+                        }
+                        event.consume()
+                        continue
                     }
-                    event.consume()
-                    continue
                 }
                 if (event.eventValue == 15) continue
                 if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) continue
-                if (event.isKeyboardEvent && !event.isKeyUpEvent)
+                if (event.isKeyDownEvent && !event.isKeyUpEvent)
                 {
                     if (paragraph!!.computeTextWidth(paragraph!!.text) > (width - 20) - paragraph!!.computeTextWidth("_"))
                     {
-                        Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                        Global.getSoundPlayer().playUISound("ui_typer_buzz", 1f, 1f)
                         continue
                     }
                     var char = event.eventChar
@@ -255,33 +251,29 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                         if (value is String)
                         {
                             paragraph!!.text += char
-                            isCooldown = true
-                            cooldown = 2f
                             event.consume()
-                            Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                            Global.getSoundPlayer().playUISound("ui_typer_type", 1f, 1f)
                             value = paragraph!!.text.toString() as T
                             break
                         }
                         else if (value is Int)
                         {
-                            isCooldown = true
-                            cooldown = 2f
                             event.consume()
                             if (char == '_') continue
                             if (char == '-' && paragraph!!.text.isNotEmpty())
                             {
-                                Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                                Global.getSoundPlayer().playUISound("ui_typer_buzz", 1f, 1f)
                                 break
                             }
                             paragraph!!.text += char
                             if (paragraph!!.text.contains("[^0-9-]".toRegex()))
                             {
                                 paragraph!!.text = paragraph!!.text.replace("[^0-9-]".toRegex(), "")
-                                Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                                Global.getSoundPlayer().playUISound("ui_typer_buzz", 1f, 1f)
                             }
                             else
                             {
-                                Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                                Global.getSoundPlayer().playUISound("ui_typer_type", 1f, 1f)
                             }
                             break
                         }
@@ -291,19 +283,15 @@ class LunaUITextField<T>(var value: T, var minValue: Float, var maxValue: Float,
                             {
                                 paragraph!!.text += char
                                 paragraph!!.text = paragraph!!.text.replace("[^0-9.-]".toRegex(), "")
-                                isCooldown = true
-                                cooldown = 2f
                                 event.consume()
-                                Global.getSoundPlayer().playSound("ui_typer_type", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                                Global.getSoundPlayer().playUISound("ui_typer_type", 1f, 1f)
 
                                 break
                             }
                             else
                             {
-                                isCooldown = true
-                                cooldown = 1f
                                 event.consume()
-                                Global.getSoundPlayer().playSound("ui_typer_buzz", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                                Global.getSoundPlayer().playUISound("ui_typer_buzz", 1f, 1f)
                                 break
                             }
                         }

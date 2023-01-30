@@ -7,7 +7,7 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
-import lunalib.backend.scripts.LunaKeybinds
+import lunalib.backend.scripts.LoadedSettings
 import org.lwjgl.input.Keyboard
 
 class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
@@ -85,7 +85,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
         }
 
         events.forEach { event ->
-            if (event.isKeyDownEvent && event.eventValue == LunaKeybinds.settingsKeybind)
+            if (event.isKeyDownEvent && event.eventValue == LoadedSettings.settingsKeybind)
             {
                 event.consume()
 

@@ -9,7 +9,7 @@ import com.fs.starfarer.api.util.Misc
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector2f
 
-class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+internal class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var buttonText: LabelAPI? = null
     var borderColor = Misc.getDarkPlayerColor()
@@ -27,10 +27,13 @@ class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float,
                     value = !value
                     unselect()
                 }
-                Global.getSoundPlayer().playSound("ui_button_pressed", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
             }
         }
 
+        onHoverEnter {
+            Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+        }
         onHover {
             borderColor = Misc.getDarkPlayerColor().brighter()
         }

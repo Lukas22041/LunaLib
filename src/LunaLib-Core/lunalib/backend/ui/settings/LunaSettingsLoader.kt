@@ -4,17 +4,17 @@ import com.fs.starfarer.api.Global
 import org.apache.log4j.Level
 import org.json.JSONArray
 import org.lazywizard.lazylib.JSONUtils
+import org.lazywizard.lazylib.MathUtils
 
 data class LunaSettingsData(
     val modID: String,
     val fieldID: String,
     val fieldName: String,
     val fieldType: String,
-    val fieldTooltip: String,
+    val fieldDescription: String,
     val defaultValue: Any,
     val minValue: Double,
-    val maxValue: Double,
-    val tags: List<String>)
+    val maxValue: Double)
 
 /**
 Class that both loads and holds data for LunaSettings. Can not be used outside LunaLib.
@@ -50,7 +50,15 @@ internal object LunaSettingsLoader
             val id = rows.getString("fieldID");
             val name = rows.getString("fieldName");
             val type = rows.getString("fieldType")
-            val tooltip = rows.getString("fieldTooltip")
+
+            var description = ""
+            try {
+                description = rows.getString("fieldTooltip")
+            } catch (e: Throwable) {}
+            try {
+                description = rows.getString("fieldDescription")
+            } catch (e: Throwable) {}
+
             var default: Any = rows.getString("defaultValue")
 
             when (type)
@@ -76,17 +84,10 @@ internal object LunaSettingsLoader
             var minValue = 0.0
             var maxValue = 0.0
 
-            var tagsToBeFiltered = rows.getString("tags").split(",")
-            var tags: MutableList<String> = ArrayList()
-            for (tag in tagsToBeFiltered)
-            {
-                tags.add(tag.trim())
-            }
-
             if (type == "Int" || type == "Double")
             {
                 try {
-                    minValue = rows.getString("minValue").toDouble()
+                    minValue = MathUtils.clamp(rows.getString("minValue").toFloat(), Int.MIN_VALUE.toFloat(), Int.MAX_VALUE.toFloat()).toDouble()
                 }
                 catch (e: Throwable)
                 {
@@ -95,7 +96,7 @@ internal object LunaSettingsLoader
                 }
 
                 try {
-                    maxValue = rows.getString("maxValue").toDouble()
+                    maxValue =  MathUtils.clamp(rows.getString("maxValue").toFloat(), Int.MIN_VALUE.toFloat(), Int.MAX_VALUE.toFloat()).toDouble()
                 }
                 catch (e: Throwable)
                 {
@@ -104,7 +105,7 @@ internal object LunaSettingsLoader
                 }
             }
 
-            SettingsData.add(LunaSettingsData(modID, id, name, type, tooltip, default, minValue, maxValue, tags))
+            SettingsData.add(LunaSettingsData(modID, id, name, type, description, default, minValue, maxValue))
             log.debug("LunaSettings: Loaded default settings data: $id, from $modID")
         }
     }

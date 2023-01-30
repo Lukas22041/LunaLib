@@ -11,7 +11,7 @@ import org.lwjgl.util.vector.Vector2f
 import kotlin.math.round
 
 
-class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+internal class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var borderColor = Misc.getDarkPlayerColor()
     var sliderCenterColor = Misc.getDarkPlayerColor().brighter()
@@ -27,8 +27,11 @@ class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, 
         onClick {event ->
             if (event.eventValue == 0 && event.x.toFloat() in (position!!.centerX - width)..(position!!.centerX + width) && event.y.toFloat() in (posY)..(posY + height ))
             {
-                Global.getSoundPlayer().playSound("ui_button_pressed", 1f, 1f, Vector2f(0f, 0f), Vector2f(0f, 0f))
+                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
             }
+        }
+        onHoverEnter {
+            Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
         }
         onHeld {event ->
             if (event.isMouseEvent && event.x.toFloat() in (position!!.centerX - width)..(position!!.centerX + width) && event.y.toFloat() in (posY)..(posY + height ))
@@ -44,7 +47,7 @@ class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, 
             borderColor = Misc.getDarkPlayerColor().brighter()
         }
         onHover {event ->
-             if (event.x.toFloat() in ((sliderPosX + centerX) - width / 20)..((sliderPosX + centerX)+ width / 20) && event.y.toFloat() in (posY)..(posY + height ))
+            if (event.x.toFloat() in ((sliderPosX + centerX) - width / 20)..((sliderPosX + centerX)+ width / 20) && event.y.toFloat() in (posY)..(posY + height ))
             {
                 sliderCenterColor = Misc.getDarkPlayerColor().brighter().brighter()
             }
@@ -52,9 +55,11 @@ class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, 
             {
                 sliderCenterColor = Misc.getDarkPlayerColor().brighter()
             }
+            darkColor = Misc.getDarkPlayerColor().brighter()
         }
         onNotHover {
             sliderCenterColor = Misc.getDarkPlayerColor().brighter()
+            darkColor = Misc.getDarkPlayerColor()
         }
     }
 
@@ -119,7 +124,7 @@ class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, 
     override fun renderBelow(alphaMult: Float) {
         if (position != null)
         {
-            createGLRectangle(darkColor.darker(), alphaMult)  {
+            createGLRectangle(darkColor.darker(), alphaMult * 0.9f)  {
                 GL11.glRectf(posX, posY , posX + width, posY + height)
             }
             createGLRectangle(sliderCenterColor, alphaMult)  {
