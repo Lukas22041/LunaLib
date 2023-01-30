@@ -24,9 +24,9 @@ internal class OpenSettingsPanelInteraction : InteractionDialogPlugin
 
         var scale = Global.getSettings().screenScaleMult
 
-        dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.9f,
-            Global.getSettings().screenHeight * 0.9f,
-            OpenSettingsPanelDelegate(LunaSettingsUI(false), dialog))
+        dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.8f,
+            Global.getSettings().screenHeight * 0.8f,
+            OpenSettingsPanelDelegate(LunaSettingsUIMainPanel(false), dialog))
     }
 
     override fun optionSelected(optionText: String?, optionData: Any?) {
@@ -53,11 +53,11 @@ internal class OpenSettingsPanelInteraction : InteractionDialogPlugin
     }
 }
 
-internal class OpenSettingsPanelDelegate(missionPanel: LunaSettingsUI?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
+internal class OpenSettingsPanelDelegate(missionPanel: LunaSettingsUIMainPanel?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
 {
 
     private var callbacks: DialogCallbacks? = null
-    private var plugin: LunaSettingsUI? = null
+    private var plugin: LunaSettingsUIMainPanel? = null
     private var dialog: InteractionDialogAPI? = null
 
     init {

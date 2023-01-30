@@ -13,7 +13,7 @@ None of the Settings here do anything.
 lunalib,luna_exampleString,Example String,String,some string,"Strings will accept any characters put in, with no filtering.",,,
 lunalib,luna_exampleBoolean,Example Boolean,Boolean,true,"An active Button sets to true, an inactive button sets to false",,,
 lunalib,luna_exampleInt,Example Int,Int,100,"Int Fields will only accept whole Numbers, and block any other character from being entered.
-Using the maxValue config, you can change the range of values that can be entered.",50,200,
+Using the maxValue config, you can change the range of values that can be entered.",-50,200,
 lunalib,luna_exampleDouble,Example Double,Double,10.2,"Doubles allow only numbers and a single decimal dot (.) 
 Using the maxValue config, you can change the range of values that can be entered.",0,20,spacing:0.5
 lunalib,luna_exampleKeybind,Example Keybind,Keycode,0,"Lets users register a keybind. The saved keycodes are the same as used by org.lwjgl.input.Keyboard and Starsectors InputEventAPI.

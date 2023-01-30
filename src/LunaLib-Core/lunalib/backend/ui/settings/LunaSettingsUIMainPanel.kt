@@ -1,4 +1,4 @@
-package lunalib.backend.ui.settingsV2
+package lunalib.backend.ui.settings
 
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate

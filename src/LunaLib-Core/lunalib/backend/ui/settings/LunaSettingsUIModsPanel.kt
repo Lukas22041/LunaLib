@@ -1,13 +1,9 @@
-package lunalib.backend.ui.settingsV2
+package lunalib.backend.ui.settings
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
-import com.fs.starfarer.api.campaign.CampaignFleetAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
-import com.fs.starfarer.api.combat.ShipHullSpecAPI
-import com.fs.starfarer.api.combat.ShipSystemSpecAPI
 import com.fs.starfarer.api.input.InputEventAPI
-import com.fs.starfarer.api.loading.FighterWingSpecAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
@@ -18,13 +14,9 @@ import lunalib.backend.ui.components.LunaUITextFieldWithSlider
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUITextField
-import lunalib.backend.ui.settings.LunaSettingsData
-import lunalib.backend.ui.settings.LunaSettingsLoader
-import lunalib.backend.ui.settings.LunaSettingsUI
 import lunalib.lunaSettings.LunaSettingsListener
 import org.lazywizard.lazylib.JSONUtils
 import org.lwjgl.input.Keyboard
-import org.lwjgl.opengl.GL11
 import java.awt.Color
 
 class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin

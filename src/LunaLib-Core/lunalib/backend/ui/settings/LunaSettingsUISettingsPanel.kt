@@ -1,4 +1,4 @@
-package lunalib.backend.ui.settingsV2
+package lunalib.backend.ui.settings
 
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
@@ -15,11 +15,7 @@ import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
-import lunalib.backend.ui.settings.LunaSettingsData
-import lunalib.backend.ui.settings.LunaSettingsLoader
-import lunalib.backend.ui.settings.TooltipPreset
 import lunalib.lunaSettings.LunaSettings
-import java.awt.Color
 
 class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 {
@@ -124,7 +120,7 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 var textHeight = description.computeTextHeight(description.text)
                 var ratio = textWidth / description.position.width
                 var extraSpace = textHeight * ratio
-                var increase = extraSpace * 0.95f
+                var increase = extraSpace
 
                 cardPanel!!.position!!.setSize(cardPanel!!.position!!.width, cardPanel!!.position!!.height  + increase)
                 subpanelElement!!.addSpacer(increase)
@@ -138,7 +134,6 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             else
             {
                 var descriptionElement = cardPanel.lunaElement!!.createUIElement(width * 0.6f - 20, requiredSpacing, false)
-                descriptionElement.addTooltipToPrevious(TooltipPreset("", width), TooltipMakerAPI.TooltipLocation.BELOW)
                 descriptionElement.position.inTL(0f, 0f)
                 cardPanel.uiElement.addComponent(descriptionElement)
                 cardPanel.lunaElement!!.addUIElement(descriptionElement)
@@ -155,7 +150,7 @@ class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 var textHeight = description.computeTextHeight(description.text)
                 var ratio = textWidth / description.position.width
                 var extraSpace = textHeight * ratio
-                var increase = extraSpace * 0.95f
+                var increase = extraSpace
 
                 cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + increase)
                 subpanelElement!!.addSpacer(increase)
