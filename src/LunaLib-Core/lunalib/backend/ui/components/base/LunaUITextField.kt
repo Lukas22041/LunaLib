@@ -138,7 +138,6 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
             if (value is Int && !isSelected())
             {
                 try {
-                    value = paragraph!!.text.toInt() as T
                     if (value as Int > maxValue)
                     {
                         paragraph!!.text = maxValue.toInt().toString()
@@ -147,12 +146,12 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                     {
                         paragraph!!.text = minValue.toInt().toString()
                     }
+                    value = paragraph!!.text.toInt() as T
                 } catch (e: Throwable) {}
             }
             else if (value is Number && !isSelected())
             {
                 try {
-                    value = paragraph!!.text.toDouble() as T
                     if (value as Double > maxValue)
                     {
                         paragraph!!.text = maxValue.toString()
@@ -161,6 +160,7 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                     {
                         paragraph!!.text = minValue.toString()
                     }
+                    value = paragraph!!.text.toDouble() as T
                 } catch (e: Throwable) {}
             }
 

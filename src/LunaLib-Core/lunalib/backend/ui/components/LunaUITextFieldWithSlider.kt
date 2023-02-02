@@ -102,4 +102,13 @@ internal class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minVal
     override fun render(alphaMult: Float) {
 
     }
+
+    override fun advance(amount: Float) {
+        super.advance(amount)
+
+        if (textField != null)
+        {
+            this.value = textField!!.value
+        }
+    }
 }

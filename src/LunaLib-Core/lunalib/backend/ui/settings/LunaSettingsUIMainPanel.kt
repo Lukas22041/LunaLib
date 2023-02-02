@@ -1,5 +1,6 @@
 package lunalib.backend.ui.settings
 
+import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
@@ -7,7 +8,11 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
+import com.fs.starfarer.api.ui.TooltipMakerAPI
+import com.fs.starfarer.api.util.Misc
 import lunalib.backend.scripts.LoadedSettings
+import lunalib.backend.ui.components.base.LunaUIButton
+import lunalib.backend.ui.components.util.TooltipHelper
 import org.lwjgl.input.Keyboard
 
 class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
@@ -34,7 +39,12 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
         height = panel!!.position.height
 
         var element = panel.createUIElement(width, 20f, false)
-        element.addSectionHeading("Mod Settings", Alignment.MID, 0f)
+        var header = element.addSectionHeading("Mod Settings", Alignment.MID, 0f)
+
+        element.addTooltipToPrevious(TooltipHelper("Mod Settings added by Lunalib.\n\n" +
+                "Config files can be found under \"Starsector/saves/common/LunaSettings/\". \nOpen them with Notepad if you need to edit them. Changes to those files are only read on game start."
+            , 500f), TooltipMakerAPI.TooltipLocation.BELOW)
+
         element.position.inTL(0f, 0f)
         panel.addUIElement(element)
 

@@ -29,7 +29,6 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
     var panelElement: TooltipMakerAPI? = null
     var searchField: LunaUITextField<String>? = null
 
-
     var subpanel: CustomPanelAPI? = null
     var subpanelElement: TooltipMakerAPI? = null
 
@@ -40,6 +39,9 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
     var height = 0f
 
     var currentSearchText = ""
+
+    var saveDelay = 0
+    var saving = false
 
     companion object
     {
@@ -82,6 +84,13 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
             this.uiElement.addTooltipToPrevious(TooltipHelper("Saves the currently selected mods settings. If you switch to another mod without saving, the changes are lost. Glows yellow if there are unchanged saves.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
 
+            onHover {
+                backgroundAlpha = 1f
+            }
+            onNotHover {
+                backgroundAlpha = 0.5f
+            }
+
             onHoverEnter {
                 Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
             }
@@ -100,38 +109,10 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             }
             onClick {
                 if (selectedMod == null) return@onClick
-                LunaSettingsUISettingsPanel.unsaved = false
-                val data = JSONUtils.loadCommonJSON("LunaSettings/${selectedMod!!.id}.json", "data/config/LunaSettingsDefault.default");
-                for (element in LunaSettingsUISettingsPanel.addedElements)
-                {
-                    var setting = (element.key as LunaSettingsData)
-                    if (element is LunaUITextField<*>)
-                    {
-                        data.put(setting.fieldID, element.value)
-                    }
-                    if (element is LunaUITextFieldWithSlider<*>)
-                    {
-                        data.put(setting.fieldID, element.value)
-                    }
-                    if (element is LunaUIColorPicker)
-                    {
-                        var color = element.value
-                        var hex = String.format("#%02x%02x%02x", color!!.red, color!!.green, color.blue);
-                        data.put(setting.fieldID, hex)
-                    }
-                    if (element is LunaUIButton)
-                    {
-                        data.put(setting.fieldID, element.value)
-                    }
-                    if (element is LunaUIKeybindButton)
-                    {
-                        data.put(setting.fieldID, element.keycode)
-                    }
-                }
-                data.save()
-                LunaSettingsLoader.Settings.put(selectedMod!!.id, data)
 
-                if (!newGame) callSettingsChangedListener(selectedMod!!)
+                saveDelay = 5
+                saving = true
+
             }
         }
 
@@ -145,6 +126,12 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         }
         resetButton!!.onHoverEnter {
             Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+        }
+        resetButton!!.onHover {
+            backgroundAlpha = 1f
+        }
+        resetButton!!.onNotHover {
+            backgroundAlpha = 0.5f
         }
         resetButton!!.onClick {
             if (selectedMod == null) return@onClick
@@ -233,7 +220,11 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             {
                 para.text = ""
             }
-            if (isSelected())
+            if (isHovering)
+            {
+                backgroundAlpha = 0.75f
+            }
+            else if (isSelected())
             {
                 backgroundAlpha = 1f
             }
@@ -262,8 +253,6 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
         subpanelElement!!.position.inTL(0f, 0f)
         subpanelElement!!.addSpacer(5f)
-
-        var test = mutableListOf<LunaUIBaseElement>()
 
         val modsWithData = LunaSettingsLoader.SettingsData.map { it.modID }.distinct()
         val mods: List<ModSpecAPI> = Global.getSettings().modManager.enabledModsCopy.filter { modsWithData.contains( it.id) }
@@ -296,11 +285,11 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                 }
 
                 onSelect {
+                    if (!saving)
                     selectedMod = mod
                 }
             }
 
-            test.add(button)
             subpanelElement!!.addSpacer(5f)
         }
 
@@ -320,7 +309,47 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
     }
 
     override fun advance(amount: Float) {
+        if (saving)
+        {
+            saveDelay--
+            if (saveDelay < 1)
+            {
+                if (selectedMod == null) return
+                LunaSettingsUISettingsPanel.unsaved = false
+                val data = JSONUtils.loadCommonJSON("LunaSettings/${selectedMod!!.id}.json", "data/config/LunaSettingsDefault.default");
+                for (element in LunaSettingsUISettingsPanel.addedElements)
+                {
+                    var setting = (element.key as LunaSettingsData)
+                    if (element is LunaUITextField<*>)
+                    {
+                        data.put(setting.fieldID, element.value)
+                    }
+                    if (element is LunaUITextFieldWithSlider<*>)
+                    {
+                        data.put(setting.fieldID, element.value)
+                    }
+                    if (element is LunaUIColorPicker)
+                    {
+                        var color = element.value
+                        var hex = String.format("#%02x%02x%02x", color!!.red, color!!.green, color.blue);
+                        data.put(setting.fieldID, hex)
+                    }
+                    if (element is LunaUIButton)
+                    {
+                        data.put(setting.fieldID, element.value)
+                    }
+                    if (element is LunaUIKeybindButton)
+                    {
+                        data.put(setting.fieldID, element.keycode)
+                    }
+                }
+                data.save()
+                LunaSettingsLoader.Settings.put(selectedMod!!.id, data)
 
+                if (!newGame) callSettingsChangedListener(selectedMod!!)
+                saving = false
+            }
+        }
     }
 
     override fun processInput(events: MutableList<InputEventAPI>) {

@@ -47,19 +47,10 @@ internal class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue
             borderColor = Misc.getDarkPlayerColor().brighter()
         }
         onHover {event ->
-            if (event.x.toFloat() in ((sliderPosX + centerX) - width / 20)..((sliderPosX + centerX)+ width / 20) && event.y.toFloat() in (posY)..(posY + height ))
-            {
-                sliderCenterColor = Misc.getDarkPlayerColor().brighter().brighter()
-            }
-            else
-            {
-                sliderCenterColor = Misc.getDarkPlayerColor().brighter()
-            }
-            darkColor = Misc.getDarkPlayerColor().brighter()
+            sliderCenterColor = Misc.getDarkPlayerColor().brighter().brighter()
         }
         onNotHover {
             sliderCenterColor = Misc.getDarkPlayerColor().brighter()
-            darkColor = Misc.getDarkPlayerColor()
         }
     }
 
@@ -124,7 +115,7 @@ internal class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue
     override fun renderBelow(alphaMult: Float) {
         if (position != null)
         {
-            createGLRectangle(darkColor.darker(), alphaMult * 0.9f)  {
+            createGLRectangle(darkColor.darker(), alphaMult)  {
                 GL11.glRectf(posX, posY , posX + width, posY + height)
             }
             createGLRectangle(sliderCenterColor, alphaMult)  {
