@@ -8,9 +8,11 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
+import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.ui.components.base.LunaUIButton
+import lunalib.backend.ui.components.util.TooltipHelper
 import org.lwjgl.input.Keyboard
 
 class LunaDebugUIMainPanel() : CustomUIPanelPlugin
@@ -33,7 +35,7 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
 
     companion object
     {
-        var selectedTab: String = "Entities"
+        var selectedTab: String = "Snippets"
         var closeCooldown = 0
     }
 
@@ -50,72 +52,7 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
         element.position.inTL(0f, 0f)
         panel.addUIElement(element)
 
-
-        var entitiesButton = LunaUIButton(false, false,width / 2, 40f, "none", "Tabs", panel!!, element!!).apply {
-            this.buttonText!!.text = "Entities"
-            this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-            this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height / 2 + this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 4)
-            this.backgroundAlpha = 0.5f
-
-            if (selectedTab == "Entities")
-            {
-                setSelected()
-            }
-
-            onSelect {
-                selectedTab = "Entities"
-            }
-
-            onUpdate {
-                if (this.isSelected())
-                {
-                    this.backgroundAlpha = 1f
-                }
-                else
-                {
-                    this.backgroundAlpha = 0.5f
-                }
-            }
-
-            onHoverEnter {
-                Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
-            }
-        }
-        entitiesButton.position!!.inTL(0f,header.position.height)
-
-        var itemsButton = LunaUIButton(false, false,width / 2, 40f, "none", "Tabs", panel!!, element!!).apply {
-            this.buttonText!!.text = "Items"
-            this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-            this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height / 2 + this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 4)
-            this.backgroundAlpha = 0.5f
-
-            if (selectedTab == "Items")
-            {
-                setSelected()
-            }
-
-            onSelect {
-                selectedTab = "Items"
-            }
-
-            onUpdate {
-                if (this.isSelected())
-                {
-                    this.backgroundAlpha = 1f
-                }
-                else
-                {
-                    this.backgroundAlpha = 0.5f
-                }
-            }
-
-            onHoverEnter {
-                Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
-            }
-        }
-        itemsButton.position!!.inTL(width / 2,header.position.height)
-
-      /*  var snippetsButton = LunaUIButton(false, false,width / 3, 40f, "none", "Tabs", panel!!, element!!).apply {
+        var snippetsButton = LunaUIButton(false, false,width / 3, 40f, "none", "Tabs", panel!!, element!!).apply {
             this.buttonText!!.text = "Snippets"
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height / 2 + this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 4)
@@ -145,7 +82,74 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
                 Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
             }
         }
-        snippetsButton.position!!.inTL((width / 3) * 2,header.position.height)*/
+        snippetsButton.position!!.inTL(0f ,header.position.height)
+        element.addTooltipToPrevious(TooltipHelper("A list of code snippets that can be executed that modders can add to. Similar to Console Commands", 300f), TooltipMakerAPI.TooltipLocation.BELOW)
+
+        var entitiesButton = LunaUIButton(false, false,width / 3, 40f, "none", "Tabs", panel!!, element!!).apply {
+            this.buttonText!!.text = "Entities"
+            this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+            this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height / 2 + this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 4)
+            this.backgroundAlpha = 0.5f
+
+            if (selectedTab == "Entities")
+            {
+                setSelected()
+            }
+
+            onSelect {
+                selectedTab = "Entities"
+            }
+
+            onUpdate {
+                if (this.isSelected())
+                {
+                    this.backgroundAlpha = 1f
+                }
+                else
+                {
+                    this.backgroundAlpha = 0.5f
+                }
+            }
+
+            onHoverEnter {
+                Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+            }
+        }
+        entitiesButton.position!!.inTL(width / 3 ,header.position.height)
+        element.addTooltipToPrevious(TooltipHelper("A list of all Entities in the Sector.", 300f), TooltipMakerAPI.TooltipLocation.BELOW)
+
+        var itemsButton = LunaUIButton(false, false,width / 3, 40f, "none", "Tabs", panel!!, element!!).apply {
+            this.buttonText!!.text = "Items"
+            this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+            this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height / 2 + this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 4)
+            this.backgroundAlpha = 0.5f
+
+            if (selectedTab == "Items")
+            {
+                setSelected()
+            }
+
+            onSelect {
+                selectedTab = "Items"
+            }
+
+            onUpdate {
+                if (this.isSelected())
+                {
+                    this.backgroundAlpha = 1f
+                }
+                else
+                {
+                    this.backgroundAlpha = 0.5f
+                }
+            }
+
+            onHoverEnter {
+                Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+            }
+        }
+        itemsButton.position!!.inTL((width / 3) * 2,header.position.height)
+        element.addTooltipToPrevious(TooltipHelper("A list of all Items Loaded in to the Game.", 300f), TooltipMakerAPI.TooltipLocation.BELOW)
 
     }
 

@@ -75,6 +75,8 @@ internal class LunaDebugUIItemsPanel : LunaDebugUIInterface {
         searchField.paragraph!!.text = searchText
         searchField.value = searchText
 
+        searchField.backgroundAlpha = 0.5f
+
         searchField.position!!.inTL(50f, 60f)
 
         var pan = searchField.lunaElement!!.createUIElement(searchField.position!!.width, searchField.position!!.height, false)
@@ -132,7 +134,6 @@ internal class LunaDebugUIItemsPanel : LunaDebugUIInterface {
                 onHoverEnter {
                     Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
                 }
-
 
                 panelElement!!.addSpacer(5f)
             }
@@ -222,15 +223,15 @@ internal class LunaDebugUIItemsPanel : LunaDebugUIInterface {
                     descriptionText += "Type: ${item.type}\n"
                 }
                 is HullModSpecAPI -> {
-                    descriptionText += "Id: ${item.id}"
+                    descriptionText += "Id: ${item.id}\n"
                     descriptionText += "Category: ${item.uiTags}\n"
                 }
                 is FighterWingSpecAPI -> {
-                    descriptionText += "Id: ${item.id}"
+                    descriptionText += "Id: ${item.id}\n"
                     descriptionText += "Variant Id: ${item.variantId}\n"
                 }
                 is CommoditySpecAPI -> {
-                    descriptionText += "Id: ${item.id}"
+                    descriptionText += "Id: ${item.id}\n"
                     descriptionText += "Base Value: ${item.basePrice}\n"
                 }
             }

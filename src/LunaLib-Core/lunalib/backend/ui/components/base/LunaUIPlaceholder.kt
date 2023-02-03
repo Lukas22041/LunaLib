@@ -8,7 +8,7 @@ import com.fs.starfarer.api.util.Misc
 import org.lwjgl.opengl.GL11
 
 
-internal class LunaUIPlaceholder(var renderBackground: Boolean,width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+class LunaUIPlaceholder(var renderBackground: Boolean,width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var addedBackgroundImage: Boolean = false
 

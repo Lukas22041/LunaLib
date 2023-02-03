@@ -69,6 +69,8 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
         searchField.paragraph!!.text = searchText
         searchField.value = searchText
 
+        searchField.backgroundAlpha = 0.5f
+
         searchField.position!!.inTL(50f, 60f)
 
         var pan = searchField.lunaElement!!.createUIElement(searchField.position!!.width, searchField.position!!.height, false)

@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11
 import java.awt.Color
 import java.util.WeakHashMap
 
-internal abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, var key: Any, var group: String, var panel: CustomPanelAPI, var uiElement: TooltipMakerAPI) : CustomUIPanelPlugin
+abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, var key: Any, var group: String, var panel: CustomPanelAPI, var uiElement: TooltipMakerAPI) : CustomUIPanelPlugin
 {
     companion object {
         var selectedMap: MutableMap<String, LunaUIBaseElement?> = WeakHashMap()

@@ -92,7 +92,6 @@ internal object LunaSettingsLoader
                 catch (e: Throwable)
                 {
                     maxValue = 0.0
-                    log.debug("LunaSettings: No min value for for $id, setting to 0")
                 }
 
                 try {
@@ -101,7 +100,6 @@ internal object LunaSettingsLoader
                 catch (e: Throwable)
                 {
                     maxValue = 100.0
-                    log.debug("LunaSettings: No max value for for $id, setting to 100")
                 }
             }
 
@@ -110,10 +108,13 @@ internal object LunaSettingsLoader
         }
     }
 
-    fun saveDefaultsToFile()
+    fun saveDefaultsToFile(modID: String = "")
     {
         var defaults = SettingsData
-        var mods = Global.getSettings().modManager.enabledModsCopy
+        var mods = when (modID) {
+            "" -> Global.getSettings().modManager.enabledModsCopy
+            else -> listOf(Global.getSettings().modManager.getModSpec(modID))
+        }
 
         for (mod in mods)
         {
@@ -149,21 +150,34 @@ internal object LunaSettingsLoader
         }
     }
 
-    fun loadSettings()
+    fun loadSettings(modID: String = "", reload: Boolean = false)
     {
         //Settings.clear()
-        var mods = Global.getSettings().modManager.enabledModsCopy
+        var mods = when (modID) {
+            "" -> Global.getSettings().modManager.enabledModsCopy
+            else -> listOf(Global.getSettings().modManager.getModSpec(modID))
+        }
 
         for (mod in mods)
         {
             var data = JSONUtils.loadCommonJSON("LunaSettings/${mod.id}.json", "data/config/LunaSettingsDefault.default");
             if (data.length() == 0 || data == null)
             {
-                log.debug("LunaSettings: Could not find any mod settings for ${mod.id}, skipping.")
+                if (!reload)
+                {
+                    log.debug("LunaSettings: Could not find any mod settings for ${mod.id}, skipping.")
+                }
                 continue
             }
             Settings.put(mod.id, data)
-            log.debug("LunaSettings: Loaded Mod Settings for ${mod.id}")
+            if (!reload)
+            {
+                log.debug("LunaSettings: Loaded Mod Settings for ${mod.id}")
+            }
+            else
+            {
+                log.debug("LunaSettings: Reloaded Mod Settings for ${mod.id}")
+            }
         }
     }
 }

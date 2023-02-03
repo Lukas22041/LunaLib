@@ -223,15 +223,29 @@ object LunaSettings
      */
      object SettingsCreator
     {
+
+
         /**
         Has to be called after Settings have been added, otherwise they will not load.
          */
+        @JvmStatic
+        fun refresh(ModID: String)
+        {
+            LunaSettingsLoader.saveDefaultsToFile(modID = ModID)
+            LunaSettingsLoader.loadSettings(modID = ModID, reload = true)
+        }
+
+        /**
+        Deprecated, please use the refresh method with the modID parameter
+        */
         @JvmStatic
         fun refresh()
         {
             LunaSettingsLoader.saveDefaultsToFile()
             LunaSettingsLoader.loadSettings()
         }
+
+
 
         @JvmStatic
         fun addHeader(ModID: String, FieldID: String, Title: String)
