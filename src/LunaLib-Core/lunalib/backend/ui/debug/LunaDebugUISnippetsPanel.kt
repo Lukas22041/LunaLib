@@ -33,7 +33,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
     companion object
     {
         var searchText = ""
-        var filters = mutableMapOf(SnippetCategory.Cheat to true, SnippetCategory.Debug to true, SnippetCategory.Item to true, SnippetCategory.Entity to true)
+        var filters = mutableMapOf(LunaSnippet.SnippetCategory.Cheat to true, LunaSnippet.SnippetCategory.Debug to true, LunaSnippet.SnippetCategory.Cargo to true, LunaSnippet.SnippetCategory.Entity to true)
     }
 
     override fun getTab(): String {
@@ -81,7 +81,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
         {
             para.text = "Search"
         }
-        para.position.inTL(para.position.width / 2 - para.computeTextWidth(para.text) / 2 , para.position.height  - para.computeTextHeight(para.text) / 2)
+        para.position.inTL(searchField!!.position!!.width / 2 - para.computeTextWidth(para.text) / 2 , searchField!!.position!!.height / 2 - para.computeTextHeight(para.text) / 2)
 
         searchField.onHoverEnter {
             Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
@@ -92,7 +92,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             if (button.paragraph!!.text == "" && !button.isSelected())
             {
                 para.text = "Search"
-                para.position.inTL(para.position.width / 2 - para.computeTextWidth(para.text) / 2 , para.position.height  - para.computeTextHeight(para.text) / 2)
+                para.position.inTL(searchField!!.position!!.width / 2 - para.computeTextWidth(para.text) / 2 , searchField!!.position!!.height / 2 - para.computeTextHeight(para.text) / 2)
             }
             else
             {
@@ -119,6 +119,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
         {
             var button = LunaUIButton(false, false,250f, 30f, "none", "Debug", panel!!, panelElement!!).apply {
                 this.buttonText!!.text = key.toString()
+                this.buttonText!!.position.inTL(this.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.height / 2 - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
                 this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
                 //this.position!!.inTL(0f,0f)
                 this.backgroundAlpha = 0.5f
@@ -173,7 +174,11 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
         var spacing = 10f
         for (snippet in snippets)
         {
-            var requiredSpacing = 100f
+            var color = Misc.getBasePlayerColor()
+            color = Color(color.red, color.green, color.blue, 230)
+
+            var requiredSpacing = 110f
+            var outputSpacing = 0f
             var cardPanel = LunaUIPlaceholder(true, subpanel!!.position.width - 75, requiredSpacing, "empty", "none", subpanel!!, subpanelElement!!)
             cardPanel.position!!.inTL(10f, spacing)
 
@@ -184,32 +189,22 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
 
             descriptionElement.addSpacer(5f)
 
-            var name = "${snippet.getName()} (From ${Global.getSettings().modManager.getModSpec(snippet.getModId()).name})"
+            var name = "${snippet.getName()}"
 
-            var namePara = descriptionElement.addPara("$name", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+            var namePara = descriptionElement.addPara("$name", 0f, Misc.getBasePlayerColor(), color)
+            namePara.setHighlight("")
 
             descriptionElement.addSpacer(3f)
 
-            var color = Misc.getBasePlayerColor()
-            color = Color(color.red, color.green, color.blue, 230)
-
-            var descriptionText = snippet.getDescription()
+            var from = "Mod: ${Global.getSettings().modManager.getModSpec(snippet.getModId()).name} | "
+            var categories = "Categories: "
+            snippet.categories.forEach { categories += "$it, " }
+            categories = categories.substring(0, categories.length - 2)
+            var descriptionText = from + categories + "\n\n" + snippet.getDescription()
 
             var description = descriptionElement.addPara(descriptionText,0f, color, color)
 
-            var textWidth = description.computeTextWidth(description.text)
-            var textHeight = description.computeTextHeight(description.text)
-            var ratio = textWidth / description.position.width
-            var extraSpace = textHeight * ratio
-            var increase = extraSpace * 0.5f
-
-
             descriptionElement!!.addSpacer(20f)
-
-
-            cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + increase)
-            subpanelElement!!.addSpacer(increase)
-
 
             var interactbleElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.5f - 20, requiredSpacing, false)
 
@@ -218,19 +213,37 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             cardPanel.lunaElement!!.addUIElement(interactbleElement)
 
             interactbleElement.addSpacer(20f)
+            outputSpacing += 50f
 
             var executeButton = LunaUIButton(true, false,250f, 30f, "", "Debug", cardPanel.lunaElement!!, interactbleElement!!)
             executeButton.buttonText!!.text = "Execute"
-            executeButton.buttonText!!.position.inTL(executeButton.buttonText!!.position.width / 2 - executeButton.buttonText!!.computeTextWidth(executeButton.buttonText!!.text) / 2, executeButton.buttonText!!.position.height - executeButton.buttonText!!.computeTextHeight(executeButton.buttonText!!.text) / 2)
+            executeButton.buttonText!!.position.inTL(executeButton.position!!.width / 2 - executeButton.buttonText!!.computeTextWidth(executeButton.buttonText!!.text) / 2, executeButton!!.position!!.height / 2 - executeButton.buttonText!!.computeTextHeight(executeButton.buttonText!!.text) / 2)
 
-            interactbleElement.addSpacer(5f)
-
-            var statePara = interactbleElement.addPara("", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+            outputSpacing += executeButton.position!!.height
 
             interactbleElement.addSpacer(20f)
+            outputSpacing += 20f
 
             var snippetBuilder = SnippetBuilder(cardPanel, cardPanel.lunaElement!!, interactbleElement)
             snippet.addParameters(snippetBuilder)
+
+            outputSpacing += snippetBuilder.totalAddedSpacing
+
+            var outputElement = cardPanel.lunaElement!!.createUIElement(cardPanel!!.position!!.width - 40, 50f, false)
+
+            outputElement.position.inTL(3f , outputSpacing)
+            cardPanel.uiElement.addComponent(outputElement)
+            cardPanel.lunaElement!!.addUIElement(outputElement)
+
+            var output = LunaUIPlaceholder(true, descriptionElement.position.width + executeButton.width + 30, outputElement.position.height, "empty", "none", cardPanel.lunaElement!!, outputElement!!).apply {
+                backgroundAlpha = 0.25f
+                borderAlpha = 0.5f
+            }
+
+            var statePara = output.uiElement.addPara("", 0f, color, color)
+            statePara.position.inTL(10f, 2f)
+
+            cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + output.position!!.height)
 
             executeButton.onClick {
                 var parameters: MutableMap<String, Any> = HashMap()
@@ -280,7 +293,17 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
                 var text = searchText.lowercase()
 
                 if (capCount > LoadedSettings.debugEntryCap!!) break
-                if (!filters.get(instance.getCategory())!!) continue
+
+                var passedFilter = false
+                for ((key, value) in filters)
+                {
+                    if (instance.getCategories().contains(key) && value == true)
+                    {
+                        passedFilter = true
+                        break;
+                    }
+                }
+                if (!passedFilter) continue
                 if (!instance.getName().lowercase().contains(text) && !mod.id.lowercase().contains(text) && !mod.name.lowercase().contains(text)) continue
                 snippets.add(instance)
             }

@@ -3,9 +3,8 @@ package lunalib.lunaDebug.snippets
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.JumpPointAPI
 import com.fs.starfarer.api.campaign.SectorEntityToken
-import lunalib.lunaDebug.LunaSnippet
 import lunalib.lunaDebug.SnippetBuilder
-import lunalib.lunaDebug.SnippetCategory
+import lunalib.lunaDebug.LunaSnippet
 
 class ExampleSnippet : LunaSnippet {
     override fun getName(): String {
@@ -20,13 +19,12 @@ class ExampleSnippet : LunaSnippet {
         return "lunalib"
     }
 
-    override fun getCategory(): SnippetCategory {
-        return SnippetCategory.Debug
+    override fun getCategories(): List<LunaSnippet.SnippetCategory> {
+        return listOf(LunaSnippet.SnippetCategory.Debug, LunaSnippet.SnippetCategory.Cheat)
     }
 
     override fun addParameters(builder: SnippetBuilder) {
         builder.addStringParameter("Entity Id", "Test")
-        builder.addStringParameter("Entity Id2", "Test2")
     }
 
     override fun execute(parameters: Map<String, Any>) : String{

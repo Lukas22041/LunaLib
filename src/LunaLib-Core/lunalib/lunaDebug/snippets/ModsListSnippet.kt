@@ -1,13 +1,11 @@
 package lunalib.lunaDebug.snippets
 
 import com.fs.starfarer.api.Global
-import lunalib.lunaDebug.LunaSnippet
 import lunalib.lunaDebug.SnippetBuilder
-import lunalib.lunaDebug.SnippetCategory
+import lunalib.lunaDebug.LunaSnippet
 import java.awt.Toolkit
 import java.awt.datatransfer.Clipboard
 import java.awt.datatransfer.StringSelection
-
 
 class ModsListSnippet : LunaSnippet {
     override fun getName(): String {
@@ -22,8 +20,8 @@ class ModsListSnippet : LunaSnippet {
         return "lunalib"
     }
 
-    override fun getCategory(): SnippetCategory {
-        return SnippetCategory.Debug
+    override fun getCategories(): List<LunaSnippet.SnippetCategory> {
+        return listOf(LunaSnippet.SnippetCategory.Debug)
     }
 
     override fun addParameters(builder: SnippetBuilder) {

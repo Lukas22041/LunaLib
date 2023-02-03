@@ -21,11 +21,6 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
     private var callbacks: CustomVisualDialogDelegate.DialogCallbacks? = null
     private var panel: CustomPanelAPI? = null
 
-    private var entitiesPanel: CustomPanelAPI? = null
-    //private var modsPanelPlugin: LunaSettingsUIModsPanel? = null
-
-    private var itemsPanel: CustomPanelAPI? = null
-    //private var settingsPanelPlugin: LunaSettingsUISettingsPanel? = null
 
     private var width = 0f
     private var height = 0f
@@ -119,18 +114,18 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
         element.addTooltipToPrevious(TooltipHelper("A list of all Entities in the Sector.", 300f), TooltipMakerAPI.TooltipLocation.BELOW)
 
         var itemsButton = LunaUIButton(false, false,width / 3, 40f, "none", "Tabs", panel!!, element!!).apply {
-            this.buttonText!!.text = "Items"
+            this.buttonText!!.text = "Cargo"
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height / 2 + this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 4)
             this.backgroundAlpha = 0.5f
 
-            if (selectedTab == "Items")
+            if (selectedTab == "Cargo")
             {
                 setSelected()
             }
 
             onSelect {
-                selectedTab = "Items"
+                selectedTab = "Cargo"
             }
 
             onUpdate {
@@ -167,8 +162,8 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
                     currentTabPanel!!.position.inTL(0f, 60f)
                     currentTabPlugin!!.init(panel!!, this, currentTabPanel!!)
                 }
-                "Items" -> {
-                    currentTabPlugin = LunaDebugUIItemsPanel()
+                "Cargo" -> {
+                    currentTabPlugin = LunaDebugUICargoPanel()
                     currentTabPanel = panel!!.createCustomPanel(width, height - 60, currentTabPlugin)
                     panel!!.addComponent(currentTabPanel)
                     currentTabPanel!!.position.inTL(0f, 60f)

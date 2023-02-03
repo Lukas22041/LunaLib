@@ -20,7 +20,7 @@ import lunalib.backend.ui.components.base.LunaUISlider
 import lunalib.backend.ui.components.base.LunaUITextField
 import java.awt.Color
 
-internal class LunaDebugUIItemsPanel : LunaDebugUIInterface {
+internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
 
     var parentPanel: CustomPanelAPI? = null
     var parentClass: LunaDebugUIMainPanel? = null
@@ -44,7 +44,7 @@ internal class LunaDebugUIItemsPanel : LunaDebugUIInterface {
     }
 
     override fun getTab(): String {
-        return "Items"
+        return "Cargo"
     }
 
     override fun init(parentPanel: CustomPanelAPI, parentClass: LunaDebugUIMainPanel, panel: CustomPanelAPI) {
@@ -88,7 +88,7 @@ internal class LunaDebugUIItemsPanel : LunaDebugUIInterface {
         {
             para.text = "Search"
         }
-        para.position.inTL(para.position.width / 2 - para.computeTextWidth(para.text) / 2 , para.position.height  - para.computeTextHeight(para.text) / 2)
+        para.position.inTL(searchField!!.position!!.width / 2 - para.computeTextWidth(para.text) / 2 , searchField!!.position!!.height / 2 - para.computeTextHeight(para.text) / 2)
 
         searchField.onHoverEnter {
             Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
@@ -99,7 +99,7 @@ internal class LunaDebugUIItemsPanel : LunaDebugUIInterface {
             if (button.paragraph!!.text == "" && !button.isSelected())
             {
                 para.text = "Search"
-                para.position.inTL(para.position.width / 2 - para.computeTextWidth(para.text) / 2 , para.position.height  - para.computeTextHeight(para.text) / 2)
+                para.position.inTL(searchField!!.position!!.width / 2 - para.computeTextWidth(para.text) / 2 , searchField!!.position!!.height / 2 - para.computeTextHeight(para.text) / 2)
             }
             else
             {
@@ -126,6 +126,7 @@ internal class LunaDebugUIItemsPanel : LunaDebugUIInterface {
         {
             var button = LunaUIButton(false, false,250f, 30f, "none", "Debug", panel!!, panelElement!!).apply {
                 this.buttonText!!.text = key
+                this.buttonText!!.position.inTL(this.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.height / 2 - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
                 this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
                 //this.position!!.inTL(0f,0f)
                 this.backgroundAlpha = 0.5f
