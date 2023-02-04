@@ -19,7 +19,7 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
     /** Usefull if you need a Snippet to be longer, for example if you use a lot of text.*/
     fun addSpace(amount: Float)
     {
-        cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + amount)
+       // cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + amount)
         totalAddedSpacing += amount
     }
 
@@ -68,7 +68,7 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
             }
         }
         parameterCard.addSpacer(5f)
-        cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textField.position!!.height)
+        //cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textField.position!!.height)
         totalAddedSpacing += textField.position!!.height + 5
         elements.add(textField)
     }
@@ -125,7 +125,7 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
             }
         }
         parameterCard.addSpacer(5f + textFieldAndSlider.position!!.height * 0.65f)
-        cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textFieldAndSlider.position!!.height * 1.35f)
+        //cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textFieldAndSlider.position!!.height * 1.35f)
         totalAddedSpacing += textFieldAndSlider.position!!.height * 1.35f + 5
         elements.add(textFieldAndSlider)
     }
@@ -178,7 +178,7 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
         }
 
         parameterCard.addSpacer(5f)
-        cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + button.position!!.height + 5)
+        //cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + button.position!!.height + 5)
         totalAddedSpacing += button.position!!.height + 5
         elements.add(button)
     }

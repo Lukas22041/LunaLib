@@ -6,10 +6,7 @@ import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.scripts.KeybindsScript
 import lunalib.backend.ui.settings.LunaSettingsLoader
 import lunalib.lunaDebug.LunaDebug
-import lunalib.lunaDebug.snippets.ExampleSnippet
-import lunalib.lunaDebug.snippets.ModsListSnippet
-import lunalib.lunaSettings.LunaSettings
-import java.awt.Color
+import lunalib.lunaDebug.snippets.ModListSnippet
 
 
 class LunaLibPlugin : BaseModPlugin()
@@ -29,8 +26,7 @@ class LunaLibPlugin : BaseModPlugin()
         /*LunaSettings.SettingsCreator.addColor("lunalib", "test", "Test Color", "Test Description", Color(255, 255, 255))
         LunaSettings.SettingsCreator.refresh("lunalib")*/
 
-        LunaDebug.addSnippet(ExampleSnippet())
-        LunaDebug.addSnippet(ModsListSnippet())
+        LunaDebug.addSnippet(ModListSnippet())
     }
 }
 

@@ -47,11 +47,12 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
         element.position.inTL(0f, 0f)
         panel.addUIElement(element)
 
-        var snippetsButton = LunaUIButton(false, false,width / 3, 40f, "none", "Tabs", panel!!, element!!).apply {
+        var snippetsButton = LunaUIButton(false, false,width / 3 - -1f, 40f, "none", "Tabs", panel!!, element!!).apply {
             this.buttonText!!.text = "Snippets"
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-            this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height / 2 + this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 4)
+            this.buttonText!!.position.inTL(this.position!!.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this!!.position!!.height / 2 - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.backgroundAlpha = 0.5f
+            this.borderAlpha = 0.5f
 
             onSelect {
                 selectedTab = "Snippets"
@@ -78,13 +79,14 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
             }
         }
         snippetsButton.position!!.inTL(0f ,header.position.height)
-        element.addTooltipToPrevious(TooltipHelper("A list of code snippets that can be executed that modders can add to. Similar to Console Commands.", 300f), TooltipMakerAPI.TooltipLocation.BELOW)
+        element.addTooltipToPrevious(TooltipHelper("Snippets are packets of code that can be executed, which can be added by Modders. Similar to Console Commands.", 300f), TooltipMakerAPI.TooltipLocation.BELOW)
 
-        var entitiesButton = LunaUIButton(false, false,width / 3, 40f, "none", "Tabs", panel!!, element!!).apply {
+        var entitiesButton = LunaUIButton(false, false,width / 3 -1f, 40f, "none", "Tabs", panel!!, element!!).apply {
             this.buttonText!!.text = "Entities"
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-            this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height / 2 + this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 4)
+            this.buttonText!!.position.inTL(this.position!!.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this!!.position!!.height / 2 - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.backgroundAlpha = 0.5f
+            this.borderAlpha = 0.5f
 
             if (selectedTab == "Entities")
             {
@@ -113,11 +115,12 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
         entitiesButton.position!!.inTL(width / 3 ,header.position.height)
         element.addTooltipToPrevious(TooltipHelper("A list of all Entities in the Sector.", 300f), TooltipMakerAPI.TooltipLocation.BELOW)
 
-        var itemsButton = LunaUIButton(false, false,width / 3, 40f, "none", "Tabs", panel!!, element!!).apply {
+        var itemsButton = LunaUIButton(false, false,width / 3 - 1f, 40f, "none", "Tabs", panel!!, element!!).apply {
             this.buttonText!!.text = "Cargo"
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-            this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height / 2 + this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 4)
+            this.buttonText!!.position.inTL(this.position!!.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this!!.position!!.height / 2 - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.backgroundAlpha = 0.5f
+            this.borderAlpha = 0.5f
 
             if (selectedTab == "Cargo")
             {

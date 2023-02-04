@@ -1,18 +1,20 @@
 package lunalib.lunaDebug;
 
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
+
 import java.util.List;
 import java.util.Map;
 
 public interface LunaSnippet
 {
-    enum SnippetCategory {
+    enum SnippetTags {
         Cheat, Debug, Cargo, Entity, Player, Faction
     }
 
     public String getName();
     public String getDescription();
     public String getModId();
-    public List<SnippetCategory> getCategories();
+    public List<String> getTags();
     public void addParameters(SnippetBuilder builder);
-    public String execute(Map<String, Object> parameters);
+    public void execute(Map<String, Object> parameters, TooltipMakerAPI output);
 }

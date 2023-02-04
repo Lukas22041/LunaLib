@@ -1,7 +1,5 @@
 package lunalib.lunaDebug
 
-import lunalib.lunaDebug.snippets.ExampleSnippet
-
 
 object LunaDebug
 {
