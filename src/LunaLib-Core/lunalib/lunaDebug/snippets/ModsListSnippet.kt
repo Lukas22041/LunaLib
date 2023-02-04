@@ -32,6 +32,7 @@ class ModsListSnippet : LunaSnippet {
         try {
             var testParam = parameters.get("Discord") as Boolean ?: false
 
+
             var mods = Global.getSettings().modManager.enabledModsCopy
             var list = ""
             for (mod in mods)

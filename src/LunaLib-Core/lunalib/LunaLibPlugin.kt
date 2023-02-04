@@ -29,9 +29,8 @@ class LunaLibPlugin : BaseModPlugin()
         /*LunaSettings.SettingsCreator.addColor("lunalib", "test", "Test Color", "Test Description", Color(255, 255, 255))
         LunaSettings.SettingsCreator.refresh("lunalib")*/
 
-        LunaDebug.addSnippet(ExampleSnippet::class.java)
-        LunaDebug.addSnippet(ModsListSnippet::class.java)
-
+        LunaDebug.addSnippet(ExampleSnippet())
+        LunaDebug.addSnippet(ModsListSnippet())
     }
 }
 

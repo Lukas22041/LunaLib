@@ -78,7 +78,7 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
             }
         }
         snippetsButton.position!!.inTL(0f ,header.position.height)
-        element.addTooltipToPrevious(TooltipHelper("A list of code snippets that can be executed that modders can add to. Similar to Console Commands", 300f), TooltipMakerAPI.TooltipLocation.BELOW)
+        element.addTooltipToPrevious(TooltipHelper("A list of code snippets that can be executed that modders can add to. Similar to Console Commands.", 300f), TooltipMakerAPI.TooltipLocation.BELOW)
 
         var entitiesButton = LunaUIButton(false, false,width / 3, 40f, "none", "Tabs", panel!!, element!!).apply {
             this.buttonText!!.text = "Entities"

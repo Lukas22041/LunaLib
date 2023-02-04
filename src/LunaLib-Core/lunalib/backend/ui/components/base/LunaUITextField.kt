@@ -149,6 +149,20 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                     value = paragraph!!.text.toInt() as T
                 } catch (e: Throwable) {}
             }
+            else if (value is Float && !isSelected())
+            {
+                try {
+                    if (value as Float > maxValue)
+                    {
+                        paragraph!!.text = maxValue.toString()
+                    }
+                    if (minValue > value as Float)
+                    {
+                        paragraph!!.text = minValue.toString()
+                    }
+                    value = paragraph!!.text.toFloat() as T
+                } catch (e: Throwable) {}
+            }
             else if (value is Number && !isSelected())
             {
                 try {
@@ -163,9 +177,6 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                     value = paragraph!!.text.toDouble() as T
                 } catch (e: Throwable) {}
             }
-
-
-
         }
     }
 
@@ -277,6 +288,7 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                             }
                             break
                         }
+
                         else if (value is Number)
                         {
                             if (DOUBLE_PATTERN.matcher(paragraph!!.text + char).matches() || char == '-' && paragraph!!.text.isEmpty())

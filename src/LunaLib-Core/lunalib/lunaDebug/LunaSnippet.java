@@ -6,7 +6,7 @@ import java.util.Map;
 public interface LunaSnippet
 {
     enum SnippetCategory {
-        Cheat, Debug, Cargo, Entity
+        Cheat, Debug, Cargo, Entity, Player, Faction
     }
 
     public String getName();

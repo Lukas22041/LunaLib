@@ -7,6 +7,7 @@ import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.backend.scripts.LoadedSettings
+import lunalib.backend.ui.components.LunaUITextFieldWithSlider
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
@@ -34,7 +35,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
     companion object
     {
         var searchText = ""
-        var filters = mutableMapOf(LunaSnippet.SnippetCategory.Cheat to true, LunaSnippet.SnippetCategory.Debug to true, LunaSnippet.SnippetCategory.Cargo to true, LunaSnippet.SnippetCategory.Entity to true)
+        var filters = mutableMapOf(LunaSnippet.SnippetCategory.Cheat to true, LunaSnippet.SnippetCategory.Debug to true, LunaSnippet.SnippetCategory.Cargo to true, LunaSnippet.SnippetCategory.Entity to true,  LunaSnippet.SnippetCategory.Player to true, LunaSnippet.SnippetCategory.Faction to true)
     }
 
     override fun getTab(): String {
@@ -125,6 +126,8 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
                     LunaSnippet.SnippetCategory.Debug -> "Snippets for debugging the game to make testing easier for developers."
                     LunaSnippet.SnippetCategory.Cargo -> "Snippets for interacting with Cargo/Inventory."
                     LunaSnippet.SnippetCategory.Entity -> "Snippets for interacting with Entities, i.e Fleets, Planets, Stations, etc"
+                    LunaSnippet.SnippetCategory.Player -> "Snippets for interactions regarding the player."
+                    LunaSnippet.SnippetCategory.Faction -> "Snippets for interacting with a Faction."
                     else -> ""
                 }
                 panelElement!!.addTooltipToPrevious(TooltipHelper(tooltip, 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
@@ -241,7 +244,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
 
             outputSpacing += snippetBuilder.totalAddedSpacing
 
-            var outputElement = cardPanel.lunaElement!!.createUIElement(cardPanel!!.position!!.width - 40, 50f, false)
+            var outputElement = cardPanel.lunaElement!!.createUIElement(cardPanel!!.position!!.width - 40, 100f, false)
 
             outputElement.position.inTL(3f , outputSpacing)
             cardPanel.uiElement.addComponent(outputElement)
@@ -251,6 +254,19 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
                 backgroundAlpha = 0.25f
                 borderAlpha = 0.5f
             }
+
+
+            var scrollerTest = output.lunaElement!!.createUIElement(output.width, output.height, true)
+            scrollerTest.position.inTL(0f, 0f)
+            var test = output.lunaElement
+            var test2 = output.lunaElement
+
+            for (i in 0..10)
+            {
+                scrollerTest.addPara("Test", 0f)
+            }
+            output.lunaElement!!.addUIElement(scrollerTest)
+
 
             var statePara = output.uiElement.addPara("", 0f, color, color)
             statePara.position.inTL(10f, 2f)
@@ -265,6 +281,10 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
                     {
                         parameters.put(element.key as String, element.value!!)
                     }
+                    if (element is LunaUITextFieldWithSlider<*>)
+                    {
+                        parameters.put(element.key as String, element.textField!!.value!!)
+                    }
                     if (element is LunaUIButton)
                     {
                         parameters.put(element.key as String, element.value!!)
@@ -277,9 +297,8 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
                 catch (e: Throwable)
                 {
                     Global.getLogger(this::class.java).debug("Lunalib: Failed to execute snippet \"${snippet.getName()}\"")
+                    statePara.text = "Error: Failed to execute Snippet"
                 }
-
-
             }
 
             spacing += cardPanel.height
@@ -298,14 +317,11 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
         snippets.clear()
         var capCount = 0
 
-
-
         for (snippet in LunaDebug.snippets)
         {
             try {
-                var instance = snippet.newInstance() as LunaSnippet
 
-                var mod = Global.getSettings().modManager.getModSpec(instance.getModId())
+                var mod = Global.getSettings().modManager.getModSpec(snippet.getModId())
                 var text = searchText.lowercase()
 
                 if (capCount > LoadedSettings.debugEntryCap!!) break
@@ -313,15 +329,15 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
                 var passedFilter = false
                 for ((key, value) in filters)
                 {
-                    if (instance.getCategories().contains(key) && value == true)
+                    if (snippet.getCategories().contains(key) && value == true)
                     {
                         passedFilter = true
                         break;
                     }
                 }
                 if (!passedFilter) continue
-                if (!instance.getName().lowercase().contains(text) && !mod.id.lowercase().contains(text) && !mod.name.lowercase().contains(text)) continue
-                snippets.add(instance)
+                if (!snippet.getName().lowercase().contains(text) && !mod.id.lowercase().contains(text) && !mod.name.lowercase().contains(text)) continue
+                snippets.add(snippet)
             }
             catch (e: Throwable)
             {

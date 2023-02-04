@@ -24,7 +24,7 @@ internal class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minVal
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
 
-            textField = LunaUITextField(value as T,minValue, maxValue, 200f, 30f,"Test", group, panel, pan!!)
+            textField = LunaUITextField(value as T,minValue, maxValue, width, 30f,"Test", group, panel, pan!!)
             textField!!.position!!.inTL(0f, 0f)
             textField!!.borderAlpha = 0.5f
 

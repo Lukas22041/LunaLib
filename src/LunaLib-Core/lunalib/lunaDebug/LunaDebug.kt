@@ -5,10 +5,10 @@ import lunalib.lunaDebug.snippets.ExampleSnippet
 
 object LunaDebug
 {
-    internal var snippets: MutableList<Class<*>> = ArrayList()
+    internal var snippets: MutableList<LunaSnippet> = ArrayList()
 
     @JvmStatic
-    fun <T : LunaSnippet> addSnippet(lunaSnippetClass: Class<T>)
+    fun addSnippet(lunaSnippetClass: LunaSnippet)
     {
         snippets.add(lunaSnippetClass)
     }

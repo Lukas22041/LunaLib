@@ -4,12 +4,11 @@ import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
+import lunalib.backend.ui.components.LunaUITextFieldWithSlider
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
-import lunalib.backend.ui.components.util.TooltipHelper
-import lunalib.backend.ui.debug.LunaDebugUISnippetsPanel
 
 
 class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel: CustomPanelAPI, private var parameterCard: TooltipMakerAPI) {
@@ -72,6 +71,63 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
         cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textField.position!!.height)
         totalAddedSpacing += textField.position!!.height + 5
         elements.add(textField)
+    }
+
+    fun addIntParameter(name: String, key: String, defaultValue: Int, minValue: Int, maxValue: Int) {
+        addNumberParameter(name, key, defaultValue, minValue, maxValue)
+    }
+
+    fun addFloatParameter(name: String, key: String, defaultValue: Float, minValue: Float, maxValue: Float) {
+        addNumberParameter(name, key, defaultValue, minValue, maxValue)
+    }
+
+    private fun <T : Number> addNumberParameter(name: String, key: String, defaultValue: T, minValue: T, maxValue: T) {
+        var textFieldAndSlider = LunaUITextFieldWithSlider(defaultValue, minValue.toFloat(), maxValue.toFloat(), 250f, 30f,key, "Debug", panel, parameterCard!!)
+        textFieldAndSlider.position!!.setLocation(0f, 0f)
+        textFieldAndSlider.textField!!.paragraph!!.text = "$defaultValue"
+        textFieldAndSlider.value = defaultValue
+
+        var pan = textFieldAndSlider.lunaElement!!.createUIElement(textFieldAndSlider.position!!.width, textFieldAndSlider.position!!.height, false)
+        textFieldAndSlider.uiElement.addComponent(pan)
+        textFieldAndSlider.lunaElement!!.addUIElement(pan)
+        textFieldAndSlider.backgroundAlpha = 0.25f
+        textFieldAndSlider.borderAlpha = 0.5f
+        textFieldAndSlider.textField!!.borderAlpha = 0.25f
+        textFieldAndSlider.textField!!.backgroundAlpha = 0.25f
+        textFieldAndSlider.valueSlider!!.backgroundAlpha = 0.25f
+        textFieldAndSlider.valueSlider!!.borderAlpha = 0.25f
+
+        pan.position.inTL(0f, 0f)
+        var para = pan.addPara(name, 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+        para.position.inTL(textFieldAndSlider.position!!.width  - para.computeTextWidth(para.text) - 5, textFieldAndSlider.position!!.height / 2 - para.computeTextHeight(para.text) / 2)
+
+        textFieldAndSlider.onHoverEnter {
+            Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+        }
+        textFieldAndSlider.onUpdate {
+            var button = textFieldAndSlider.textField as LunaUITextField<T>
+            //button.resetParagraphIfEmpty = false
+            if (isHovering)
+            {
+                backgroundAlpha = 0.5f
+                textFieldAndSlider.textField!!.backgroundAlpha = 0.5f
+            }
+            else if (isSelected())
+            {
+                backgroundAlpha = 0.75f
+                textFieldAndSlider.textField!!.backgroundAlpha = 0.75f
+
+            }
+            else
+            {
+                backgroundAlpha = 0.25f
+                textFieldAndSlider.textField!!.backgroundAlpha = 0.25f
+            }
+        }
+        parameterCard.addSpacer(5f + textFieldAndSlider.position!!.height * 0.65f)
+        cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textFieldAndSlider.position!!.height * 1.35f)
+        totalAddedSpacing += textFieldAndSlider.position!!.height * 1.35f + 5
+        elements.add(textFieldAndSlider)
     }
 
     fun addBooleanParameter(name: String, key: String, defaultValue: Boolean) {
