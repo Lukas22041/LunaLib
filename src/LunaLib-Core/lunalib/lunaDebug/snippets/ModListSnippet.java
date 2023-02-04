@@ -42,6 +42,7 @@ public class ModListSnippet implements LunaSnippet {
     public List<String> getTags() {
         List<String> tags = new ArrayList<>();
         tags.add(SnippetTags.Debug.toString());
+        //tags.add("Lunalib");
         return tags;
     }
 
@@ -61,7 +62,15 @@ public class ModListSnippet implements LunaSnippet {
         List<ModSpecAPI> mods = Global.getSettings().getModManager().getEnabledModsCopy();
         StringBuilder modList = new StringBuilder();
 
-        output.addPara("Succesfully copied to clipboard!", 0f, Misc.getPositiveHighlightColor(), Misc.getHighlightColor());
+        //Creating a new Paragraph at the top of the Output Window.
+        if (discord)
+        {
+            output.addPara("Succesfully copied to clipboard with Discord formatting!", 0f, Misc.getPositiveHighlightColor(), Misc.getHighlightColor());
+        }
+        else
+        {
+            output.addPara("Succesfully copied to clipboard!", 0f, Misc.getPositiveHighlightColor(), Misc.getHighlightColor());
+        }
         output.addSpacer(5f);
         for (ModSpecAPI mod : mods)
         {
@@ -73,6 +82,7 @@ public class ModListSnippet implements LunaSnippet {
             {
                 modList.append(mod.getName() + ":" + mod.getVersion() + "\n");
             }
+            //Creating a new Paragraph in the output window for each line, and then highlighting the Mod name.
             LabelAPI paragraph = output.addPara(mod.getName() + ":" + mod.getVersion(), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor());
             paragraph.setHighlight(mod.getName());
         }

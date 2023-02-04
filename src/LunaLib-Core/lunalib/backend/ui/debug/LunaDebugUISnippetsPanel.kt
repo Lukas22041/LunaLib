@@ -247,8 +247,8 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
 
         output.lunaElement!!.addUIElement(outputScroller)
 
-        snippets.addAll(snippets)
-        snippets.addAll(snippets)
+/*        snippets.addAll(snippets)
+        snippets.addAll(snippets)*/
         var spacing = 5f
         for (snippet in snippets)
         {
@@ -275,7 +275,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             descriptionElement.addSpacer(3f)
 
             var from = "${Global.getSettings().modManager.getModSpec(snippet.getModId()).name} • "
-            var categories = ""
+            var categories = "Tags: "
             snippet.tags.forEach { categories += "$it, " }
             categories = categories.substring(0, categories.length - 2)
             var descriptionText = from + categories + "\n\n" + snippet.getDescription()

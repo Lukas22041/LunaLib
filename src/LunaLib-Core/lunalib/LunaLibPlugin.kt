@@ -6,6 +6,7 @@ import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.scripts.KeybindsScript
 import lunalib.backend.ui.settings.LunaSettingsLoader
 import lunalib.lunaDebug.LunaDebug
+import lunalib.lunaDebug.snippets.LunaLibDataSnippet
 import lunalib.lunaDebug.snippets.ModListSnippet
 
 
@@ -27,6 +28,7 @@ class LunaLibPlugin : BaseModPlugin()
         LunaSettings.SettingsCreator.refresh("lunalib")*/
 
         LunaDebug.addSnippet(ModListSnippet())
+        LunaDebug.addSnippet(LunaLibDataSnippet())
     }
 }
 
