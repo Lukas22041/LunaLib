@@ -10,6 +10,7 @@ import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
+import lunalib.backend.ui.components.util.TooltipHelper
 import lunalib.lunaDebug.*
 import java.awt.Color
 
@@ -118,6 +119,15 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
         for ((key, value) in filters)
         {
             var button = LunaUIButton(false, false,250f, 30f, "none", "Debug", panel!!, panelElement!!).apply {
+                var tooltip = when(key)
+                {
+                    LunaSnippet.SnippetCategory.Cheat -> "Snippets that generaly allow you to alter values."
+                    LunaSnippet.SnippetCategory.Debug -> "Snippets for debugging the game to make testing easier for developers."
+                    LunaSnippet.SnippetCategory.Cargo -> "Snippets for interacting with Cargo/Inventory."
+                    LunaSnippet.SnippetCategory.Entity -> "Snippets for interacting with Entities, i.e Fleets, Planets, Stations, etc"
+                    else -> ""
+                }
+                panelElement!!.addTooltipToPrevious(TooltipHelper(tooltip, 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
                 this.buttonText!!.text = key.toString()
                 this.buttonText!!.position.inTL(this.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.height / 2 - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
                 this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
@@ -132,6 +142,8 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
 
                 panelElement!!.addSpacer(5f)
             }
+
+
 
             button.onClick {
                 button.value = !button.value
@@ -213,7 +225,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             cardPanel.lunaElement!!.addUIElement(interactbleElement)
 
             interactbleElement.addSpacer(20f)
-            outputSpacing += 50f
+            outputSpacing += 40f
 
             var executeButton = LunaUIButton(true, false,250f, 30f, "", "Debug", cardPanel.lunaElement!!, interactbleElement!!)
             executeButton.buttonText!!.text = "Execute"
@@ -253,6 +265,10 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
                     {
                         parameters.put(element.key as String, element.value!!)
                     }
+                    if (element is LunaUIButton)
+                    {
+                        parameters.put(element.key as String, element.value!!)
+                    }
                 }
 
                 try {
@@ -271,9 +287,9 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             //to create a small gap
             spacing += 5f
             subpanelElement!!.addSpacer(5f)
+            subpanelElement!!.addSpacer(outputSpacing)
 
         }
-        subpanelElement!!.addSpacer(20f)
         subpanel!!.addUIElement(subpanelElement)
     }
 

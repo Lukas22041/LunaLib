@@ -24,7 +24,7 @@ class ExampleSnippet : LunaSnippet {
     }
 
     override fun addParameters(builder: SnippetBuilder) {
-        builder.addStringParameter("Entity Id", "Test")
+        builder.addStringParameter("Enter Entity Id", "Test")
     }
 
     override fun execute(parameters: Map<String, Any>) : String{

@@ -5,8 +5,11 @@ import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.backend.ui.components.base.LunaUIBaseElement
+import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
+import lunalib.backend.ui.components.util.TooltipHelper
+import lunalib.backend.ui.debug.LunaDebugUISnippetsPanel
 
 
 class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel: CustomPanelAPI, private var parameterCard: TooltipMakerAPI) {
@@ -30,6 +33,7 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
         textField.uiElement.addComponent(pan)
         textField.lunaElement!!.addUIElement(pan)
         textField.backgroundAlpha = 0.25f
+        textField.borderAlpha = 0.5f
 
         pan.position.inTL(0f, 0f)
         var para = pan.addPara(name, 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
@@ -42,7 +46,6 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
         textField.onUpdate {
             var button = this as LunaUITextField<String>
             button.resetParagraphIfEmpty = false
-            borderAlpha = 0.5f
             if (button.paragraph!!.text == "" && !button.isSelected())
             {
                 para.text = name
@@ -69,5 +72,58 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
         cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textField.position!!.height)
         totalAddedSpacing += textField.position!!.height + 5
         elements.add(textField)
+    }
+
+    fun addBooleanParameter(name: String, key: String, defaultValue: Boolean) {
+
+        var button = LunaUIButton(defaultValue, false,250f, 30f, key, "Debug", panel!!, parameterCard!!).apply {
+            this.buttonText!!.text = "$name: ${value.toString().capitalize()}"
+            this.buttonText!!.position.inTL(this.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.height / 2 - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
+            this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+            //this.position!!.inTL(0f,0f)
+
+            if (value) this.backgroundAlpha = 0.5f
+            else backgroundAlpha = 0.125f
+            this.borderAlpha = 0.5f
+
+            onHoverEnter {
+                Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+            }
+        }
+
+        button.onClick {
+            button.value = !button.value
+            button.buttonText!!.text = "$name: ${button.value.toString().capitalize()}"
+        }
+
+        button.onUpdate {
+            if (button.value)
+            {
+                if (isHovering)
+                {
+                    backgroundAlpha = 0.75f
+                }
+                else
+                {
+                    backgroundAlpha = 0.5f
+                }
+            }
+            else
+            {
+                if (isHovering)
+                {
+                    backgroundAlpha = 0.25f
+                }
+                else
+                {
+                    backgroundAlpha = 0.125f
+                }
+            }
+        }
+
+        parameterCard.addSpacer(5f)
+        cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + button.position!!.height + 5)
+        totalAddedSpacing += button.position!!.height + 5
+        elements.add(button)
     }
 }

@@ -25,18 +25,26 @@ class ModsListSnippet : LunaSnippet {
     }
 
     override fun addParameters(builder: SnippetBuilder) {
-
+        builder.addBooleanParameter("Discord Format", "Discord", false)
     }
 
     override fun execute(parameters: Map<String, Any>) : String{
         try {
+            var testParam = parameters.get("Discord") as Boolean ?: false
+
             var mods = Global.getSettings().modManager.enabledModsCopy
             var list = ""
             for (mod in mods)
             {
-                list += "Name: ${mod.name}\n"
-                list += "Id: ${mod.id}\n"
-                list += "Version: ${mod.version}\n\n"
+
+                if (testParam)
+                {
+                    list += "**${mod.name}:** ``${mod.version}``\n"
+                }
+                else
+                {
+                    list += "${mod.name}: ${mod.version}\n"
+                }
             }
 
             val stringSelection = StringSelection(list)
