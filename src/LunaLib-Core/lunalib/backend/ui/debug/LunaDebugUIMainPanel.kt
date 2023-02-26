@@ -11,6 +11,7 @@ import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.backend.scripts.LoadedSettings
+import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.util.TooltipHelper
 import org.lwjgl.input.Keyboard
@@ -213,6 +214,9 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
                 dialog!!.showVisualPanel()
                 callbacks!!.dismissDialog()
 
+                //Not clearing this will cause a memory leak
+                LunaUIBaseElement.selectedMap.clear()
+
                 dialog!!.dismiss()
 
                 closeCooldown = 30
@@ -225,6 +229,9 @@ class LunaDebugUIMainPanel() : CustomUIPanelPlugin
                 dialog!!.showTextPanel()
                 dialog!!.showVisualPanel()
                 callbacks!!.dismissDialog()
+
+                //Not clearing this will cause a memory leak
+                LunaUIBaseElement.selectedMap.clear()
 
                 dialog!!.dismiss()
 

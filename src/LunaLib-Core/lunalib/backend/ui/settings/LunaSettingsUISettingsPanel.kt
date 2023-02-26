@@ -159,8 +159,6 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + increase)
                 subpanelElement!!.addSpacer(increase)
 
-
-
                 var interactbleElement = cardPanel.lunaElement!!.createUIElement(width * 0.4f - 20, requiredSpacing, false)
 
                 interactbleElement.position.inTL(10f + width * 0.6f, 0f)

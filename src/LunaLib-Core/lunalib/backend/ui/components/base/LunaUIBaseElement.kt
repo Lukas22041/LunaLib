@@ -13,6 +13,7 @@ import java.util.WeakHashMap
 abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, var key: Any, var group: String, var panel: CustomPanelAPI, var uiElement: TooltipMakerAPI) : CustomUIPanelPlugin
 {
     companion object {
+        //Needs a re-do at some point, causes a memory leak if its not cleared manually after closing the menu.
         var selectedMap: MutableMap<String, LunaUIBaseElement?> = WeakHashMap()
     }
 

@@ -23,7 +23,7 @@ class LunaLibPlugin : BaseModPlugin()
         LunaSettingsLoader.loadDefault()
         LunaSettingsLoader.saveDefaultsToFile()
         LunaSettingsLoader.loadSettings()
-
+        Global.getSettings()
         /*LunaSettings.SettingsCreator.addColor("lunalib", "test", "Test Color", "Test Description", Color(255, 255, 255))
         LunaSettings.SettingsCreator.refresh("lunalib")*/
 
