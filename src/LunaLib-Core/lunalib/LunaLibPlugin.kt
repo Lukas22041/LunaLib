@@ -8,6 +8,8 @@ import lunalib.backend.ui.settings.LunaSettingsLoader
 import lunalib.lunaDebug.LunaDebug
 import lunalib.lunaDebug.snippets.LunaLibDataSnippet
 import lunalib.lunaDebug.snippets.ModListSnippet
+import lunalib.lunaDelegates.LunaMemory
+import kotlin.reflect.KProperty
 
 
 class LunaLibPlugin : BaseModPlugin()
@@ -23,7 +25,7 @@ class LunaLibPlugin : BaseModPlugin()
         LunaSettingsLoader.loadDefault()
         LunaSettingsLoader.saveDefaultsToFile()
         LunaSettingsLoader.loadSettings()
-        Global.getSettings()
+
         /*LunaSettings.SettingsCreator.addColor("lunalib", "test", "Test Color", "Test Description", Color(255, 255, 255))
         LunaSettings.SettingsCreator.refresh("lunalib")*/
 
@@ -31,5 +33,4 @@ class LunaLibPlugin : BaseModPlugin()
         LunaDebug.addSnippet(LunaLibDataSnippet())
     }
 }
-
 

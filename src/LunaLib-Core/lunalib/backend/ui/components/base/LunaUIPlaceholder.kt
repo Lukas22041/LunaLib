@@ -38,7 +38,7 @@ class LunaUIPlaceholder(var renderBackground: Boolean,width: Float, height: Floa
     override fun render(alphaMult: Float) {
         if (renderBackground)
         {
-            createGLLines(darkColor, alphaMult)
+            createGLLines(darkColor, alphaMult * 0.5f)
             {
                 GL11.glVertex2f(posX, posY)
                 GL11.glVertex2f(posX, posY + height)

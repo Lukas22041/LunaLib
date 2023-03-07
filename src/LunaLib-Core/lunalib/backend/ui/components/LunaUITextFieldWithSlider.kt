@@ -20,13 +20,13 @@ internal class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minVal
         if (textField == null && lunaElement != null && value != null) {
 
             var pan = lunaElement!!.createUIElement(width, height, false)
-            uiElement.addComponent(pan)
+            //uiElement.addComponent(pan)
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
 
-            textField = LunaUITextField(value as T,minValue, maxValue, width, 30f,"Test", group, panel, pan!!)
+            textField = LunaUITextField(value as T, minValue, maxValue, width, height * 0.6f,"Test", group, panel, pan!!)
             textField!!.position!!.inTL(0f, 0f)
-            textField!!.borderAlpha = 0.5f
+            textField!!.borderAlpha = 1f
 
             textField!!.onUpdate {
                 if (textField!!.isSelected())
@@ -34,7 +34,8 @@ internal class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minVal
                     if (value is Double)
                     {
                         try {
-                            var text = textField!!.paragraph!!.text.replace("_", "")
+                            //var text = textField!!.paragraph!!.text.replace("_", "")
+                            var text = textField!!.paragraph!!.text
                             if (text != "")
                             {
                                 var curValue = text.toDouble() as T
@@ -48,7 +49,8 @@ internal class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minVal
                     if (value is Float)
                     {
                         try {
-                            var text = textField!!.paragraph!!.text.replace("_", "")
+                            //var text = textField!!.paragraph!!.text.replace("_", "")
+                            var text = textField!!.paragraph!!.text
                             if (text != "")
                             {
                                 var curValue = text.toFloat() as T
@@ -62,7 +64,8 @@ internal class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minVal
                     if (value is Int)
                     {
                         try {
-                            var text = textField!!.paragraph!!.text.replace("_", "")
+                            //var text = textField!!.paragraph!!.text.replace("_", "")
+                            var text = textField!!.paragraph!!.text
                             if (text != "")
                             {
                                 var curValue = text.toInt() as T
@@ -75,8 +78,9 @@ internal class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minVal
                     }
                 }
             }
+            pan.addSpacer(2f)
 
-            valueSlider = LunaUISlider(value as T, minValue, maxValue, width, height * 0.65f,"", group, panel, pan!!)
+            valueSlider = LunaUISlider(value as T, minValue, maxValue, width, height * 0.4f,"", group, panel, pan!!)
             valueSlider!!.borderAlpha = 0.5f
             valueSlider!!.onHeld {
                 try {

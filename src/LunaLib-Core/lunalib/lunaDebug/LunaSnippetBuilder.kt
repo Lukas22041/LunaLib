@@ -29,7 +29,7 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
         textField.value = ""
 
         var pan = textField.lunaElement!!.createUIElement(textField.position!!.width, textField.position!!.height, false)
-        textField.uiElement.addComponent(pan)
+        //textField.uiElement.addComponent(pan)
         textField.lunaElement!!.addUIElement(pan)
         textField.backgroundAlpha = 0.25f
         textField.borderAlpha = 0.5f
@@ -88,7 +88,7 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
         textFieldAndSlider.value = defaultValue
 
         var pan = textFieldAndSlider.lunaElement!!.createUIElement(textFieldAndSlider.position!!.width, textFieldAndSlider.position!!.height, false)
-        textFieldAndSlider.uiElement.addComponent(pan)
+        //textFieldAndSlider.uiElement.addComponent(pan)
         textFieldAndSlider.lunaElement!!.addUIElement(pan)
         textFieldAndSlider.backgroundAlpha = 0.25f
         textFieldAndSlider.borderAlpha = 0.5f

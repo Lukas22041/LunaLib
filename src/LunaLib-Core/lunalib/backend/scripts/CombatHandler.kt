@@ -2,9 +2,21 @@ package lunalib.backend.scripts
 
 import com.fs.starfarer.api.GameState
 import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.campaign.InteractionDialogAPI
+import com.fs.starfarer.api.campaign.InteractionDialogPlugin
+import com.fs.starfarer.api.campaign.VisualPanelAPI
 import com.fs.starfarer.api.combat.*
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.util.Misc
+import com.fs.starfarer.campaign.CampaignEngine
+import com.fs.starfarer.combat.CombatEngine
+import com.fs.starfarer.combat.CombatMain
+import com.fs.starfarer.combat.CombatState
+import com.fs.starfarer.title.TitleScreenState
+import com.fs.starfarer.ui.newui.o0Oo
+import com.fs.state.AppDriver
+import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
+import lunalib.backend.ui.settings.OpenSettingsPanelInteraction
 import lunalib.lunaSettings.LunaSettings
 import org.lazywizard.lazylib.ui.LazyFont
 import org.lwjgl.input.Keyboard
@@ -33,7 +45,33 @@ class CombatHandler : EveryFrameCombatPlugin
 
     override fun advance(amount: Float, events: MutableList<InputEventAPI>?)
     {
+       /* if (Keyboard.isKeyDown(Keyboard.KEY_K))
+        {
+            try {
+                var combatscreen: CombatState = AppDriver.getInstance().currentState as CombatState
 
+                *//*CampaignEngine.getInstance().campaignUI
+                CombatEngine.getInstance().combatUI.dialog*//*
+
+
+                var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenSettingsPanelInteraction(), combatscreen.screenPanel, combatscreen);
+                test.show(0.3f, 0.2f)
+            } catch (e: Throwable) {
+                try {
+                    var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
+
+                  //  var panel = Global.getSettings().createCustom(0.8f, 0.7f, LunaSettingsUIMainPanel(false))
+
+                    *//*CampaignEngine.getInstance().campaignUI
+                    CombatEngine.getInstance().combatUI.dialog*//*
+
+                    var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenSettingsPanelInteraction(), titlescreen.screenPanel, titlescreen);
+                    test.show(0.3f, 0.2f)
+
+                } catch (e: Throwable) {}
+            }
+
+        }*/
     }
 
     override fun renderInWorldCoords(viewport: ViewportAPI?)
@@ -49,7 +87,7 @@ class CombatHandler : EveryFrameCombatPlugin
             var location = "New Game -> Ship Selection -> Difficulty -> Mod Settings."
             if (Global.getSettings().modManager.isModEnabled("nexerelin"))
             {
-                 location = "New Game -> Sector Configuration -> Mod Settings."
+                 location = "New Game -> Sector Configuration -> Mod Settings. "
             }
             toDraw!!.draw(100f,100f);
             toDraw!!.text = "LunaLib "

@@ -41,18 +41,18 @@ internal class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, 
             b = Color.RGBtoHSB(value!!.red, value!!.green, value!!.blue, null).get(2)
 
             var pan = lunaElement!!.createUIElement(width, height, false)
-            uiElement.addComponent(pan)
+            //uiElement.addComponent(pan)
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
             textField = LunaUITextField("",0f, 1f, width, height * 0.3f,"Test", group, panel, pan!!)
             textField!!.lunaElement!!.position.inTL(0f, 0f)
             textField!!.value = String.format("#%02x%02x%02x", value!!.red, value!!.green, value!!.blue);
-            textField!!.borderAlpha = 0.5f
+            textField!!.borderAlpha = 1f
 
             pan.addSpacer(4f)
 
             hueSlider = LunaUISlider(h, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
-            hueSlider!!.borderAlpha = 0.5f
+            hueSlider!!.borderAlpha = 1f
             hueSlider!!.onHeld {
                 try {
                     h = hueSlider!!.value
@@ -67,7 +67,7 @@ internal class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, 
 
 
             satSlider = LunaUISlider(s, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
-            satSlider!!.borderAlpha = 0.5f
+            satSlider!!.borderAlpha = 1f
             satSlider!!.onHeld {
                 try {
                     s = satSlider!!.value
@@ -81,7 +81,7 @@ internal class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, 
             pan.addSpacer(4f)
 
             brightSlider = LunaUISlider(b, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
-            brightSlider!!.borderAlpha = 0.5f
+            brightSlider!!.borderAlpha = 1f
             brightSlider!!.onHeld {
                 try {
                     b = brightSlider!!.value

@@ -55,7 +55,7 @@ internal class LunaUIButton(var value: Boolean, var regularButton: Boolean, widt
         if (buttonText == null && lunaElement != null)
         {
             var pan = lunaElement!!.createUIElement(width, height, false)
-            uiElement.addComponent(pan)
+            //uiElement.addComponent(pan)
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
             buttonText = pan.addPara("", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())

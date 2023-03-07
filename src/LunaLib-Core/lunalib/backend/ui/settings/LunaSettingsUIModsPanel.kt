@@ -115,6 +115,8 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
             }
         }
+        saveButton!!.borderAlpha = 0.5f
+
 
         panelElement!!.addSpacer(3f)
 
@@ -133,6 +135,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         resetButton!!.onNotHover {
             backgroundAlpha = 0.5f
         }
+        resetButton!!.borderAlpha = 0.5f
         resetButton!!.onClick {
             if (selectedMod == null) return@onClick
             for (element in LunaSettingsUISettingsPanel.addedElements)
@@ -196,12 +199,12 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         }
 
         var pan = searchField.lunaElement!!.createUIElement(searchField.position!!.width, searchField.position!!.height, false)
-        searchField.uiElement.addComponent(pan)
+       // searchField.uiElement.addComponent(pan)
         searchField.lunaElement!!.addUIElement(pan)
         pan.position.inTL(0f, 0f)
         var para = pan.addPara("Search Mod", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
         para.position.inTL(para.position.width / 2 - para.computeTextWidth(para.text) / 2 , para.position.height  - para.computeTextHeight(para.text) / 2)
-
+        searchField.borderAlpha = 0.5f
         searchField.run {
             this.uiElement.addTooltipToPrevious(TooltipHelper("Select and type in a mods name to filter out all mods that dont match the name or id.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
 
@@ -266,6 +269,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                 this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
                 //this.position!!.inTL(0f,0f)
                 this.backgroundAlpha = 0.5f
+                this.borderAlpha = 0.5f
 
                 if (selectedMod == mod) this.setSelected()
 

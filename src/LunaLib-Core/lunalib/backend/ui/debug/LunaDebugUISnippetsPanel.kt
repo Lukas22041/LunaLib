@@ -87,9 +87,9 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             onUpdate {
 
                 var field = this as LunaUITextField<String>
-                if (field.paragraph != null && isSelected() && searchText != field.paragraph!!.text.replace("_", ""))
+                if (field.paragraph != null && isSelected() && searchText != field.paragraph!!.text)
                 {
-                    searchText = field!!.paragraph!!.text.replace("_", "")
+                    searchText = field!!.paragraph!!.text
                     searchForSnippets()
                     createList()
                 }
@@ -103,7 +103,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
         searchField.position!!.inTL(25f, 60f)
 
         var pan = searchField.lunaElement!!.createUIElement(searchField.position!!.width, searchField.position!!.height, false)
-        searchField.uiElement.addComponent(pan)
+       // searchField.uiElement.addComponent(pan)
         searchField.lunaElement!!.addUIElement(pan)
         pan.position.inTL(0f, 0f)
         var para = pan.addPara("", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
@@ -222,19 +222,19 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             panel!!.removeComponent(outputPanel)
         }
 
-        subpanel = panel!!.createCustomPanel(width - 310, height * 0.7f, null)
+        subpanel = panel!!.createCustomPanel(width - 310, height * 0.65f, null)
         subpanel!!.position.inTL(300f, 0f)
         panel!!.addComponent(subpanel)
-        subpanelElement = subpanel!!.createUIElement(width - 310, height * 0.7f, true)
+        subpanelElement = subpanel!!.createUIElement(width - 310, height * 0.65f, true)
         subpanelElement!!.position.inTL(0f, 0f)
 
-        outputPanel = panel!!.createCustomPanel(width - 310, height * 0.25f, null)
-        outputPanel!!.position.inTL(300f - 5f, height * 0.71f)
+        outputPanel = panel!!.createCustomPanel(width - 310, height * 0.30f, null)
+        outputPanel!!.position.inTL(300f - 5f, height * 0.66f)
         panel!!.addComponent(outputPanel)
-        var outputElement = outputPanel!!.createUIElement(width - 310, height * 0.25f, false)
+        var outputElement = outputPanel!!.createUIElement(width - 310, height * 0.30f, false)
         outputElement!!.position.inTL(0f, 0f)
 
-        var output = LunaUIPlaceholder(true,width - 310, height * 0.25f, "empty", "none", outputPanel!!, outputElement!!).apply {
+        var output = LunaUIPlaceholder(true,width - 310, height * 0.30f, "empty", "none", outputPanel!!, outputElement!!).apply {
             backgroundAlpha = 0.75f
             borderAlpha = 0.75f
         }
@@ -262,7 +262,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
 
             var descriptionElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.6f - 20, requiredSpacing, false)
             descriptionElement.position.inTL(0f, 0f)
-            cardPanel.uiElement.addComponent(descriptionElement)
+            //cardPanel.uiElement.addComponent(descriptionElement)
             cardPanel.lunaElement!!.addUIElement(descriptionElement)
 
             descriptionElement.addSpacer(5f)
@@ -296,7 +296,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             var interactbleElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.4f - 20, requiredSpacing, false)
 
             interactbleElement.position.inTL(10f + subpanel!!.position.width * 0.6f, 0f)
-            cardPanel.uiElement.addComponent(interactbleElement)
+            //cardPanel.uiElement.addComponent(interactbleElement)
             cardPanel.lunaElement!!.addUIElement(interactbleElement)
 
             interactbleElement.addSpacer(20f)
@@ -326,13 +326,13 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
                 outputPanel!!.removeComponent(outputElement)
                 p!!.removeComponent(outputPanel)
 
-                outputPanel = panel!!.createCustomPanel(w - 310, h * 0.25f, null)
-                outputPanel!!.position.inTL(300f - 5f, h * 0.71f)
+                outputPanel = panel!!.createCustomPanel(w - 310, h * 0.30f, null)
+                outputPanel!!.position.inTL(300f - 5f, h * 0.66f)
                 p!!.addComponent(outputPanel)
-                var outputElement = outputPanel!!.createUIElement(w - 310, h * 0.25f, false)
+                var outputElement = outputPanel!!.createUIElement(w - 310, h * 0.30f, false)
                 outputElement!!.position.inTL(0f, 0f)
 
-                var output = LunaUIPlaceholder(true,w - 310, h * 0.25f, "empty", "none", outputPanel!!, outputElement!!).apply {
+                var output = LunaUIPlaceholder(true,w - 310, h * 0.30f, "empty", "none", outputPanel!!, outputElement!!).apply {
                     backgroundAlpha = 0.75f
                     borderAlpha = 0.75f
                 }

@@ -58,9 +58,9 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
             onUpdate {
 
                 var field = this as LunaUITextField<String>
-                if (field.paragraph != null && isSelected() && searchText != field.paragraph!!.text.replace("_", ""))
+                if (field.paragraph != null && isSelected() && searchText != field.paragraph!!.text)
                 {
-                    searchText = field!!.paragraph!!.text.replace("_", "")
+                    searchText = field!!.paragraph!!.text
                     searchForEntities()
                     createList()
                 }
@@ -74,7 +74,7 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
         searchField.position!!.inTL(50f, 60f)
 
         var pan = searchField.lunaElement!!.createUIElement(searchField.position!!.width, searchField.position!!.height, false)
-        searchField.uiElement.addComponent(pan)
+        //searchField.uiElement.addComponent(pan)
         searchField.lunaElement!!.addUIElement(pan)
         pan.position.inTL(0f, 0f)
         var para = pan.addPara("", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
@@ -182,7 +182,7 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
 
             var descriptionElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.6f - 20, requiredSpacing, false)
             descriptionElement.position.inTL(0f, 0f)
-            cardPanel.uiElement.addComponent(descriptionElement)
+           // cardPanel.uiElement.addComponent(descriptionElement)
             cardPanel.lunaElement!!.addUIElement(descriptionElement)
 
             descriptionElement.addSpacer(5f)
@@ -251,7 +251,7 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
             var interactbleElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.4f - 20, requiredSpacing, false)
 
             interactbleElement.position.inTL(10f + subpanel!!.position.width * 0.6f, 0f)
-            cardPanel.uiElement.addComponent(interactbleElement)
+           // cardPanel.uiElement.addComponent(interactbleElement)
             cardPanel.lunaElement!!.addUIElement(interactbleElement)
 
             interactbleElement.addSpacer(5f)

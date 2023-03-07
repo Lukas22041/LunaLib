@@ -224,7 +224,6 @@ object LunaSettings
      object SettingsCreator
     {
 
-
         /**
         Has to be called after Settings have been added, otherwise they will not load.
          */

@@ -6,6 +6,7 @@ import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.LabelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
+import com.fs.starfarer.api.util.IntervalUtil
 import com.fs.starfarer.api.util.Misc
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
@@ -28,6 +29,10 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
     var resetParagraphIfEmpty = true
     private var default = value
     private var init = false
+
+    var fakeParagraph: LabelAPI? = null
+    var blinkInterval = IntervalUtil(1f, 1f)
+    var blink = false
 
     init {
         onClick {
@@ -75,6 +80,7 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
     {
         value = newValue as T
         paragraph!!.text = (newValue as T).toString()
+        fakeParagraph!!.text = (newValue as T).toString()
     }
 
     override fun positionChanged(position: PositionAPI) {
@@ -83,16 +89,17 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
         if (paragraph == null && lunaElement != null)
         {
             var pan = lunaElement!!.createUIElement(width, height, false)
-            uiElement.addComponent(pan)
+            //uiElement.addComponent(pan)
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
             paragraph = pan.addPara("", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
-
+            fakeParagraph = pan.addPara("", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
         }
 
         if (paragraph != null)
         {
             paragraph!!.position.inTL(5f, height / 2 - paragraph!!.position.height / 2)
+            fakeParagraph!!.position.inTL(5f, height / 2 - fakeParagraph!!.position.height / 2)
         }
     }
 
@@ -126,6 +133,16 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
     override fun advance(amount: Float) {
         super.advance(amount)
 
+        blinkInterval.advance(amount)
+        if (!isSelected()) {
+            blinkInterval.forceIntervalElapsed()
+            blink = false
+        }
+        if (blinkInterval.intervalElapsed())
+        {
+            blink = !blink
+        }
+
         if (paragraph != null)
         {
             if (!isSelected())
@@ -152,11 +169,11 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
             else if (value is Float && !isSelected())
             {
                 try {
-                    if (value as Float > maxValue)
+                    if (value as Float - 0.000001f > maxValue)
                     {
                         paragraph!!.text = maxValue.toString()
                     }
-                    if (minValue > value as Float)
+                    if (minValue > value as Float + 0.000001f)
                     {
                         paragraph!!.text = minValue.toString()
                     }
@@ -166,11 +183,11 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
             else if (value is Number && !isSelected())
             {
                 try {
-                    if (value as Double > maxValue)
+                    if (value as Double - 0.000001f > maxValue)
                     {
                         paragraph!!.text = maxValue.toString()
                     }
-                    if (minValue > value as Double)
+                    if (minValue > value as Double + 0.000001f)
                     {
                         paragraph!!.text = minValue.toString()
                     }
@@ -178,8 +195,11 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                 } catch (e: Throwable) {}
             }
         }
+
+
     }
 
+    var cooldown = 10f
 
     val Digits = "(\\p{Digit}+)"
     val HexDigits = "(\\p{XDigit}+)"
@@ -187,19 +207,25 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
     val DOUBLE_PATTERN =
         Pattern.compile("[\\x00-\\x20]*[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)" + "([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|" + "(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))" + "[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*")
 
-
     override fun processInput(events: MutableList<InputEventAPI>) {
         super.processInput(events)
 
 
         if (paragraph != null)
         {
-           paragraph!!.text = paragraph!!.text.replace("_", "")
+           //paragraph!!.text = paragraph!!.text.replace("_", "")
         }
 
+        if (cooldown > 0)
+        {
+            cooldown--
+            return
+
+        }
         if (isSelected() && paragraph != null)
         {
             for (event in events) {
+                if (cooldown > 0) continue
                 if (event.isConsumed) continue
                 if (event.eventValue == Keyboard.KEY_ESCAPE || event.eventValue == 28 || event.eventValue == 156)
                 {
@@ -236,10 +262,11 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                 if (event.isModifierKey) continue
                 if (event.eventValue == Keyboard.KEY_BACK)
                 {
-                    if (event.isKeyDownEvent)
+                    if (event.isKeyboardEvent)
                     {
                         if (paragraph!!.text.isNotEmpty())
                         {
+                            cooldown = 8f
                             paragraph!!.text = paragraph!!.text.substring(0, paragraph!!.text.length - 1)
                             Global.getSoundPlayer().playUISound("ui_typer_type", 1f, 1f)
                         }
@@ -249,13 +276,14 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                 }
                 if (event.eventValue == 15) continue
                 if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) continue
-                if (event.isKeyDownEvent && !event.isKeyUpEvent)
+                if (event.isKeyboardEvent && !event.isKeyUpEvent)
                 {
                     if (paragraph!!.computeTextWidth(paragraph!!.text) > (width - 20) - paragraph!!.computeTextWidth("_"))
                     {
                         Global.getSoundPlayer().playUISound("ui_typer_buzz", 1f, 1f)
                         continue
                     }
+                    cooldown = 2f
                     var char = event.eventChar
                     if (char != '&' && char != '%')
                     {
@@ -311,14 +339,24 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                 }
             }
         }
-        if (paragraph != null)
+        if (paragraph != null && fakeParagraph != null)
         {
-            var tempText = paragraph!!.text
+            if (isSelected() && blink)
+            {
+                fakeParagraph!!.text = paragraph!!.text + "_"
+            }
+            else
+            {
+                fakeParagraph!!.text = paragraph!!.text + ""
+
+            }
+
+           /* var tempText = paragraph!!.text
             if (isSelected())
             {
                 tempText += "_"
             }
-            paragraph!!.text = tempText
+            paragraph!!.text = tempText*/
         }
     }
 }

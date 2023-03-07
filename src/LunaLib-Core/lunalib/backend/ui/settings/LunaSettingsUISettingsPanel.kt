@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
+import com.fs.starfarer.api.ui.Fonts
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
@@ -102,7 +103,8 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             {
                 var headerElement = cardPanel.lunaElement!!.createUIElement(width - 20, requiredSpacing, false)
                 headerElement.position.inTL(0f, 0f)
-                cardPanel.uiElement.addComponent(headerElement)
+
+                //cardPanel.uiElement.addComponent(headerElement)
                 cardPanel.lunaElement!!.addUIElement(headerElement)
                 var header = headerElement.addSectionHeading("${data.defaultValue}", Alignment.MID, 0f)
                 spacing += header.position.height
@@ -111,20 +113,24 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             else if (data.fieldType == SettingsType.Text.toString())
             {
                 var descriptionElement = cardPanel.lunaElement!!.createUIElement(width - 20, requiredSpacing / 2, false)
+                cardPanel!!.position!!.setSize(cardPanel!!.position!!.width, requiredSpacing / 2)
                 descriptionElement.position.inTL(0f, 0f)
-                cardPanel.uiElement.addComponent(descriptionElement)
+                //cardPanel.uiElement.addComponent(descriptionElement)
                 cardPanel.lunaElement!!.addUIElement(descriptionElement)
 
+                var color = Misc.getBasePlayerColor()
+                color = Color(color.red, color.green, color.blue, 240)
+
                 descriptionElement.addSpacer(5f)
-                var description = descriptionElement.addPara("${data.defaultValue}",0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+                var description = descriptionElement.addPara("${data.defaultValue}",0f, color, color)
 
                 var textWidth = description.computeTextWidth(description.text)
                 var textHeight = description.computeTextHeight(description.text)
                 var ratio = textWidth / description.position.width
                 var extraSpace = textHeight * ratio
-                var increase = extraSpace
+                var increase = extraSpace * 1f
 
-                cardPanel!!.position!!.setSize(cardPanel!!.position!!.width, cardPanel!!.position!!.height  + increase)
+                cardPanel!!.position!!.setSize(cardPanel!!.position!!.width, cardPanel!!.position!!.height + increase)
                 subpanelElement!!.addSpacer(increase)
 
                 spacing += cardPanel.height
@@ -137,7 +143,7 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             {
                 var descriptionElement = cardPanel.lunaElement!!.createUIElement(width * 0.6f - 20, requiredSpacing, false)
                 descriptionElement.position.inTL(0f, 0f)
-                cardPanel.uiElement.addComponent(descriptionElement)
+                //cardPanel.uiElement.addComponent(descriptionElement)
                 cardPanel.lunaElement!!.addUIElement(descriptionElement)
 
                 descriptionElement.addSpacer(5f)
@@ -147,14 +153,14 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 descriptionElement.addSpacer(3f)
 
                 var color = Misc.getBasePlayerColor()
-                color = Color(color.red, color.green, color.blue, 230)
+                color = Color(color.red, color.green, color.blue, 235)
                 var description = descriptionElement.addPara("${data.fieldDescription}",0f, color, color)
 
                 var textWidth = description.computeTextWidth(description.text)
                 var textHeight = description.computeTextHeight(description.text)
                 var ratio = textWidth / description.position.width
                 var extraSpace = textHeight * ratio
-                var increase = extraSpace
+                var increase = extraSpace * 0.9f
 
                 cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + increase)
                 subpanelElement!!.addSpacer(increase)
@@ -162,7 +168,7 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 var interactbleElement = cardPanel.lunaElement!!.createUIElement(width * 0.4f - 20, requiredSpacing, false)
 
                 interactbleElement.position.inTL(10f + width * 0.6f, 0f)
-                cardPanel.uiElement.addComponent(interactbleElement)
+                //cardPanel.uiElement.addComponent(interactbleElement)
                 cardPanel.lunaElement!!.addUIElement(interactbleElement)
 
                 interactbleElement.addSpacer(5f)
@@ -210,8 +216,8 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         if (data.fieldType == SettingsType.Double.toString())
         {
             var value = LunaSettings.getDouble(data.modID, data.fieldID)
-            var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, 30f,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
-            textField.position!!.inTL(50f, cardPanel.height / 2 - textField.height * 0.75f)
+            var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, 50f,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
+            textField.position!!.inTL(50f, cardPanel.height / 2 - textField.height / 2)
             textField.onUpdate {
                 if (textField.value != LunaSettings.getDouble(data.modID, data.fieldID))
                 {
@@ -223,8 +229,8 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         if (data.fieldType == SettingsType.Int.toString())
         {
             var value = LunaSettings.getInt(data.modID, data.fieldID)
-            var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, 30f, data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
-            textField.position!!.inTL(50f, cardPanel.height / 2 - textField.height * 0.75f)
+            var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, 50f, data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
+            textField.position!!.inTL(50f, cardPanel.height / 2 - textField.height / 2)
             textField.onUpdate {
                 if (textField.value != LunaSettings.getInt(data.modID, data.fieldID))
                 {

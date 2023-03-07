@@ -22,7 +22,7 @@ internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean
         if (keycode != null && button == null && lunaElement != null)
         {
             var pan = lunaElement!!.createUIElement(width, height, false)
-            uiElement.addComponent(pan)
+           // uiElement.addComponent(pan)
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
 
@@ -32,7 +32,7 @@ internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean
             {
                 button!!.buttonText!!.text = "Key: None"
             }
-            button!!.borderAlpha = 0.5f
+            button!!.borderAlpha = 1f
             button!!.position!!.inTL(0f,0f)
             button!!.onClick {
                 setSelected()
@@ -51,7 +51,7 @@ internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean
                 }
                 if (keycode == 0)
                 {
-                    button!!.backgroundAlpha = 0.25f
+                    button!!.backgroundAlpha = 0.5f
                 }
                 else
                 {

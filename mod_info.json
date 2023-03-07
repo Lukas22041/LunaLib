@@ -3,7 +3,7 @@
     "name": "LunaLib",
     "author": "Lukas04",
     "utility": "true",
-    "version": "1.3.2",
+    "version": "1.3.3",
     "description": "Library including useful utilities for mod devs",
     "gameVersion": "0.95.1a-RC6",
 	"jars":["jars/LunaLib.jar", "jars/LunaLib-Kotlin.jar"],
