@@ -123,7 +123,23 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 color = Color((color.red * 0.90f).toInt(), (color.green * 0.90f).toInt(), (color.blue * 0.90f).toInt(), 255)
 
                 descriptionElement.addSpacer(5f)
-                var description = descriptionElement.addPara("${data.defaultValue}",0f, color, color)
+                var description = descriptionElement.addPara("${data.defaultValue}",0f, color, Misc.getHighlightColor())
+
+                var descText = description.text
+                var abortAttempts = 100
+                var highlights = mutableListOf("")
+                while (descText.indexOf("[") != -1 && abortAttempts > 0)
+                {
+                    abortAttempts--
+                    highlights.add(descText.substring(descText.indexOf("[") + 1, descText.indexOf("]")))
+
+                    description.text = description.text.replaceFirst("[", "")
+                    description.text = description.text.replaceFirst("]", "")
+
+                    descText = descText.replaceFirst("[", "")
+                    descText = descText.replaceFirst("]", "")
+                }
+                description.setHighlight(*highlights.toTypedArray())
 
                 /*var textWidth = description.computeTextWidth(description.text)
                 var textHeight = description.computeTextHeight(description.text)
