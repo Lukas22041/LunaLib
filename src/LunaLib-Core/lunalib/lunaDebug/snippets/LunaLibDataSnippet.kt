@@ -19,7 +19,7 @@ class LunaLibDataSnippet() : LunaSnippet {
     }
 
     override fun getDescription(): String {
-        return "Prints miscellaneous points of data from Lunalib in to the output window."
+        return "Prints miscellaneous points of data from [Lunalib] in to the output window."
     }
 
     override fun getModId(): String {

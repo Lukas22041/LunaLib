@@ -1,7 +1,7 @@
 modID,fieldID,fieldName,fieldType,defaultValue,fieldDescription,minValue,maxValue
 lunalib,luna_settingsHeader,Keybinds Header,Header,Keybinds,,,
 lunalib,luna_SettingsKeybind,Settings Keybind,Keycode,60,"Changes the Keybind for opening this Menu in the Campaign.
-Can always be opened by pressing Shift + F2, even if set to another key.",,
+Can always be opened by pressing [Shift + F2], even if set to another key.",,
 lunalib,luna_DebugKeybind,Debug Keybind,Keycode,0,Changes the Keybind used to open the Debug Menu.,,
 ,,,,,,,
 lunalib,luna_debugHeader,Debug Header,Header,Debug,,,

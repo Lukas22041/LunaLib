@@ -253,9 +253,9 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
         for (snippet in snippets)
         {
             var color = Misc.getBasePlayerColor()
-            color = Color(color.red, color.green, color.blue, 230)
+            color = Color((color.red * 0.90f).toInt(), (color.green * 0.90f).toInt(), (color.blue * 0.90f).toInt(), 255)
 
-            var requiredSpacing = 10f
+            var requiredSpacing = 0f
             var outputSpacing = 0f
             var cardPanel = LunaUIPlaceholder(true, subpanel!!.position.width - 1 , requiredSpacing, "empty", "none", subpanel!!, subpanelElement!!)
             cardPanel.position!!.inTL(0f, spacing)
@@ -269,27 +269,45 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
 
             var name = "${snippet.getName()}"
 
-            var namePara = descriptionElement.addPara("$name", 0f, Misc.getBasePlayerColor(), color)
+            var namePara = descriptionElement.addPara("$name", 0f, Misc.getBrightPlayerColor(), color)
             namePara.setHighlight("")
 
             descriptionElement.addSpacer(3f)
-
             var from = "${Global.getSettings().modManager.getModSpec(snippet.getModId()).name} • "
             var categories = "Tags: "
             snippet.tags.forEach { categories += "$it, " }
             categories = categories.substring(0, categories.length - 2)
             var descriptionText = from + categories + "\n\n" + snippet.getDescription()
 
-            var description = descriptionElement.addPara(descriptionText,0f, color, color)
+            var description = descriptionElement.addPara(descriptionText,0f, color, Misc.getHighlightColor())
 
-            var textWidth = description.computeTextWidth(description.text)
+            var descText = description.text
+            var abortAttempts = 100
+            var highlights = mutableListOf("")
+            while (descText.indexOf("[") != -1 && abortAttempts > 0)
+            {
+                abortAttempts--
+                highlights.add(descText.substring(descText.indexOf("[") + 1, descText.indexOf("]")))
+
+                description.text = description.text.replaceFirst("[", "")
+                description.text = description.text.replaceFirst("]", "")
+
+                descText = descText.replaceFirst("[", "")
+                descText = descText.replaceFirst("]", "")
+            }
+            description.setHighlight(*highlights.toTypedArray())
+
+           /* var textWidth = description.computeTextWidth(description.text)
             var textHeight = description.computeTextHeight(description.text)
             var ratio = textWidth / description.position.width
             var extraSpace = textHeight * ratio
-            var increase = extraSpace * 0.10f
+            var increase = extraSpace * 0.10f*/
 
-            cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + increase)
-            subpanelElement!!.addSpacer(increase)
+            /*cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + increase)
+            subpanelElement!!.addSpacer(increase)*/
+
+            cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + description.position.height)
+            subpanelElement!!.addSpacer(description.position.height)
 
             descriptionElement!!.addSpacer(20f)
 
@@ -299,8 +317,8 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             //cardPanel.uiElement.addComponent(interactbleElement)
             cardPanel.lunaElement!!.addUIElement(interactbleElement)
 
-            interactbleElement.addSpacer(20f)
-            outputSpacing += 20f
+            /*interactbleElement.addSpacer(20f)
+            outputSpacing += 20f*/
 
             var executeButton = LunaUIButton(true, false,250f, 30f, "", "Debug", cardPanel.lunaElement!!, interactbleElement!!)
             executeButton.buttonText!!.text = "Execute"
@@ -309,7 +327,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             outputSpacing += executeButton.position!!.height
 
             interactbleElement.addSpacer(20f)
-            outputSpacing += 20f
+            //outputSpacing += 20f
 
             var snippetBuilder = SnippetBuilder(cardPanel, cardPanel.lunaElement!!, interactbleElement)
             snippet.addParameters(snippetBuilder)
