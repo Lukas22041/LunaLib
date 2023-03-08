@@ -16,6 +16,8 @@ import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.util.TooltipHelper
 import org.lwjgl.input.Keyboard
+import org.lwjgl.opengl.GL11
+import java.awt.Color
 
 //I dont recommend anyone to read through my UI code to learn from, its equivelant to the ramblings of an insane person, and such can only be understood by the crazy person themself.
 class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
@@ -75,6 +77,22 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
     }
 
     override fun renderBelow(alphaMult: Float) {
+
+       /* var color = Color(0, 0, 10)
+
+        GL11.glPushMatrix()
+        GL11.glDisable(GL11.GL_TEXTURE_2D)
+        GL11.glEnable(GL11.GL_BLEND)
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+        GL11.glColor4f(color.red / 255f,
+            color.green / 255f,
+            color.blue / 255f,
+            color.alpha / 255f * (alphaMult * 1f))
+
+        GL11.glRectf(panel!!.position.x, panel!!.position.y , panel!!.position.x + width, panel!!.position.y + height)
+
+        GL11.glEnd()
+        GL11.glPopMatrix()*/
 
     }
 

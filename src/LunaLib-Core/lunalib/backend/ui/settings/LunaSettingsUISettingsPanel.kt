@@ -345,11 +345,11 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         var value = LunaSettings.getColor(data.modID, data.fieldID)
         var picker = LunaUIColorPicker(value, false, 200f, height,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
-       /* if (cardPanel.position!!.height  < height)
+        if (cardPanel.position!!.height  < height)
         {
             cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + picker.position!!.height)
             subpanelElement!!.addSpacer(picker.position!!.height)
-        }*/
+        }
 
 
         picker.position!!.inTL(50f, cardPanel.height / 2 - picker.height / 2)
