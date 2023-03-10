@@ -2,6 +2,8 @@ package lunalib
 
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.impl.campaign.procgen.StarGenDataSpec
+import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator
 import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.scripts.KeybindsScript
 import lunalib.backend.ui.settings.LunaSettingsLoader

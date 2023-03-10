@@ -3,6 +3,7 @@ package lunalib.backend.ui.settings
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
+import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
@@ -20,6 +21,8 @@ import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.lunaExtensions.addTransientScript
 import lunalib.lunaSettings.LunaSettings
 import java.awt.Color
+
+data class ChangedSetting(var modID: String, var fieldID: String, var data: Any?)
 
 internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 {
@@ -44,6 +47,7 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
     companion object
     {
         var unsaved = false
+        var changedSettings = ArrayList<ChangedSetting>()
         var addedElements: MutableList<LunaUIBaseElement> = ArrayList()
     }
 
@@ -244,6 +248,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         {
             var height = 30f
             var value = LunaSettings.getString(data.modID, data.fieldID).toString()
+
+            var changedData = changedSettings.filter { it.modID == data.modID }.find { it.fieldID == data.fieldID }
+            if (changedData != null) value = changedData.data as String
+
             var textField = LunaUITextField(value,0f, 0f, 200f, height,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
           /*  if (cardPanel.position!!.height < height)
@@ -269,6 +277,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         {
             var height = 50f
             var value = LunaSettings.getDouble(data.modID, data.fieldID)
+
+            var changedData = changedSettings.filter { it.modID == data.modID }.find { it.fieldID == data.fieldID }
+            if (changedData != null) value = changedData.data as Double
+
             var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, height,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
             /*if (cardPanel.position!!.height < height)
@@ -295,6 +307,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         {
             var height = 50f
             var value = LunaSettings.getInt(data.modID, data.fieldID)
+
+            var changedData = changedSettings.filter { it.modID == data.modID }.find { it.fieldID == data.fieldID }
+            if (changedData != null) value = changedData.data as Int
+
             var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, height, data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
            /* if (cardPanel.position!!.height < height)
@@ -322,7 +338,13 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
     {
         var height = 30f
         var value = LunaSettings.getBoolean(data.modID, data.fieldID)
+
+        var changedData = changedSettings.filter { it.modID == data.modID }.find { it.fieldID == data.fieldID }
+        if (changedData != null) value = changedData.data as Boolean
+
         var button = LunaUIButton(value!!, true,200f, height, data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
+
+
 
       /*  if (cardPanel.position!!.height < height)
         {
@@ -343,6 +365,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
         var height = 80f
         var value = LunaSettings.getColor(data.modID, data.fieldID)
+
+        var changedData = changedSettings.filter { it.modID == data.modID }.find { it.fieldID == data.fieldID }
+        if (changedData != null) value = changedData.data as Color
+
         var picker = LunaUIColorPicker(value, false, 200f, height,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
         if (cardPanel.position!!.height  < height)
@@ -350,7 +376,6 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + picker.position!!.height)
             subpanelElement!!.addSpacer(picker.position!!.height)
         }
-
 
         picker.position!!.inTL(50f, cardPanel.height / 2 - picker.height / 2)
         picker.onUpdate {
@@ -367,6 +392,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
     {
         var height = 30f
         var value = LunaSettings.getInt(data.modID, data.fieldID)
+
+        var changedData = changedSettings.filter { it.modID == data.modID }.find { it.fieldID == data.fieldID }
+        if (changedData != null) value = changedData.data as Int
+
         var button = LunaUIKeybindButton(value!!, false, 200f, height,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
       /*  if (cardPanel.position!!.height < height)

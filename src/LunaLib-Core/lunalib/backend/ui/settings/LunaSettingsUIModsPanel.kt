@@ -3,6 +3,7 @@ package lunalib.backend.ui.settings
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
+import com.fs.starfarer.api.impl.campaign.procgen.StarGenDataSpec
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
@@ -15,6 +16,7 @@ import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.ui.components.util.TooltipHelper
+import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsListener
 import org.lazywizard.lazylib.JSONUtils
 import org.lwjgl.input.Keyboard
@@ -78,11 +80,11 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         panelElement!!.addSpacer(3f)
 
         saveButton = LunaUIButton(false, false,width - 15, 30f,"Test", "SettingGroup", panel!!, panelElement!!).apply {
-            this.buttonText!!.text = "Save current mod"
+            this.buttonText!!.text = "Save all mods"
             this.buttonText!!.setHighlight("Save current mod")
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-            this.uiElement.addTooltipToPrevious(TooltipHelper("Saves the currently selected mods settings. If you switch to another mod without saving, the changes are lost. Glows yellow if there are unchanged saves.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
+            this.uiElement.addTooltipToPrevious(TooltipHelper("Saves the data for all mods that have changed data. If you exit the window without saving, all changes are lost.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
 
             onHover {
                 backgroundAlpha = 1f
@@ -98,13 +100,13 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                 var button = this as LunaUIButton
                 if (LunaSettingsUISettingsPanel.unsaved)
                 {
-                    button.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-                    this.buttonText!!.setHighlight("Save current mod")
+                    /*button.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+                    this.buttonText!!.setHighlight("Save current mod")*/
                 }
                 else
                 {
-                    button.buttonText!!.setHighlightColor(Misc.getBasePlayerColor())
-                    this.buttonText!!.setHighlight("Save current mod")
+                    /*button.buttonText!!.setHighlightColor(Misc.getBasePlayerColor())
+                    this.buttonText!!.setHighlight("Save current mod")*/
                 }
             }
             onClick {
@@ -183,6 +185,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
                 }
             }
+            setUnsavedData()
         }
 
         panelElement!!.addSpacer(2f)
@@ -243,6 +246,45 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         //panel.removeComponent(subpanel)
     }
 
+    fun setUnsavedData()
+    {
+        var changed = LunaSettingsUISettingsPanel.changedSettings
+        var data = LunaSettingsUISettingsPanel.addedElements
+
+        for (element in data)
+        {
+            var settingsData = element.key as LunaSettingsData
+
+            var c = changed.filter { it.modID == settingsData.modID }.find { it.fieldID == settingsData.fieldID }
+            if (c != null) changed.remove(c)
+
+            if (element is LunaUITextField<*>)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
+            }
+            if (element is LunaUITextFieldWithSlider<*>)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
+            }
+            if (element is LunaUIColorPicker)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
+
+            }
+            if (element is LunaUIButton)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
+
+            }
+            if (element is LunaUIKeybindButton)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.keycode))
+            }
+
+            //changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, ))
+        }
+    }
+
     fun createModsList()
     {
         if (subpanel != null)
@@ -290,7 +332,11 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
                 onSelect {
                     if (!saving)
+                    setUnsavedData()
                     selectedMod = mod
+                }
+
+                onClick {
                 }
             }
 
@@ -309,7 +355,6 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
     }
 
     override fun render(alphaMult: Float) {
-
     }
 
     override fun advance(amount: Float) {
@@ -319,38 +364,64 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             if (saveDelay < 1)
             {
                 if (selectedMod == null) return
+                setUnsavedData()
                 LunaSettingsUISettingsPanel.unsaved = false
-                val data = JSONUtils.loadCommonJSON("LunaSettings/${selectedMod!!.id}.json", "data/config/LunaSettingsDefault.default");
-                for (element in LunaSettingsUISettingsPanel.addedElements)
-                {
-                    var setting = (element.key as LunaSettingsData)
-                    if (element is LunaUITextField<*>)
-                    {
-                        data.put(setting.fieldID, element.value)
-                    }
-                    if (element is LunaUITextFieldWithSlider<*>)
-                    {
-                        data.put(setting.fieldID, element.value)
-                    }
-                    if (element is LunaUIColorPicker)
-                    {
-                        var color = element.value
-                        var hex = String.format("#%02x%02x%02x", color!!.red, color!!.green, color.blue);
-                        data.put(setting.fieldID, hex)
-                    }
-                    if (element is LunaUIButton)
-                    {
-                        data.put(setting.fieldID, element.value)
-                    }
-                    if (element is LunaUIKeybindButton)
-                    {
-                        data.put(setting.fieldID, element.keycode)
-                    }
-                }
-                data.save()
-                LunaSettingsLoader.Settings.put(selectedMod!!.id, data)
 
-                if (!newGame) callSettingsChangedListener(selectedMod!!)
+                var changed = LunaSettingsUISettingsPanel.changedSettings
+                var changedMods = changed.map { it.modID }.distinct()
+
+                for (mod in changedMods)
+                {
+                    val data = JSONUtils.loadCommonJSON("LunaSettings/${mod}.json", "data/config/LunaSettingsDefault.default");
+
+                    var changedFields = changed.filter { it.modID == mod }
+
+                    for (field in changedFields)
+                    {
+
+
+                        if (field.data is Color)
+                        {
+                            var color = field.data as Color
+                            var hex = String.format("#%02x%02x%02x", color!!.red, color!!.green, color.blue);
+                            data.put(field.fieldID, hex)
+                        }
+                        else
+                        {
+                            data.put(field.fieldID, field.data)
+                        }
+
+                       /* var setting = (element.key as LunaSettingsData)
+                        if (element is LunaUITextField<*>)
+                        {
+                            data.put(setting.fieldID, element.value)
+                        }
+                        if (element is LunaUITextFieldWithSlider<*>)
+                        {
+                            data.put(setting.fieldID, element.value)
+                        }
+                        if (element is LunaUIColorPicker)
+                        {
+                            var color = element.value
+                            var hex = String.format("#%02x%02x%02x", color!!.red, color!!.green, color.blue);
+                            data.put(setting.fieldID, hex)
+                        }
+                        if (element is LunaUIButton)
+                        {
+                            data.put(setting.fieldID, element.value)
+                        }
+                        if (element is LunaUIKeybindButton)
+                        {
+                            data.put(setting.fieldID, element.keycode)
+                        }*/
+                    }
+                    data.save()
+                    LunaSettingsLoader.Settings.put(mod, data)
+
+                    if (!newGame) callSettingsChangedListener(selectedMod!!)
+                }
+
+
                 saving = false
             }
         }

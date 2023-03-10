@@ -19,6 +19,7 @@ import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import java.awt.Color
 
+
 //I dont recommend anyone to read through my UI code to learn from, its equivelant to the ramblings of an insane person, and such can only be understood by the crazy person themself.
 class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
 {
@@ -129,6 +130,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
 
                 LunaSettingsUIModsPanel.selectedMod = null
                 LunaSettingsUISettingsPanel.addedElements.clear()
+                LunaSettingsUISettingsPanel.changedSettings.clear()
 
                 //Not clearing this will cause a memory leak
                 LunaUIBaseElement.selectedMap.clear()
@@ -148,6 +150,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
 
                 LunaSettingsUIModsPanel.selectedMod = null
                 LunaSettingsUISettingsPanel.addedElements.clear()
+                LunaSettingsUISettingsPanel.changedSettings.clear()
 
                 //Not clearing this will cause a memory leak
                 LunaUIBaseElement.selectedMap.clear()
