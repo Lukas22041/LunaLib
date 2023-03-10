@@ -3,6 +3,7 @@ package lunalib.backend.ui.settings
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
+import com.fs.starfarer.api.campaign.econ.MarketAPI
 import com.fs.starfarer.api.impl.campaign.procgen.StarGenDataSpec
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
@@ -126,7 +127,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             this.buttonText!!.text = "Reset to default"
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-            this.uiElement.addTooltipToPrevious(TooltipHelper("Resets every option in the currently selected mod back to it's default value. Still needs to be manualy saved.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
+            this.uiElement.addTooltipToPrevious(TooltipHelper("Resets every option in the currently selected mod (and all of its tabs) back to it's default value. Still needs to be manualy saved.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
         }
         resetButton!!.onHoverEnter {
             Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
@@ -140,6 +141,33 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         resetButton!!.borderAlpha = 0.5f
         resetButton!!.onClick {
             if (selectedMod == null) return@onClick
+
+            var changed = LunaSettingsUISettingsPanel.changedSettings
+
+            for (data in LunaSettingsLoader.SettingsData)
+            {
+                if (selectedMod!!.id == data.modID)
+                {
+                    var c = changed.filter { it.modID == data.modID }.find { it.fieldID == data.fieldID }
+                    if (c != null) changed.remove(c)
+
+                    if (data.fieldType == "Color")
+                    {
+                        var text = data.defaultValue.toString()
+                        if (!text.contains("#"))
+                        {
+                            text = "#$text"
+                        }
+                        var color = Color.decode(text.trim().uppercase())
+                        changed.add(ChangedSetting(data.modID, data.fieldID, color))
+                    }
+                    else
+                    {
+                        changed.add(ChangedSetting(data.modID, data.fieldID, data.defaultValue))
+                    }
+                }
+            }
+
             for (element in LunaSettingsUISettingsPanel.addedElements)
             {
                 if (element is LunaUITextField<*>)
@@ -193,9 +221,9 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         var searchField = LunaUITextField("",0f, 0f, width - 15, 30f,"Empty", "Search", panel, panelElement!!).apply {
             onUpdate {
                 var field = this as LunaUITextField<String>
-                if (field.paragraph != null && isSelected() && currentSearchText != field.paragraph!!.text.replace("_", ""))
+                if (field.paragraph != null && isSelected() && currentSearchText != field.paragraph!!.text)
                 {
-                    currentSearchText = field!!.paragraph!!.text.replace("_", "")
+                    currentSearchText = field!!.paragraph!!.text
                     createModsList()
                 }
             }
@@ -310,10 +338,16 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                 this.buttonText!!.setHighlight("${mod.name.trimAfter(40)}")
                 this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
                 //this.position!!.inTL(0f,0f)
-                this.backgroundAlpha = 0.5f
-                this.borderAlpha = 0.5f
 
-                if (selectedMod == mod) this.setSelected()
+
+                if (selectedMod == mod) {
+                    this.backgroundAlpha = 1f
+                    this.setSelected()
+                }
+                else {
+                    this.backgroundAlpha = 0.5f
+                }
+                this.borderAlpha = 0.5f
 
                 onUpdate {
                     if (this.isSelected())
@@ -378,8 +412,6 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
                     for (field in changedFields)
                     {
-
-
                         if (field.data is Color)
                         {
                             var color = field.data as Color

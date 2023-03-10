@@ -283,7 +283,7 @@ internal class LunaUITextField<T>(var value: T, var minValue: Float, var maxValu
                         Global.getSoundPlayer().playUISound("ui_typer_buzz", 1f, 1f)
                         continue
                     }
-                    cooldown = 2f
+                    cooldown = 1f
                     var char = event.eventChar
                     if (char != '&' && char != '%')
                     {

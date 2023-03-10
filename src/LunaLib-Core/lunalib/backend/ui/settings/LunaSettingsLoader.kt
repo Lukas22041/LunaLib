@@ -14,7 +14,7 @@ data class LunaSettingsData(
     val fieldDescription: String,
     val defaultValue: Any,
     val minValue: Double,
-    val maxValue: Double)
+    val maxValue: Double, val tab: String)
 
 /**
 Class that both loads and holds data for LunaSettings. Can not be used outside LunaLib.
@@ -57,6 +57,11 @@ internal object LunaSettingsLoader
             } catch (e: Throwable) {}
             try {
                 description = rows.getString("fieldDescription")
+            } catch (e: Throwable) {}
+
+            var tab = ""
+            try {
+                tab = rows.getString("tab")
             } catch (e: Throwable) {}
 
             var default: Any = rows.getString("defaultValue")
@@ -103,7 +108,7 @@ internal object LunaSettingsLoader
                 }
             }
 
-            SettingsData.add(LunaSettingsData(modID, id, name, type, description, default, minValue, maxValue))
+            SettingsData.add(LunaSettingsData(modID, id, name, type, description, default, minValue, maxValue, tab))
             log.debug("LunaSettings: Loaded default settings data: $id, from $modID")
         }
     }

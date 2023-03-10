@@ -47,6 +47,12 @@ internal class LunaUIButton(var value: Boolean, var regularButton: Boolean, widt
             baseColor = Misc.getBasePlayerColor()
             borderColor = Misc.getDarkPlayerColor()
         }
+
+        if (regularButton)
+        {
+            if (!value) backgroundColor = Misc.getDarkPlayerColor().darker()
+            else backgroundColor = Misc.getDarkPlayerColor()
+        }
     }
 
     override fun positionChanged(position: PositionAPI) {

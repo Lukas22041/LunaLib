@@ -1,23 +1,23 @@
-modID,fieldID,fieldName,fieldType,defaultValue,fieldDescription,minValue,maxValue
-lunalib,luna_settingsHeader,Keybinds Header,Header,Keybinds,,,
+modID,fieldID,fieldName,fieldType,defaultValue,fieldDescription,minValue,maxValue,tab
+lunalib,luna_settingsHeader,Keybinds Header,Header,Keybinds,,,,
 lunalib,luna_SettingsKeybind,Settings Keybind,Keycode,60,"Changes the Keybind for opening this Menu in the Campaign.
-Can always be opened by pressing [Shift + F2], even if set to another key.",,
-lunalib,luna_DebugKeybind,Debug Keybind,Keycode,0,Changes the Keybind used to open the Debug Menu.,,
-,,,,,,,
-lunalib,luna_debugHeader,Debug Header,Header,Debug,,,
-lunalib,luna_DebugEntries,Debug Menu Entries,Int,25,Controls how many entries can show up in the Debug Menu's Search Screens. Higher quantities will lead to lag.,20,200
-lunalib,luna_DevmodeKeybind,Devmode Keybind,Keycode,0,Changes the keybind for the devmode toggle.,,
-,,,,,,,
-lunalib,luna_exampleHeader,Example Header,Header,Example Section,,,
+Can always be opened by pressing [Shift + F2], even if set to another key.",,,
+lunalib,luna_DebugKeybind,Debug Keybind,Keycode,16,Changes the Keybind used to open the Debug Menu.,,,
+,,,,,,,,
+lunalib,luna_debugHeader,Debug Header,Header,Debug,,,,
+lunalib,luna_DebugEntries,Debug Menu Entries,Int,40,Controls how many entries can show up in the Debug Menu's Search Screens. Higher quantities will lead to lag.,20,200,
+lunalib,luna_DevmodeKeybind,Devmode Keybind,Keycode,0,Changes the keybind for the devmode toggle.,,,
+,,,,,,,,
+lunalib,luna_exampleHeader,Example Header,Header,Example Section,,,,Examples
 lunalib,luna_exampleText,Example Text Field,Text,"Any value below is merely an example for Modders. 
 None of the Settings here do anything.
-",,,
-lunalib,luna_exampleString,Example String,String,some string,"Strings will accept any characters put in, with no filtering.",,
-lunalib,luna_exampleBoolean,Example Boolean,Boolean,true,A button that switches between true and false.,,
-lunalib,luna_exampleInt,Example Int,Int,100,"Int Fields will only accept whole Numbers, and block any other character from being entered.",-50,200
-lunalib,luna_exampleDouble,Example Double,Double,10.2,Doubles allow only numbers and a single decimal dot (.) ,0,20
+",,,,Examples
+lunalib,luna_exampleString,Example String,String,some string,"Strings will accept any characters put in, with no filtering.",,,Examples
+lunalib,luna_exampleBoolean,Example Boolean,Boolean,true,A button that switches between true and false.,,,Examples
+lunalib,luna_exampleInt,Example Int,Int,100,"Int Fields will only accept whole Numbers, and block any other character from being entered.",-50,200,Examples
+lunalib,luna_exampleDouble,Example Double,Double,10.2,Doubles allow only numbers and a single decimal dot (.) ,0,20,Examples
 lunalib,luna_exampleKeybind,Example Keybind,Keycode,0,"Lets users register a keybind. The saved keycodes are the same as used by org.lwjgl.input.Keyboard and Starsectors InputEventAPI.
 
-Make sure to set a condition for your input checks to not accept numbers of 0, as lwjgl sets both unbound & unknown characters to that value.",,
+Make sure to set a condition for your input checks to not accept numbers of 0, as lwjgl sets both unbound & unknown characters to that value.",,,Examples
 lunalib,luna_newExampleColor,Example Color,Color,#f22e6e,"Creates a color picker, giving both a hex text field and three sliders for the HSV color selection.
-",,
+",,,Examples

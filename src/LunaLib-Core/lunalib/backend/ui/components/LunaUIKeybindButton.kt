@@ -65,11 +65,27 @@ internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean
             button!!.onNotHover {
                 button!!.backgroundColor = Misc.getDarkPlayerColor()
             }
-
         }
 
         if (button != null)
         {
+            if (button!!.isSelected())
+            {
+                button!!.borderColor = Misc.getDarkPlayerColor().brighter()
+            }
+            else
+            {
+                button!!.borderColor = Misc.getDarkPlayerColor()
+            }
+            if (keycode == 0)
+            {
+                button!!.backgroundAlpha = 0.5f
+            }
+            else
+            {
+                button!!.backgroundAlpha = 1f
+            }
+
             button!!.buttonText!!.position.inTL(width / 2 - button!!.buttonText!!.computeTextWidth(button!!.buttonText!!.text) / 2, height / 2 - button!!.buttonText!!.computeTextHeight(button!!.buttonText!!.text) / 2)
         }
     }

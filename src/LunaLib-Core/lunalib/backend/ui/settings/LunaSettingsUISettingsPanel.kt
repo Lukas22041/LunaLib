@@ -3,6 +3,7 @@ package lunalib.backend.ui.settings
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
+import com.fs.starfarer.api.campaign.VisualPanelAPI
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Alignment
@@ -36,6 +37,9 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
     var panel: CustomPanelAPI? = null
     var panelElement: TooltipMakerAPI? = null
 
+    var tabspanel: CustomPanelAPI? = null
+    var tabspanelElement: TooltipMakerAPI? = null
+
     var subpanel: CustomPanelAPI? = null
     var subpanelElement: TooltipMakerAPI? = null
 
@@ -43,6 +47,9 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
     var height = 0f
 
     var selectedMod: ModSpecAPI? = null
+
+    var selectedTab = ""
+    var currentTabSpacing = 0f
 
     companion object
     {
@@ -63,7 +70,140 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         panelElement = panel.createUIElement(width, height, false)
         panelElement!!.position.inTL(0f, 0f)
         panel.addUIElement(panelElement)
+    }
 
+    fun recreateTabs()
+    {
+        if (selectedMod == null) return
+        if (tabspanel != null)
+        {
+            panel!!.removeComponent(tabspanel)
+        }
+
+        currentTabSpacing = 0f
+
+        tabspanel = panel!!.createCustomPanel(width, height, null)
+        tabspanel!!.position.inTL(0f, 0f)
+        panel!!.addComponent(tabspanel)
+        tabspanelElement = tabspanel!!.createUIElement(width, height , true)
+        tabspanel!!.addUIElement(tabspanelElement)
+
+        tabspanelElement!!.position.inTL(10f, 3f)
+        tabspanelElement!!.addSpacer(3f)
+
+        var tabs = LunaSettingsLoader.SettingsData.filter { it.modID == selectedMod!!.id }.map { it.tab }.distinct()
+
+        var rows: MutableMap<Int, MutableList<String>> = HashMap()
+        var rowCount = 0
+
+        for (tab in ArrayList(tabs))
+        {
+            var row = rows.get(rowCount)
+            if (row == null)
+            {
+                rows.put(rowCount, ArrayList())
+                row = rows.get(rowCount)
+            }
+
+            rows.put(rowCount, row!!)
+
+            if (row!!.size >= 2)
+            {
+                rowCount++
+            }
+
+            row!!.add(tab)
+        }
+
+        var test = rows
+
+        var tabHeight = 30f
+        var tabX = 0f
+        var tabY = 0f
+        var first = true
+
+        for (row in rows)
+        {
+            tabX = 0f
+            var tabs = row.value
+
+            for (tab in tabs)
+            {
+                var gapSpacing = 0f
+                if (row.value.size == 2) gapSpacing += 2
+                if (row.value.size == 3) gapSpacing += 2
+
+                var name = tab
+                if (name == "") name = "General"
+
+                var space = ((tabspanelElement!!.position.width - 15f) / row.value.size) - gapSpacing
+                var button = LunaUIButton(false, false, space, tabHeight, "key", "TabsButtons", tabspanel!!, tabspanelElement!!).apply {
+                    this.buttonText!!.text = name
+                    this.buttonText!!.position.inTL(this.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.height / 2 - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
+                    this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+                    //this.position!!.inTL(0f,0f)
+
+                    if (value) this.backgroundAlpha = 0.75f
+                    else backgroundAlpha = 0.5f
+                    this.borderAlpha = 0.5f
+
+                    onHoverEnter {
+                        Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+                    }
+                }
+
+                if (first)
+                {
+                    button.setSelected()
+                    selectedTab = tab
+                    first = false
+                    button.backgroundAlpha = 0.75f
+                }
+
+                button.position!!.inTL(tabX, tabY)
+
+                tabX += space + gapSpacing * 1.5f
+                button.onClick {
+                    if (selectedTab != tab)
+                    {
+                        setUnsavedData()
+                        selectedTab = tab
+                        setSelected()
+                        recreatePanel()
+                    }
+                }
+
+                button.onUpdate {
+                    if (isSelected())
+                    {
+                        if (isHovering)
+                        {
+                            backgroundAlpha = 0.9f
+                        }
+                        else
+                        {
+                            backgroundAlpha = 0.75f
+                        }
+                    }
+                    else
+                    {
+                        if (isHovering)
+                        {
+                            backgroundAlpha = 0.6f
+                        }
+                        else
+                        {
+                            backgroundAlpha = 0.5f
+                        }
+                    }
+                }
+
+            }
+
+            tabY += tabHeight + 2f
+
+        }
+        currentTabSpacing += tabY
     }
 
     fun recreatePanel()
@@ -75,10 +215,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         {
             panel!!.removeComponent(subpanel)
         }
-        subpanel = panel!!.createCustomPanel(width, height, null)
-        subpanel!!.position.inTL(0f, 0f)
+        subpanel = panel!!.createCustomPanel(width, height - currentTabSpacing, null)
+        subpanel!!.position.inTL(0f, 0f + currentTabSpacing)
         panel!!.addComponent(subpanel)
-        subpanelElement = subpanel!!.createUIElement(width, height , true)
+        subpanelElement = subpanel!!.createUIElement(width, height - currentTabSpacing , true)
 
         subpanelElement!!.position.inTL(0f, 0f)
         subpanelElement!!.addSpacer(2f)
@@ -88,6 +228,7 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         var spacing = 10f
         for (data in LunaSettingsLoader.SettingsData) {
             if (data.modID != selectedMod!!.id) continue
+            if (data.tab != selectedTab) continue
 
             var requiredSpacing = 30f
             var renderBackground = true
@@ -415,12 +556,53 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         return button
     }
 
+    fun setUnsavedData()
+    {
+        var changed = LunaSettingsUISettingsPanel.changedSettings
+        var data = LunaSettingsUISettingsPanel.addedElements
+
+        for (element in data)
+        {
+            var settingsData = element.key as LunaSettingsData
+
+            var c = changed.filter { it.modID == settingsData.modID }.find { it.fieldID == settingsData.fieldID }
+            if (c != null) changed.remove(c)
+
+            if (element is LunaUITextField<*>)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
+            }
+            if (element is LunaUITextFieldWithSlider<*>)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
+            }
+            if (element is LunaUIColorPicker)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
+
+            }
+            if (element is LunaUIButton)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
+
+            }
+            if (element is LunaUIKeybindButton)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.keycode))
+            }
+
+            //changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, ))
+        }
+    }
+
     override fun advance(amount: Float) {
         if (LunaSettingsUIModsPanel.selectedMod != null && LunaSettingsUIModsPanel.selectedMod != selectedMod)
         {
             selectedMod = LunaSettingsUIModsPanel.selectedMod
+            recreateTabs()
             recreatePanel()
         }
+
     }
 
     override fun positionChanged(position: PositionAPI?) {

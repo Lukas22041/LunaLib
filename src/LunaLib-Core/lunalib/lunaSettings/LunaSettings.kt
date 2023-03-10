@@ -2,6 +2,9 @@ package lunalib.lunaSettings
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.SettingsAPI
+import com.fs.starfarer.loading.specs.BaseWeaponSpec
+import com.fs.starfarer.util.ReplaceableSprite
+import javafx.scene.control.Tab
 import lunalib.backend.ui.settings.LunaSettingsData
 import lunalib.backend.ui.settings.LunaSettingsLoader
 import org.apache.log4j.Level
@@ -244,70 +247,119 @@ object LunaSettings
             LunaSettingsLoader.loadSettings()
         }
 
+        @JvmStatic
+        fun addHeader(ModID: String, FieldID: String, Title: String, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, "", "Header", "", Title, 0.0, 0.0, Tab))
+        }
+
+        @JvmStatic
+        fun addText(ModID: String, FieldID: String, Text: String, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, "", "Text", "", Text, 0.0, 0.0, Tab))
+        }
+
+        @JvmStatic
+        fun addInt(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Int, MinValue: Int, MaxValue: Int, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Int", Tooltip, DefaultValue, MinValue.toDouble(), MaxValue.toDouble(), Tab))
+        }
+
+        @JvmStatic
+        fun addDouble(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Double, MinValue: Double, MaxValue: Double, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Double", Tooltip, DefaultValue, MinValue, MaxValue, Tab))
+        }
+
+        @JvmStatic
+        fun addString(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: String, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "String", Tooltip, DefaultValue, 0.0, 0.0, Tab))
+        }
+
+        @JvmStatic
+        fun addBoolean(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Boolean, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Boolean", Tooltip, DefaultValue, 0.0, 0.0, Tab))
+        }
+
+        @JvmStatic
+        fun addEnum(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: List<String>, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Enum", Tooltip, DefaultValue, 0.0, 0.0, Tab))
+        }
+
+        @JvmStatic
+        fun addKeybind(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Int, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Keycode", Tooltip, DefaultValue, 0.0, 0.0, Tab))
+        }
+
+        @JvmStatic
+        fun addColor(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Color, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            var text = String.format("#%02x%02x%02x", DefaultValue!!.red, DefaultValue!!.green, DefaultValue!!.blue);
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Color", Tooltip, text, 0.0, 0.0, Tab))
+        }
+
 
 
         @JvmStatic
         fun addHeader(ModID: String, FieldID: String, Title: String)
         {
-            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, "", "Header", "", Title, 0.0, 0.0))
+            addHeader(ModID, FieldID, Title, "")
         }
 
         @JvmStatic
         fun addText(ModID: String, FieldID: String, Text: String)
         {
-            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, "", "Text", "", Text, 0.0, 0.0))
+            addText(ModID, FieldID, Text, "")
         }
 
         @JvmStatic
         fun addInt(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Int, MinValue: Int, MaxValue: Int)
         {
-            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Int", Tooltip, DefaultValue, MinValue.toDouble(), MaxValue.toDouble()))
+            addInt(ModID, FieldID, FieldName, Tooltip, DefaultValue, MinValue, MaxValue, "")
         }
 
         @JvmStatic
         fun addDouble(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Double, MinValue: Double, MaxValue: Double)
         {
-            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Double", Tooltip, DefaultValue, MinValue, MaxValue))
+            addDouble(ModID, FieldID, FieldName, Tooltip, DefaultValue, MinValue, MaxValue, "")
+
         }
 
         @JvmStatic
         fun addString(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: String)
         {
-            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "String", Tooltip, DefaultValue, 0.0, 0.0))
+            addString(ModID, FieldID, FieldName, Tooltip, DefaultValue, "")
         }
 
         @JvmStatic
         fun addBoolean(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Boolean)
         {
-            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Boolean", Tooltip, DefaultValue, 0.0, 0.0))
-        }
-
-        @JvmStatic
-        fun addEnum(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: List<String>)
-        {
-            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Enum", Tooltip, DefaultValue, 0.0, 0.0))
+            addBoolean(ModID, FieldID, FieldName, Tooltip, DefaultValue, "")
         }
 
         @JvmStatic
         fun addKeybind(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Int)
         {
-            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Keycode", Tooltip, DefaultValue, 0.0, 0.0))
+            addKeybind(ModID, FieldID, FieldName, Tooltip, DefaultValue, "")
         }
 
         @JvmStatic
         fun addColor(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Color)
         {
-            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            var text = String.format("#%02x%02x%02x", DefaultValue!!.red, DefaultValue!!.green, DefaultValue!!.blue);
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Color", Tooltip, text, 0.0, 0.0))
+            addColor(ModID, FieldID, FieldName, Tooltip, DefaultValue, "")
         }
     }
 
