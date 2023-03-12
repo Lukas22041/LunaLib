@@ -82,7 +82,7 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
     }
 
     private fun <T : Number> addNumberParameter(name: String, key: String, defaultValue: T, minValue: T, maxValue: T) {
-        var textFieldAndSlider = LunaUITextFieldWithSlider(defaultValue, minValue.toFloat(), maxValue.toFloat(), 250f, 30f,key, "Debug", panel, parameterCard!!)
+        var textFieldAndSlider = LunaUITextFieldWithSlider(defaultValue, minValue.toFloat(), maxValue.toFloat(), 250f, 60f,key, "Debug", panel, parameterCard!!)
         textFieldAndSlider.position!!.setLocation(0f, 0f)
         textFieldAndSlider.textField!!.paragraph!!.text = "$defaultValue"
         textFieldAndSlider.value = defaultValue
@@ -99,7 +99,7 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
 
         pan.position.inTL(0f, 0f)
         var para = pan.addPara(name, 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
-        para.position.inTL(textFieldAndSlider.position!!.width  - para.computeTextWidth(para.text) - 5, textFieldAndSlider.position!!.height / 2 - para.computeTextHeight(para.text) / 2)
+        para.position.inTL(textFieldAndSlider.position!!.width  - para.computeTextWidth(para.text) - 5, textFieldAndSlider.textField!!.position!!.height / 2 - para.computeTextHeight(para.text) / 2)
 
         textFieldAndSlider.onHoverEnter {
             Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
@@ -124,9 +124,9 @@ class SnippetBuilder(private var cardPanel: LunaUIPlaceholder, private var panel
                 textFieldAndSlider.textField!!.backgroundAlpha = 0.25f
             }
         }
-        parameterCard.addSpacer(5f + textFieldAndSlider.position!!.height * 0.65f)
+        parameterCard.addSpacer(7f)
         //cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textFieldAndSlider.position!!.height * 1.35f)
-        totalAddedSpacing += textFieldAndSlider.position!!.height * 1.35f + 5
+        totalAddedSpacing += textFieldAndSlider.position!!.height + 7f
         elements.add(textFieldAndSlider)
     }
 

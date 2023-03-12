@@ -19,6 +19,7 @@ import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.ui.components.util.TooltipHelper
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsListener
+import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.lazywizard.lazylib.JSONUtils
 import org.lwjgl.input.Keyboard
 import java.awt.Color
@@ -82,7 +83,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
         saveButton = LunaUIButton(false, false,width - 15, 30f,"Test", "SettingGroup", panel!!, panelElement!!).apply {
             this.buttonText!!.text = "Save all mods"
-            this.buttonText!!.setHighlight("Save current mod")
+            this.buttonText!!.setHighlight("Save all mods")
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
             this.uiElement.addTooltipToPrevious(TooltipHelper("Saves the data for all mods that have changed data. If you exit the window without saving, all changes are lost.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
@@ -101,13 +102,13 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                 var button = this as LunaUIButton
                 if (LunaSettingsUISettingsPanel.unsaved)
                 {
-                    /*button.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-                    this.buttonText!!.setHighlight("Save current mod")*/
+                    button.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+                    this.buttonText!!.setHighlight("Save all mods")
                 }
                 else
                 {
-                    /*button.buttonText!!.setHighlightColor(Misc.getBasePlayerColor())
-                    this.buttonText!!.setHighlight("Save current mod")*/
+                    button.buttonText!!.setHighlightColor(Misc.getBasePlayerColor())
+                    this.buttonText!!.setHighlight("Save all mods")
                 }
             }
             onClick {
@@ -142,6 +143,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         resetButton!!.onClick {
             if (selectedMod == null) return@onClick
 
+            LunaSettingsUISettingsPanel.unsaved = true
             var changed = LunaSettingsUISettingsPanel.changedSettings
 
             for (data in LunaSettingsLoader.SettingsData)
@@ -332,7 +334,15 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
         for (mod in mods)
         {
-            if (currentSearchText != "" && !mod.name.lowercase().contains(currentSearchText.lowercase()) && !mod.id.lowercase().contains(currentSearchText.lowercase())) continue
+            var search = currentSearchText.lowercase()
+            var result = FuzzySearch.extractOne(search, listOf(mod.id.lowercase(), mod.name.lowercase()))
+
+            var failed = false
+
+            if (currentSearchText != "" && !mod.name.lowercase().contains(currentSearchText.lowercase()) && !mod.id.lowercase().contains(currentSearchText.lowercase())) failed = true
+            if (search != "" && result.score > 50) failed = false
+            if (failed) continue
+
             var button = LunaUIButton(false, false,width - 15, 60f, mod, "ModsButtons", subpanel!!, subpanelElement!!).apply {
                 this.buttonText!!.text = "${mod.name.trimAfter(40)}\nVersion: ${mod.version.trimAfter(20)}"
                 this.buttonText!!.setHighlight("${mod.name.trimAfter(40)}")

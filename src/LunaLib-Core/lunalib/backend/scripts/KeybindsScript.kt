@@ -13,7 +13,7 @@ internal class KeybindsScript :  EveryFrameScript
 {
 
     var keyPressed = false
-    var interval = IntervalUtil(1f, 1f)
+    var interval = IntervalUtil(0.8f, 0.8f)
 
 
     init {

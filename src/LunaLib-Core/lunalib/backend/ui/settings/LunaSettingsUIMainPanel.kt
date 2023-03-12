@@ -131,6 +131,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
                 LunaSettingsUIModsPanel.selectedMod = null
                 LunaSettingsUISettingsPanel.addedElements.clear()
                 LunaSettingsUISettingsPanel.changedSettings.clear()
+                LunaSettingsUISettingsPanel.unsaved = false
 
                 //Not clearing this will cause a memory leak
                 LunaUIBaseElement.selectedMap.clear()
@@ -151,6 +152,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
                 LunaSettingsUIModsPanel.selectedMod = null
                 LunaSettingsUISettingsPanel.addedElements.clear()
                 LunaSettingsUISettingsPanel.changedSettings.clear()
+                LunaSettingsUISettingsPanel.unsaved = false
 
                 //Not clearing this will cause a memory leak
                 LunaUIBaseElement.selectedMap.clear()

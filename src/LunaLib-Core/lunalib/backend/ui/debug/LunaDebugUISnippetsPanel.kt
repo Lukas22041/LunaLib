@@ -13,6 +13,7 @@ import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.ui.components.util.TooltipHelper
 import lunalib.lunaDebug.*
+import me.xdrop.fuzzywuzzy.FuzzySearch
 import java.awt.Color
 
 class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
@@ -419,7 +420,12 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
 
                 if (activeFilter != "All" && !snippet.getTags().contains(activeFilter)) continue
 
-                if (!snippet.getName().lowercase().contains(text) && !mod.id.lowercase().contains(text) && !mod.name.lowercase().contains(text)) continue
+                var result = FuzzySearch.extractOne(text, listOf(snippet.name.lowercase(), mod.id.lowercase(), mod.name.lowercase()))
+                var failed = false
+                if (!snippet.getName().lowercase().contains(text) && !mod.id.lowercase().contains(text) && !mod.name.lowercase().contains(text)) failed = true
+                if (result.score > 70) failed = false
+                if (failed) continue
+
                 snippets.add(snippet)
             }
             catch (e: Throwable)

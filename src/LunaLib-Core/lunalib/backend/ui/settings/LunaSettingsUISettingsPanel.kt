@@ -15,9 +15,8 @@ import com.fs.starfarer.api.util.Misc
 import lunalib.backend.ui.components.LunaUIColorPicker
 import lunalib.backend.ui.components.LunaUIKeybindButton
 import lunalib.backend.ui.components.LunaUITextFieldWithSlider
-import lunalib.backend.ui.components.base.LunaUIBaseElement
+import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
-import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.lunaExtensions.addTransientScript
 import lunalib.lunaSettings.LunaSettings
@@ -209,7 +208,7 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
     fun recreatePanel()
     {
         addedElements.clear()
-        unsaved = false
+        //unsaved = false
         if (selectedMod == null) return
         if (subpanel != null)
         {
@@ -485,6 +484,9 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
         var button = LunaUIButton(value!!, true,200f, height, data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
+        /*var com = Global.getSettings().getCommoditySpec("supplies")
+
+        var test = LunaUISprite(com.iconName, 80f, 80f, data, "Group", cardPanel.lunaElement!!, interactbleElement)*/
 
 
       /*  if (cardPanel.position!!.height < height)

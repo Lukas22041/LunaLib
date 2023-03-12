@@ -14,8 +14,8 @@ import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.backend.scripts.LoadedSettings
+import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
-import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUISlider
 import lunalib.backend.ui.components.base.LunaUITextField
 import java.awt.Color
@@ -180,11 +180,11 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
         var spacing = 10f
         for (item in items)
         {
-            var requiredSpacing = 100f
+            var requiredSpacing = 0f
             var cardPanel = LunaUIPlaceholder(true, subpanel!!.position.width - 75, requiredSpacing, "empty", "none", subpanel!!, subpanelElement!!)
             cardPanel.position!!.inTL(10f, spacing)
 
-            var descriptionElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.6f - 20, requiredSpacing, false)
+            var descriptionElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.5f - 20, requiredSpacing, false)
             descriptionElement.position.inTL(0f, 0f)
            // cardPanel.uiElement.addComponent(descriptionElement)
             cardPanel.lunaElement!!.addUIElement(descriptionElement)
@@ -200,8 +200,19 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
                 is CommoditySpecAPI -> "${item.name} (Commodity)"
                 else -> ""
             }
+            var spriteName = when (item)
+            {
+                is ShipHullSpecAPI -> "${item.spriteName}"
+                is WeaponSpecAPI -> "${item.turretSpriteName}"
+                is HullModSpecAPI -> "${item.spriteName}"
+                is FighterWingSpecAPI -> Global.getSettings().getVariant(item.variantId)?.hullSpec?.spriteName ?: ""
+                is CommoditySpecAPI -> "${item.iconName}"
+                else -> ""
+            }
 
             var namePara = descriptionElement.addPara("$name", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+
+
 
             descriptionElement.addSpacer(3f)
 
@@ -248,13 +259,23 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
             cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + increase)
             subpanelElement!!.addSpacer(increase)
 
-            var interactbleElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.4f - 20, requiredSpacing, false)
+            var interactbleElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.5f - 20, requiredSpacing, false)
 
-            interactbleElement.position.inTL(10f + subpanel!!.position.width * 0.6f, 0f)
+            interactbleElement.position.inTL(subpanel!!.position.width * 0.5f, 0f)
            // cardPanel.uiElement.addComponent(interactbleElement)
             cardPanel.lunaElement!!.addUIElement(interactbleElement)
 
             interactbleElement.addSpacer(5f)
+
+            var space = 10f
+            if (spriteName != "")
+            {
+                var sprite = LunaUISprite(spriteName, 120f, 140f, 50f, 50f, 300f, 600f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
+
+                sprite.position!!.inTL(interactbleElement.position!!.width / 2 - sprite.textureWidth / 2, space)
+
+                space += sprite.textureHeight + 10f
+            }
 
 
             var max = when (item) {
@@ -266,17 +287,19 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
                 else -> 10f
             }
 
-            var textField = LunaUISlider(1, 1f,  max, 200f, 20f, "none", "Debug", cardPanel.lunaElement!!, interactbleElement)
-            textField.position!!.inTL(0f, cardPanel.height / 2 - textField.height / 2 - 15f)
+            var slider = LunaUISlider(1, 1f,  max, 200f, 20f, "none", "Debug", cardPanel.lunaElement!!, interactbleElement)
+            slider.position!!.inTL(interactbleElement.position!!.width / 2 - slider.position!!.width / 2, space)
 
             var button = LunaUIButton(true, false,200f, 30f, item, "Debug", cardPanel.lunaElement!!, interactbleElement)
-            button.buttonText!!.text = "Cheat in ${textField.value}"
+            button.buttonText!!.text = "Cheat in ${slider.value}"
             button.buttonText!!.position.inTL(button.buttonText!!.position.width / 2 - button.buttonText!!.computeTextWidth(button.buttonText!!.text) / 2, button.buttonText!!.position.height - button.buttonText!!.computeTextHeight(button.buttonText!!.text) / 2)
 
+            space += 50f
+
             button.onUpdate {
-                if (button.buttonText!!.text != "Cheat in ${textField.value}")
+                if (button.buttonText!!.text != "Cheat in ${slider.value}")
                 {
-                    button.buttonText!!.text = "Cheat in ${textField.value}"
+                    button.buttonText!!.text = "Cheat in ${slider.value}"
                     button.buttonText!!.position.inTL(button.buttonText!!.position.width / 2 - button.buttonText!!.computeTextWidth(button.buttonText!!.text) / 2, button.buttonText!!.position.height - button.buttonText!!.computeTextHeight(button.buttonText!!.text) / 2)
                 }
             }
@@ -285,32 +308,37 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
                 when (item)
                 {
                     is ShipHullSpecAPI -> {
-                        for (i in 0 until textField.value)
+                        for (i in 0 until slider.value)
                         {
                             var member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, item.baseHullId + "_Hull");
                             Global.getSector().playerFleet.fleetData.addFleetMember(member)
                         }
                     }
                     is WeaponSpecAPI -> {
-                        Global.getSector().playerFleet.cargo.addWeapons(item.weaponId, textField.value)
+                        Global.getSector().playerFleet.cargo.addWeapons(item.weaponId, slider.value)
                     }
                     is HullModSpecAPI -> {
-                        Global.getSector().playerFleet.cargo.addHullmods(item.id, textField.value)
+                        Global.getSector().playerFleet.cargo.addHullmods(item.id, slider.value)
                     }
                     is FighterWingSpecAPI -> {
-                        Global.getSector().playerFleet.cargo.addFighters(item.id, textField.value)
+                        Global.getSector().playerFleet.cargo.addFighters(item.id, slider.value)
                     }
                     is CommoditySpecAPI -> {
-                        Global.getSector().playerFleet.cargo.addCommodity(item.id, textField.value.toFloat())
+                        Global.getSector().playerFleet.cargo.addCommodity(item.id, slider.value.toFloat())
                     }
                 }
             }
 
-            spacing += cardPanel.height
 
             //to create a small gap
-            spacing += 5f
             subpanelElement!!.addSpacer(5f)
+            cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + space)
+
+            spacing += 5f
+            spacing += cardPanel.height
+
+
+            subpanelElement!!.addSpacer(space)
 
         }
         subpanelElement!!.addSpacer(20f)
@@ -330,6 +358,7 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
             run search@ {
                 Global.getSettings().allShipHullSpecs.forEach {
                     if (it.hullSize == ShipAPI.HullSize.FIGHTER) return@forEach
+                    if (it.isDHull) return@forEach
                     if (it.hullName.lowercase().contains(searchInput) || it.hullId.lowercase().contains(searchInput)) { items.add(it); capCount++ }
                     if (capCount > LoadedSettings.debugEntryCap!!) return@search
                 }

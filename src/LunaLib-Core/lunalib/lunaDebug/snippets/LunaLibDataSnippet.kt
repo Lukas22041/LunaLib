@@ -13,7 +13,7 @@ import lunalib.lunaDebug.LunaSnippet.SnippetTags
 import lunalib.lunaDebug.SnippetBuilder
 import lunalib.lunaSettings.LunaSettings
 
-class LunaLibDataSnippet() : LunaSnippet {
+class LunaLibDataSnippet() : LunaSnippet() {
     override fun getName(): String {
         return "Print LunaLib data"
     }

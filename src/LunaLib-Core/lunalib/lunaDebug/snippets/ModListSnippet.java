@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ModListSnippet implements LunaSnippet {
+public class ModListSnippet extends LunaSnippet {
 
     //The name displayed on top of the Snippet.
     @Override

@@ -329,6 +329,8 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
 
         var searchInput = searchText.lowercase()
 
+
+        //cant use fuzzy string matching, as this goes through way to many entities and starts becoming laggy quickly.
         if (filters.get("Starsystems")!!)
         {
             run search@ {

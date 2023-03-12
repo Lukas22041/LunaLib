@@ -1,5 +1,7 @@
 package lunalib.lunaDebug
 
+import com.fs.starfarer.api.Global
+
 
 object LunaDebug
 {
