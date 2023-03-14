@@ -337,7 +337,6 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
             spacing += 5f
             spacing += cardPanel.height
 
-
             subpanelElement!!.addSpacer(space)
 
         }

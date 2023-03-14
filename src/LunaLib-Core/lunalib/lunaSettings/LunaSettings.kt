@@ -20,11 +20,19 @@ Class for getting LunaSettings stored data.
 object LunaSettings
 {
 
+   // internal var listeners: MutableList<LunaSettingsListener> = ArrayList()
     private val log = Global.getLogger(LunaSettings::class.java)
 
     init {
         log.level = Level.ALL
     }
+
+
+    /*fun addListener(listener: LunaSettingsListener)
+    {
+        if (!listeners.contains(listener))
+        listeners.add(listener)
+    }*/
 
     /**
     Method for getting a Double from LunaSettings.

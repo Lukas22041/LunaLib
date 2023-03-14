@@ -6,11 +6,12 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
+import com.fs.starfarer.api.ui.TooltipMakerAPI.FleetMemberValueGetter
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.campaign.CustomCampaignEntity
 import lunalib.backend.scripts.LoadedSettings
+import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
-import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
 import java.awt.Color
 
@@ -176,11 +177,11 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
         var spacing = 10f
         for (entity in entities)
         {
-            var requiredSpacing = 75f
+            var requiredSpacing = 0f
             var cardPanel = LunaUIPlaceholder(true, subpanel!!.position.width - 75, requiredSpacing, "empty", "none", subpanel!!, subpanelElement!!)
             cardPanel.position!!.inTL(10f, spacing)
 
-            var descriptionElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.6f - 20, requiredSpacing, false)
+            var descriptionElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.5f - 20, requiredSpacing, false)
             descriptionElement.position.inTL(0f, 0f)
            // cardPanel.uiElement.addComponent(descriptionElement)
             cardPanel.lunaElement!!.addUIElement(descriptionElement)
@@ -210,7 +211,6 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
             var color = Misc.getBasePlayerColor()
             color = Color(color.red, color.green, color.blue, 230)
 
-
             var descriptionText = ""
             if (entity is SectorEntityToken)
             {
@@ -239,25 +239,87 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
 
             var description = descriptionElement.addPara(descriptionText,0f, color, color)
 
-            var textWidth = description.computeTextWidth(description.text)
+            /*var textWidth = description.computeTextWidth(description.text)
             var textHeight = description.computeTextHeight(description.text)
             var ratio = textWidth / description.position.width
             var extraSpace = textHeight * ratio
             var increase = extraSpace * 0.5f
 
             cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height  + increase)
-            subpanelElement!!.addSpacer(increase)
+            subpanelElement!!.addSpacer(increase)*/
 
-            var interactbleElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.4f - 20, requiredSpacing, false)
+            var interactbleElement = cardPanel.lunaElement!!.createUIElement(subpanel!!.position.width * 0.5f - 20, requiredSpacing, false)
 
-            interactbleElement.position.inTL(10f + subpanel!!.position.width * 0.6f, 0f)
+            interactbleElement.position.inTL(subpanel!!.position.width * 0.5f, 0f)
            // cardPanel.uiElement.addComponent(interactbleElement)
             cardPanel.lunaElement!!.addUIElement(interactbleElement)
 
             interactbleElement.addSpacer(5f)
 
+            var space = 10f
+            if (entity is PlanetAPI)
+            {
+                var sprite = LunaUISphere(entity.spec.texture, 40f, 40f, 40f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
+                sprite.position!!.inTL(interactbleElement.position!!.width / 2 - sprite.width / 2, space)
+
+
+                if (entity.spec.cloudTexture != null)
+                {
+                    var sprite2 = LunaUISphere(entity.spec.cloudTexture, 40f, 40f, 40f, "", "Group", cardPanel.lunaElement!!, interactbleElement, isCloud = true, cloudColor = entity.spec.cloudColor)
+                    sprite2.position!!.inTL(interactbleElement.position!!.width / 2 - sprite2.width / 2, space)
+                }
+               /* if (entity.spec.glowTexture != null)
+                {
+                    var sprite2 = LunaUISphere(entity.spec.glowTexture, 40f, 40f, 40f, "", "Group", cardPanel.lunaElement!!, interactbleElement, isCloud = true, cloudColor = entity.spec.glowColor)
+                    sprite2.position!!.inTL(interactbleElement.position!!.width / 2 - sprite2.width / 2, space)
+                }*/
+
+                space += sprite.height * 2 + 10
+
+
+            }
+            if (entity is StarSystemAPI)
+            {
+                if (entity.center is PlanetAPI)
+                {
+                    var center = entity.center as PlanetAPI
+                    var sprite = LunaUISphere(center.spec.texture, 40f, 40f, 40f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
+                    sprite.position!!.inTL(interactbleElement.position!!.width / 2 - sprite.width / 2, space)
+
+                    space += sprite.height * 2 + 10
+                }
+                else
+                {
+                    space += 40 * 2  + 10
+                }
+            }
+            if (entity is CustomCampaignEntity)
+            {
+                if (entity.spec.spriteName != null)
+                {
+                    var sprite = LunaUISprite(entity.spec.spriteName, 80f, 80f, 40f, 40f, 300f, 600f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
+                    sprite.position!!.inTL(interactbleElement.position!!.width / 2 - sprite.textureWidth / 2, space)
+                    space += sprite.textureHeight + 20f
+                }
+                else if (entity.spec.iconName != null)
+                {
+                    var sprite = LunaUISprite(entity.spec.iconName, 80f, 80f, 40f, 40f, 300f, 600f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
+                    sprite.position!!.inTL(interactbleElement.position!!.width / 2 - sprite.textureWidth / 2, space)
+                    space += sprite.textureHeight + 20f
+                }
+                else
+                {
+                    space += 40 * 2  + 10
+                }
+            }
+            if (entity is CampaignFleetAPI)
+            {
+                space += 40
+            }
+
+
             var button = LunaUIButton(true, false,200f, 30f, entity, "Debug", cardPanel.lunaElement!!, interactbleElement)
-            button.position!!.inTL(0f, cardPanel.height / 2 - button.height / 2)
+            button.position!!.inTL(interactbleElement.position!!.width / 2 - button.position!!.width / 2, space)
             button.buttonText!!.text = "Teleport"
             button.buttonText!!.position.inTL(button.buttonText!!.position.width / 2 - button.buttonText!!.computeTextWidth(button.buttonText!!.text) / 2, button.buttonText!!.position.height - button.buttonText!!.computeTextHeight(button.buttonText!!.text) / 2)
 
@@ -282,16 +344,20 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
                 }
             }
 
-            spacing += cardPanel.height
+            space += 40f
 
             //to create a small gap
-            spacing += 5f
             subpanelElement!!.addSpacer(5f)
+            cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + space)
+
+            spacing += 5f
+            spacing += cardPanel.height
+
+            subpanelElement!!.addSpacer(space)
 
         }
 
         subpanelElement!!.addSpacer(20f)
-
         subpanel!!.addUIElement(subpanelElement)
     }
 

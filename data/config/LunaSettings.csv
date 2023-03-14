@@ -5,7 +5,7 @@ Can always be opened by pressing [Shift + F2], even if set to another key.",,,
 lunalib,luna_DebugKeybind,Debug Keybind,Keycode,61,Changes the Keybind used to open the Debug Menu.,,,
 ,,,,,,,,
 lunalib,luna_debugHeader,Debug Header,Header,Debug,,,,
-lunalib,luna_DebugEntries,Debug Menu Entries,Int,40,Controls how many entries can show up in the Debug Menu's Search Screens. Higher quantities will lead to lag.,20,200,
+lunalib,luna_DebugEntries,Debug Menu Entries,Int,25,Controls how many entries can show up in the Debug Menu's Search Screens. Higher quantities will lead to lag.,10,50,
 lunalib,luna_DevmodeKeybind,Devmode Keybind,Keycode,0,Changes the keybind for the devmode toggle.,,,
 ,,,,,,,,
 lunalib,luna_exampleHeader,Example Header,Header,Example Section,,,,Examples

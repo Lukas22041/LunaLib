@@ -8,7 +8,7 @@ import lunalib.backend.ui.settings.LunaSettingsLoader
 import lunalib.lunaDebug.LunaDebug
 import lunalib.lunaDebug.snippets.LunaLibDataSnippet
 import lunalib.lunaDebug.snippets.ModListSnippet
-import me.xdrop.fuzzywuzzy.FuzzySearch
+import lunalib.lunaDebug.snippets.SnippetsListSnippet
 import java.lang.Exception
 
 
@@ -22,6 +22,7 @@ class LunaLibPlugin : BaseModPlugin()
 
     override fun onApplicationLoad()
     {
+
         var rat = Global.getSettings().modManager.getModSpec("assortment_of_things")
         if (rat != null)
         {
@@ -46,6 +47,7 @@ class LunaLibPlugin : BaseModPlugin()
 
         LunaDebug.addSnippet(ModListSnippet())
         LunaDebug.addSnippet(LunaLibDataSnippet())
+        LunaDebug.addSnippet(SnippetsListSnippet())
     }
 }
 

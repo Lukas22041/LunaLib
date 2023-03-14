@@ -93,7 +93,6 @@ class CombatHandler : EveryFrameCombatPlugin
             toDraw!!.text = "LunaLib "
             toDraw!!.append(" \n", Misc.getBasePlayerColor())
             toDraw!!.append("Open the Mod Settings Menu with $settingsKeybind in the Campaign, or at $location", Misc.getBasePlayerColor())
-
         }
     }
 }

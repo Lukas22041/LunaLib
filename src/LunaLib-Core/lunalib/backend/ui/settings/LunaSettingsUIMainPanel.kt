@@ -48,8 +48,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
         var element = panel.createUIElement(width, 20f, false)
         var header = element.addSectionHeading("Mod Settings", Alignment.MID, 0f)
 
-        element.addTooltipToPrevious(TooltipHelper("Mod Settings added by Lunalib.\n\n" +
-                "Config files can be found under \"Starsector/saves/common/LunaSettings/\". \nOpen them with Notepad if you need to edit them. Changes to those files are only read on game start."
+        element.addTooltipToPrevious(TooltipHelper("Mod Settings added by Lunalib."
             , 500f), TooltipMakerAPI.TooltipLocation.BELOW)
 
         element.position.inTL(0f, 0f)
