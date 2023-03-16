@@ -2,6 +2,13 @@
  	"ruleCommandPackages":[
  		"lunalib.backend.cmds",
  	],		
+	
+	"graphics":{
+		"lunalib":{
+			"default":"graphics/icons/default_mod_icon.png",
+			"lunalib_icon":"graphics/icons/lunalib_icon.png",
+		},
+ 	},
 
 	"plugins":{
 		"LunaLibCombatHandler":"lunalib.backend.scripts.CombatHandler",

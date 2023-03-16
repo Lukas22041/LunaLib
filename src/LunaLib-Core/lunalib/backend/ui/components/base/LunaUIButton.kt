@@ -6,6 +6,7 @@ import com.fs.starfarer.api.ui.LabelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
+import lunalib.backend.util.getLunaString
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector2f
 
@@ -86,7 +87,14 @@ internal class LunaUIButton(var value: Boolean, var regularButton: Boolean, widt
         {
             if (regularButton)
             {
-                buttonText!!.text = value.toString().capitalize()
+                if (value)
+                {
+                    buttonText!!.text = "buttonTrue".getLunaString()
+                }
+                else
+                {
+                    buttonText!!.text = "buttonFalse".getLunaString()
+                }
                 buttonText!!.position.inTL(width / 2 - buttonText!!.computeTextWidth(buttonText!!.text) / 2, height / 2 - buttonText!!.computeTextHeight(buttonText!!.text) / 2)
             }
         }

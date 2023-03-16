@@ -8,6 +8,7 @@ import com.fs.starfarer.api.util.Misc
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUISlider
 import lunalib.backend.ui.components.base.LunaUITextField
+import lunalib.backend.util.getLunaString
 import org.lwjgl.opengl.GL11
 import java.awt.Color
 
@@ -47,12 +48,12 @@ internal class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, 
             textField = LunaUITextField("",0f, 1f, width, height * 0.3f,"Test", group, panel, pan!!)
             textField!!.lunaElement!!.position.inTL(0f, 0f)
             textField!!.value = String.format("#%02x%02x%02x", value!!.red, value!!.green, value!!.blue);
-            textField!!.borderAlpha = 1f
+            textField!!.borderAlpha = 0.5f
 
             pan.addSpacer(4f)
 
             hueSlider = LunaUISlider(h, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
-            hueSlider!!.borderAlpha = 1f
+            hueSlider!!.borderAlpha = 0.5f
             hueSlider!!.onHeld {
                 try {
                     h = hueSlider!!.value
@@ -67,7 +68,7 @@ internal class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, 
 
 
             satSlider = LunaUISlider(s, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
-            satSlider!!.borderAlpha = 1f
+            satSlider!!.borderAlpha = 0.5f
             satSlider!!.onHeld {
                 try {
                     s = satSlider!!.value
@@ -81,7 +82,7 @@ internal class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, 
             pan.addSpacer(4f)
 
             brightSlider = LunaUISlider(b, 0f, 1f, width, height * 0.23f,"", group, panel, pan!!)
-            brightSlider!!.borderAlpha = 1f
+            brightSlider!!.borderAlpha = 0.5f
             brightSlider!!.onHeld {
                 try {
                     b = brightSlider!!.value
@@ -122,13 +123,13 @@ internal class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, 
                 }
             }
 
-            huePara = pan.addPara("Hue", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+            huePara = pan.addPara("colorSelectorHue".getLunaString(), 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
             huePara!!.position.inTL((width / 2 - huePara!!.computeTextWidth(huePara!!.text) / 2) , height * 0.31f + 4)
 
-            satPara = pan.addPara("Saturation", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+            satPara = pan.addPara("colorSelectorSaturation".getLunaString(), 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
             satPara!!.position.inTL((width / 2 - satPara!!.computeTextWidth(satPara!!.text) / 2) , height * 0.31f + height * 0.23f + 8)
 
-            brightPara = pan.addPara("Brightness", 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+            brightPara = pan.addPara("colorSelectorBrightness".getLunaString(), 1f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
             brightPara!!.position.inTL((width / 2 - brightPara!!.computeTextWidth(brightPara!!.text) / 2) , height * 0.31f + height * 0.46f + 12)
 
             // for the extra gaps between sliders

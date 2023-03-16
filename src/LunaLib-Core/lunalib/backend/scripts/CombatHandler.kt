@@ -17,6 +17,7 @@ import com.fs.starfarer.ui.newui.o0Oo
 import com.fs.state.AppDriver
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
 import lunalib.backend.ui.settings.OpenSettingsPanelInteraction
+import lunalib.backend.util.getLunaString
 import lunalib.lunaSettings.LunaSettings
 import org.lazywizard.lazylib.ui.LazyFont
 import org.lwjgl.input.Keyboard
@@ -28,6 +29,7 @@ class CombatHandler : EveryFrameCombatPlugin
     var engine: CombatEngineAPI? = null
     private var toDraw: LazyFont.DrawableString? = null
     var settingsKeybind = ""
+
     override fun init(engine: CombatEngineAPI?)
     {
         this.engine = engine
@@ -84,15 +86,15 @@ class CombatHandler : EveryFrameCombatPlugin
         {
             settingsKeybind = Keyboard.getKeyName(LunaSettings.getInt("lunalib", "luna_SettingsKeybind")!!)
 
-            var location = "New Game -> Ship Selection -> Difficulty -> Mod Settings."
+            var location = "mainMenuTextNonNex".getLunaString()
             if (Global.getSettings().modManager.isModEnabled("nexerelin"))
             {
-                 location = "New Game -> Sector Configuration -> Mod Settings. "
+                 location = "mainMenuTextNex".getLunaString()
             }
             toDraw!!.draw(100f,100f);
             toDraw!!.text = "LunaLib "
             toDraw!!.append(" \n", Misc.getBasePlayerColor())
-            toDraw!!.append("Open the Mod Settings Menu with $settingsKeybind in the Campaign, or at $location", Misc.getBasePlayerColor())
+            toDraw!!.append("mainMenuText1".getLunaString() + settingsKeybind + "mainMenuText2".getLunaString() + location, Misc.getBasePlayerColor())
         }
     }
 }

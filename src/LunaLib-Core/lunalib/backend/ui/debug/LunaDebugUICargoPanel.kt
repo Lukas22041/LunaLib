@@ -271,7 +271,6 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
             if (spriteName != "")
             {
                 var sprite = LunaUISprite(spriteName, 120f, 140f, 50f, 50f, 300f, 600f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
-
                 sprite.position!!.inTL(interactbleElement.position!!.width / 2 - sprite.textureWidth / 2, space)
 
                 space += sprite.textureHeight + 10f

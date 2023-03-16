@@ -13,6 +13,7 @@ data class LunaSettingsData(
     val fieldType: String,
     val fieldDescription: String,
     val defaultValue: Any,
+    val secondaryValue: Any,
     val minValue: Double,
     val maxValue: Double, val tab: String)
 
@@ -76,15 +77,11 @@ internal object LunaSettingsLoader
                 "Keycode" -> default = default.toString().toInt()
             }
 
-            if (type == "Enum")
-            {
-                var list: MutableList<String> = ArrayList()
-                for (entry in default as List<String>)
-                {
-                    list.add(entry.trim())
-                }
-                default = list
-            }
+            var secondary = ""
+            try {
+                secondary = rows.getString("secondaryValue")
+            } catch (e: Throwable) {}
+
 
             var minValue = 0.0
             var maxValue = 0.0
@@ -108,7 +105,7 @@ internal object LunaSettingsLoader
                 }
             }
 
-            SettingsData.add(LunaSettingsData(modID, id, name, type, description, default, minValue, maxValue, tab))
+            SettingsData.add(LunaSettingsData(modID, id, name, type, description, default, secondary, minValue, maxValue, tab))
             log.debug("LunaSettings: Loaded default settings data: $id, from $modID")
         }
     }

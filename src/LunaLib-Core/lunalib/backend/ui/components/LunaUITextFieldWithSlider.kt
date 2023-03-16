@@ -26,7 +26,7 @@ internal class LunaUITextFieldWithSlider <T : Number> (var value: T?, var minVal
 
             textField = LunaUITextField(value as T, minValue, maxValue, width, height * 0.6f,"Test", group, panel, pan!!)
             textField!!.position!!.inTL(0f, 0f)
-            textField!!.borderAlpha = 1f
+            textField!!.borderAlpha = 0.5f
 
             textField!!.onUpdate {
                 if (textField!!.isSelected())

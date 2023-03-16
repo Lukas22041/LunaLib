@@ -1,24 +1,18 @@
 package lunalib.backend.ui.settings
 
-import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Alignment
-import com.fs.starfarer.api.ui.ButtonAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
-import com.fs.starfarer.api.util.Misc
 import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.ui.components.base.LunaUIBaseElement
-import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.util.TooltipHelper
 import org.lwjgl.input.Keyboard
-import org.lwjgl.opengl.GL11
-import java.awt.Color
-
+import lunalib.backend.util.*
 
 //I dont recommend anyone to read through my UI code to learn from, its equivelant to the ramblings of an insane person, and such can only be understood by the crazy person themself.
 class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
@@ -46,9 +40,8 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
         height = panel!!.position.height
 
         var element = panel.createUIElement(width, 20f, false)
-        var header = element.addSectionHeading("Mod Settings", Alignment.MID, 0f)
-
-        element.addTooltipToPrevious(TooltipHelper("Mod Settings added by Lunalib."
+        var header = element.addSectionHeading("header".getLunaString(), Alignment.MID, 0f)
+        element.addTooltipToPrevious(TooltipHelper("headerTooltip".getLunaString()
             , 500f), TooltipMakerAPI.TooltipLocation.BELOW)
 
         element.position.inTL(0f, 0f)
@@ -130,6 +123,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
                 LunaSettingsUIModsPanel.selectedMod = null
                 LunaSettingsUISettingsPanel.addedElements.clear()
                 LunaSettingsUISettingsPanel.changedSettings.clear()
+                LunaSettingsUISettingsPanel.unsavedCounter.clear()
                 LunaSettingsUISettingsPanel.unsaved = false
 
                 //Not clearing this will cause a memory leak
@@ -151,6 +145,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
                 LunaSettingsUIModsPanel.selectedMod = null
                 LunaSettingsUISettingsPanel.addedElements.clear()
                 LunaSettingsUISettingsPanel.changedSettings.clear()
+                LunaSettingsUISettingsPanel.unsavedCounter.clear()
                 LunaSettingsUISettingsPanel.unsaved = false
 
                 //Not clearing this will cause a memory leak

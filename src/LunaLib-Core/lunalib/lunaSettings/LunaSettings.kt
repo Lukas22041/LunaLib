@@ -259,56 +259,56 @@ object LunaSettings
         fun addHeader(ModID: String, FieldID: String, Title: String, Tab: String)
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, "", "Header", "", Title, 0.0, 0.0, Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, "", "Header", "", Title,"", 0.0, 0.0, Tab))
         }
 
         @JvmStatic
         fun addText(ModID: String, FieldID: String, Text: String, Tab: String)
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, "", "Text", "", Text, 0.0, 0.0, Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, "", "Text", "", Text, "",0.0, 0.0, Tab))
         }
 
         @JvmStatic
         fun addInt(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Int, MinValue: Int, MaxValue: Int, Tab: String)
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Int", Tooltip, DefaultValue, MinValue.toDouble(), MaxValue.toDouble(), Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Int", Tooltip, DefaultValue,"", MinValue.toDouble(), MaxValue.toDouble(), Tab))
         }
 
         @JvmStatic
         fun addDouble(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Double, MinValue: Double, MaxValue: Double, Tab: String)
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Double", Tooltip, DefaultValue, MinValue, MaxValue, Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Double", Tooltip, DefaultValue,"", MinValue, MaxValue, Tab))
         }
 
         @JvmStatic
         fun addString(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: String, Tab: String)
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "String", Tooltip, DefaultValue, 0.0, 0.0, Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "String", Tooltip, DefaultValue, "",0.0, 0.0, Tab))
         }
 
         @JvmStatic
         fun addBoolean(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Boolean, Tab: String)
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Boolean", Tooltip, DefaultValue, 0.0, 0.0, Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Boolean", Tooltip, DefaultValue, "",0.0, 0.0, Tab))
         }
 
         @JvmStatic
         fun addEnum(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: List<String>, Tab: String)
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Enum", Tooltip, DefaultValue, 0.0, 0.0, Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Enum", Tooltip, DefaultValue, "",0.0, 0.0, Tab))
         }
 
         @JvmStatic
         fun addKeybind(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Int, Tab: String)
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Keycode", Tooltip, DefaultValue, 0.0, 0.0, Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Keycode", Tooltip, DefaultValue, "",0.0, 0.0, Tab))
         }
 
         @JvmStatic
@@ -316,9 +316,18 @@ object LunaSettings
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
             var text = String.format("#%02x%02x%02x", DefaultValue!!.red, DefaultValue!!.green, DefaultValue!!.blue);
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Color", Tooltip, text, 0.0, 0.0, Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Color", Tooltip, text, "",0.0, 0.0, Tab))
         }
 
+        /**
+        Adds a Radio-Button Selection. secondaryValue is a comma-seperated list that generates the choices, default value is the one thats being selected by default.
+        */
+        @JvmStatic
+        fun addRadio(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: String, secondaryValue: String, Tab: String)
+        {
+            if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "String", Tooltip, DefaultValue, secondaryValue,0.0, 0.0, Tab))
+        }
 
 
         @JvmStatic

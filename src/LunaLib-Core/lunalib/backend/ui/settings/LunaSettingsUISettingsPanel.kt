@@ -3,22 +3,21 @@ package lunalib.backend.ui.settings
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
-import com.fs.starfarer.api.campaign.VisualPanelAPI
-import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
-import com.fs.starfarer.api.ui.Fonts
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
+import com.fs.starfarer.campaign.accidents.B
+import data.scripts.util.MagicSettings
 import lunalib.backend.ui.components.LunaUIColorPicker
 import lunalib.backend.ui.components.LunaUIKeybindButton
+import lunalib.backend.ui.components.LunaUIRadioButton
 import lunalib.backend.ui.components.LunaUITextFieldWithSlider
 import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUITextField
-import lunalib.lunaExtensions.addTransientScript
 import lunalib.lunaSettings.LunaSettings
 import java.awt.Color
 
@@ -28,7 +27,7 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 {
 
     enum class SettingsType {
-        String, Int, Double, Boolean, Color, Keycode, Text, Header, //Enum
+        String, Int, Double, Boolean, Color, Keycode, Radio, Multichoice, Text, Header,
     }
 
     var parentPanel: CustomPanelAPI? = null
@@ -53,6 +52,7 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
     companion object
     {
         var unsaved = false
+        var unsavedCounter: MutableMap<String, Int> = HashMap()
         var changedSettings = ArrayList<ChangedSetting>()
         var addedElements: MutableList<LunaUIBaseElement> = ArrayList()
     }
@@ -356,8 +356,12 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                     SettingsType.Boolean.toString() -> createButtonCard(data, cardPanel, interactbleElement)
                     SettingsType.Color.toString() -> createColorCard(data, cardPanel, interactbleElement)
                     SettingsType.Keycode.toString() -> createKeybindCard(data, cardPanel, interactbleElement)
+                    SettingsType.Radio.toString() -> createRadioCard(data, cardPanel, interactbleElement)
+
                     else -> null
                 }
+
+
 
                 /*if (createdElement != null)
                 {
@@ -408,8 +412,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 if (textField.value != LunaSettings.getString(data.modID, data.fieldID).toString())
                 {
                     unsaved = true
+                    unsavedCounter.put(data.fieldID, 1)
                 }
             }
+
             addedElements.add(textField)
             return textField
         }
@@ -423,13 +429,6 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
             var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, height,data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
-            /*if (cardPanel.position!!.height < height)
-            {
-                cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textField.position!!.height)
-                subpanelElement!!.addSpacer(textField.position!!.height)
-
-            }
-*/
 
             textField.position!!.inTL(50f, cardPanel.height / 2 - textField.height / 2)
             cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + 2)
@@ -438,8 +437,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 if (textField.value != LunaSettings.getDouble(data.modID, data.fieldID))
                 {
                     unsaved = true
+                    unsavedCounter.put(data.fieldID, 1)
                 }
             }
+
             addedElements.add(textField)
             return textField
         }
@@ -453,21 +454,15 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
             var textField = LunaUITextFieldWithSlider(value, data.minValue.toFloat(),  data.maxValue.toFloat(), 200f, height, data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
-           /* if (cardPanel.position!!.height < height)
-            {
-                cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + textField.position!!.height)
-                subpanelElement!!.addSpacer(textField.position!!.height)
-            }*/
-            /*cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + 12)
-            subpanelElement!!.addSpacer(12f)*/
-
             textField.position!!.inTL(50f, cardPanel.height / 2 - textField.height / 2)
             textField.onUpdate {
                 if (textField.value != LunaSettings.getInt(data.modID, data.fieldID))
                 {
                     unsaved = true
+                    unsavedCounter.put(data.fieldID, 1)
                 }
             }
+
             addedElements.add(textField)
             return textField
         }
@@ -484,28 +479,28 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
         var button = LunaUIButton(value!!, true,200f, height, data, "SettingGroup", cardPanel.lunaElement!!, interactbleElement)
 
-        /*var com = Global.getSettings().getCommoditySpec("supplies")
-
-        var test = LunaUISprite(com.iconName, 80f, 80f, data, "Group", cardPanel.lunaElement!!, interactbleElement)*/
-
-
-      /*  if (cardPanel.position!!.height < height)
-        {
-            cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + button.position!!.height)
-            subpanelElement!!.addSpacer(button.position!!.height)
-        }*/
 
         button.position!!.inTL(50f, cardPanel.height / 2 - button.height / 2)
         button.onClick {
             unsaved = true
+
+            if (button.value != LunaSettings.getBoolean(data.modID, data.fieldID))
+            {
+                unsavedCounter.put(data.fieldID, 1)
+
+            }
+            else
+            {
+                unsavedCounter.put(data.fieldID, 0)
+            }
         }
+
         addedElements.add(button)
         return button
     }
 
     fun createColorCard(data: LunaSettingsData, cardPanel: LunaUIPlaceholder,  interactbleElement: TooltipMakerAPI) : LunaUIBaseElement?
     {
-
         var height = 80f
         var value = LunaSettings.getColor(data.modID, data.fieldID)
 
@@ -525,8 +520,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             if (picker.value != LunaSettings.getColor(data.modID, data.fieldID))
             {
                 unsaved = true
+                unsavedCounter.put(data.fieldID, 1)
             }
         }
+
         addedElements.add(picker)
         return picker
     }
@@ -552,10 +549,59 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             if (button.keycode != LunaSettings.getInt(data.modID, data.fieldID))
             {
                 unsaved = true
+                unsavedCounter.put(data.fieldID, 1)
             }
         }
         addedElements.add(button)
+
+
         return button
+    }
+
+    fun createRadioCard(data: LunaSettingsData, cardPanel: LunaUIPlaceholder,  interactbleElement: TooltipMakerAPI) : LunaUIBaseElement?
+    {
+        var value = LunaSettings.getString(data.modID, data.fieldID)
+
+        var changedData = changedSettings.filter { it.modID == data.modID }.find { it.fieldID == data.fieldID }
+        if (changedData != null) value = changedData.data as String
+
+        var choices = (data.secondaryValue as String).split(",").map { it.trim() }
+
+        var radio = LunaUIRadioButton(value!!, choices,200f, 0f, data, data.fieldID, cardPanel.lunaElement!!, interactbleElement)
+        radio.position!!.inTL(50f, cardPanel.height / 2 - radio.height / 2)
+
+       /* if (cardPanel.height < 25 * radio.buttons.size)
+        {*/
+           /* cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + radio.height)
+            subpanelElement!!.addSpacer(radio.height)*/
+       /* }*/
+
+        cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + 10)
+        subpanelElement!!.addSpacer(10f)
+
+        //Add spacing based on the size of the button for each button, until its larger than the total spacing the buttons take up
+        for (button in radio.buttons)
+        {
+            //+5 spacing for the space inbetween each button
+            if (cardPanel.height < (25 + 5) * radio.buttons.size)
+            {
+                //+5 spacing for the space inbetween each button
+                cardPanel.position!!.setSize(cardPanel.position!!.width, cardPanel.position!!.height + button.height + 5)
+                subpanelElement!!.addSpacer(button.height + 5)
+            }
+        }
+        radio.position!!.inTL(50f, (cardPanel.height / 2 - radio.height / 2) - 25 / 2)
+
+        for (button in radio.buttons)
+        {
+            button.onClick {
+                unsaved = true
+                unsavedCounter.put(data.fieldID, 1)
+            }
+        }
+
+        addedElements.add(radio)
+        return radio
     }
 
     fun setUnsavedData()
@@ -591,6 +637,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             if (element is LunaUIKeybindButton)
             {
                 changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.keycode))
+            }
+            if (element is LunaUIRadioButton)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
             }
 
             //changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, ))

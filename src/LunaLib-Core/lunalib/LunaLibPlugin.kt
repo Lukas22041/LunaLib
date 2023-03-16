@@ -9,6 +9,7 @@ import lunalib.lunaDebug.LunaDebug
 import lunalib.lunaDebug.snippets.LunaLibDataSnippet
 import lunalib.lunaDebug.snippets.ModListSnippet
 import lunalib.lunaDebug.snippets.SnippetsListSnippet
+import lunalib.lunaSettings.LunaSettings
 import java.lang.Exception
 
 
@@ -22,6 +23,7 @@ class LunaLibPlugin : BaseModPlugin()
 
     override fun onApplicationLoad()
     {
+
 
         var rat = Global.getSettings().modManager.getModSpec("assortment_of_things")
         if (rat != null)

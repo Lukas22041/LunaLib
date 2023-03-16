@@ -1,0 +1,67 @@
+{
+	#Settings Menu Strings
+	"lunalib":{
+
+		###Title Screen
+		"mainMenuText1": "Open the Mod Settings Menu with ",
+		"mainMenuTextNex": "New Game -> Sector Configuration -> Mod Settings.",
+		"mainMenuTextNonNex": "New Game -> Ship Selection -> Difficulty -> Mod Settings.",
+		"mainMenuText2": " in the Campaign, or at ",
+
+
+
+
+		###Settings
+
+		#Header at the top of the Settings Menu
+		"header":"Mod Settings.",
+		"headerTooltip": "Mod Settings added by Lunalib.",
+
+		#Left Side of Settings Menu
+		"saveButtonName":"Save All",
+		"saveButtonTooltip":"Saves the data for all mods that have changed data. If you exit the window without saving, all changes are lost.",
+
+		"resetButtonName":"Reset Mod To Default",
+		"resetButtonTooltip":"Resets every option in the currently selected mod (and all of its tabs) back to it's default value. Still needs to be manualy saved.",
+
+		"aboutButtonName":"About",
+		"aboutButtonTooltip1":"Mod Settings added by Lunalib.\n\n",
+		"aboutButtonTooltip2":"This Menu displays configs added by mods that can be freely modified ingame. This is not related to other configs like the \"modSettings.json\" file from MagicLib and wont load anything from them.\n\n",
+		"aboutButtonTooltip3":"The hotkey for opening this menu can be changed in the \"LunaLib\" mod config. It can also be opened during new game creation.\n\n",
+		"aboutButtonTooltip4":"Configs persist between updates of Lunalib and the mod adding the config, unless a config is removed by the mod in an update.\n\n",
+		"aboutButtonTooltip5":"All config files can be located under \"Starsector\\saves\\common\\LunaSettings\". Do not modify or delete them while the game is open. Deleting a file will reset its config.",
+
+		"searchFieldName":"Search Mod",
+		"searchFieldTooltip":"Select and type in a mods name to filter out all mods that dont match the name or id.",
+
+		"modVersion":"Version",
+
+
+
+		### Custom UI Components
+		
+		"colorSelectorHue":"Hue",
+		"colorSelectorSaturation":"Saturation",
+		"colorSelectorBrightness":"Brightness",
+
+		"keybindText":"Key",
+		"keybindTextNone":"Key: None",
+
+		"buttonTrue":"True",
+		"buttonFalse":"False",
+
+
+		
+
+
+	},	
+}
+
+
+
+
+
+
+
+
+

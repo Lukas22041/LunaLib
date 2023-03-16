@@ -10,19 +10,19 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.backend.ui.components.LunaUIColorPicker
 import lunalib.backend.ui.components.LunaUIKeybindButton
+import lunalib.backend.ui.components.LunaUIRadioButton
 import lunalib.backend.ui.components.LunaUITextFieldWithSlider
 import lunalib.backend.ui.components.base.LunaUIButton
+import lunalib.backend.ui.components.base.LunaUIPlaceholder
+import lunalib.backend.ui.components.base.LunaUISprite
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.ui.components.util.TooltipHelper
+import lunalib.backend.util.getLunaString
 import lunalib.lunaSettings.LunaSettingsListener
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.lazywizard.lazylib.JSONUtils
 import org.lwjgl.input.Keyboard
 import java.awt.Color
-import java.lang.invoke.MethodHandles
-import java.lang.invoke.MethodType
-import java.net.URL
-import java.net.URLClassLoader
 
 internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
 {
@@ -49,6 +49,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
     companion object
     {
+        var lastSelectedMod = ""
         var selectedMod: ModSpecAPI? = null
     }
 
@@ -82,11 +83,13 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         panelElement!!.addSpacer(3f)
 
         saveButton = LunaUIButton(false, false,width - 15, 30f,"Test", "SettingGroup", panel!!, panelElement!!).apply {
-            this.buttonText!!.text = "Save All"
-            this.buttonText!!.setHighlight("Save all mods")
+            this.buttonText!!.text = "saveButtonName".getLunaString()
+            this.buttonText!!.setHighlight("Save All")
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-            this.uiElement.addTooltipToPrevious(TooltipHelper("Saves the data for all mods that have changed data. If you exit the window without saving, all changes are lost.", 300f, "all mods", "changed data", "lost"), TooltipMakerAPI.TooltipLocation.RIGHT)
+
+
+            this.uiElement.addTooltipToPrevious(TooltipHelper("saveButtonTooltip".getLunaString(), 300f, "all mods", "changed data", "lost"), TooltipMakerAPI.TooltipLocation.RIGHT)
 
             onHover {
                 backgroundAlpha = 1f
@@ -103,13 +106,35 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                 if (LunaSettingsUISettingsPanel.unsaved)
                 {
                     button.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-                    this.buttonText!!.setHighlight("Save all mods")
+                    this.buttonText!!.setHighlight("Save All")
                 }
                 else
                 {
                     button.buttonText!!.setHighlightColor(Misc.getBasePlayerColor())
-                    this.buttonText!!.setHighlight("Save all mods")
+                    this.buttonText!!.setHighlight("Save All")
                 }
+
+               /* var counter = 0
+                for ((key, value) in LunaSettingsUISettingsPanel.unsavedCounter)
+                {
+                    if (value == 1)
+                    {
+                        counter++
+                    }
+                }
+
+                if (counter != 0)
+                {
+                    button.buttonText!!.text = "saveButtonName".getLunaString() + " ($counter Unsaved)"
+                    button.buttonText!!.setHighlight("($counter Unsaved)")
+                    button.buttonText!!.setHighlightColors(Misc.getNegativeHighlightColor())
+                    this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
+                }
+                else
+                {
+                    button.buttonText!!.text = "saveButtonName".getLunaString()
+                    this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
+                }*/
             }
             onClick {
                 if (selectedMod == null) return@onClick
@@ -125,10 +150,10 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         panelElement!!.addSpacer(3f)
 
         resetButton = LunaUIButton(false, false,width - 15, 30f,"Test", "SettingGroup", panel!!, panelElement!!).apply {
-            this.buttonText!!.text = "Reset Mod To Default"
+            this.buttonText!!.text = "resetButtonName".getLunaString()
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-            this.uiElement.addTooltipToPrevious(TooltipHelper("Resets every option in the currently selected mod (and all of its tabs) back to it's default value. Still needs to be manualy saved.", 300f, "selected mod"), TooltipMakerAPI.TooltipLocation.RIGHT)
+            this.uiElement.addTooltipToPrevious(TooltipHelper("resetButtonTooltip".getLunaString(), 300f, "selected mod"), TooltipMakerAPI.TooltipLocation.RIGHT)
         }
         resetButton!!.onHoverEnter {
             Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
@@ -214,6 +239,18 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                     element.button!!.buttonText!!.position.inTL(element.width / 2 - element.button!!.buttonText!!.computeTextWidth(element.button!!.buttonText!!.text) / 2, element.height / 2 - element.button!!.buttonText!!.computeTextHeight(element.button!!.buttonText!!.text) / 2)
 
                 }
+                if (element is LunaUIRadioButton)
+                {
+                    var value = (element.key as LunaSettingsData).defaultValue as String
+                    element.value = value
+                    for (button in element.buttons)
+                    {
+                        if (button.buttonText!!.text == value)
+                        {
+                            button.setSelected()
+                        }
+                    }
+                }
             }
             setUnsavedData()
         }
@@ -221,20 +258,17 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         panelElement!!.addSpacer(3f)
 
         var aboutButton = LunaUIButton(false, false,width - 15, 30f,"Test", "SettingGroup", panel!!, panelElement!!).apply {
-            this.buttonText!!.text = "About"
+            this.buttonText!!.text = "aboutButtonName".getLunaString()
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
 
-            var tooltip = TooltipHelper("Mod Settings added by Lunalib.\n" +
-                    "\n" +
-                    "This Menu displays configs added by mods that can be freely modified ingame. This is not related to other configs like the \"modSettings.json\" file from MagicLib and wont " +
-                    "load anything from them." +
-                    "\n\n" +
-                    "The hotkey for opening this menu can be changed in the \"LunaLib\" mod config. It can also be opened during new game creation." +
-                    "\n\n" +
-                    "Configs persist between updates of Lunalib and the mod adding the config, unless a config is removed by the mod in an update." +
-                    "\n\n" +
-                    "All config files can be located under \"Starsector\\saves\\common\\LunaSettings\". Do not modify or delete them while the game is open. Deleting a file will reset its config.",
+            var tooltip1 = "aboutButtonTooltip1".getLunaString()
+            var tooltip2 = "aboutButtonTooltip2".getLunaString()
+            var tooltip3 = "aboutButtonTooltip3".getLunaString()
+            var tooltip4 = "aboutButtonTooltip4".getLunaString()
+            var tooltip5 = "aboutButtonTooltip5".getLunaString()
+
+            var tooltip = TooltipHelper(tooltip1 + tooltip2 + tooltip3 + tooltip4 + tooltip5,
                 500f, "Lunalib", "not", "hotkey", "new game creation", "persist", "Starsector\\saves\\common\\LunaSettings", "not", "modify", "delete")
 
             this.uiElement.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.RIGHT)
@@ -264,15 +298,14 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         }
 
         var pan = searchField.lunaElement!!.createUIElement(searchField.position!!.width, searchField.position!!.height, false)
-       // searchField.uiElement.addComponent(pan)
+        // searchField.uiElement.addComponent(pan)
         searchField.lunaElement!!.addUIElement(pan)
         pan.position.inTL(0f, 0f)
-        var para = pan.addPara("Search Mod", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+        var para = pan.addPara("searchFieldName".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
         para.position.inTL(para.position.width / 2 - para.computeTextWidth(para.text) / 2 , para.position.height  - para.computeTextHeight(para.text) / 2)
         searchField.borderAlpha = 0.5f
         searchField.run {
-            this.uiElement.addTooltipToPrevious(TooltipHelper("Select and type in a mods name to filter out all mods that dont match the name or id.", 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
-
+            this.uiElement.addTooltipToPrevious(TooltipHelper("searchFieldTooltip".getLunaString(), 300f), TooltipMakerAPI.TooltipLocation.RIGHT)
         }
         searchField.onHoverEnter {
             Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
@@ -282,7 +315,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             button.resetParagraphIfEmpty = false
             if (button.paragraph!!.text == "" && !button.isSelected())
             {
-                para.text = "Search Mod"
+                para.text = "searchFieldName".getLunaString()
             }
             else
             {
@@ -342,6 +375,10 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             {
                 changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.keycode))
             }
+            if (element is LunaUIRadioButton)
+            {
+                changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, element.value))
+            }
 
             //changed.add(ChangedSetting(settingsData.modID, settingsData.fieldID, ))
         }
@@ -355,19 +392,20 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         }
 
         // 32 * amount of buttons + their spacers before + an extra gap between mods and the config buttons
-        var space = (32f * 4f) + 3f
+        var space = (32f * 4f) + 10f
 
-        subpanel = panel!!.createCustomPanel(width - 5, height - space, null)
+        subpanel = panel!!.createCustomPanel(width - 9, height - space, null)
         subpanel!!.position.inTL(0f, space)
         panel!!.addComponent(subpanel)
-        subpanelElement = subpanel!!.createUIElement(width - 5, height - space, true)
+        subpanelElement = subpanel!!.createUIElement(width - 9, height - space, true)
 
         subpanelElement!!.position.inTL(0f, 0f)
-        subpanelElement!!.addSpacer(5f)
+        //subpanelElement!!.addSpacer(5f)
 
         val modsWithData = LunaSettingsLoader.SettingsData.map { it.modID }.distinct()
         val mods: List<ModSpecAPI> = Global.getSettings().modManager.enabledModsCopy.filter { modsWithData.contains( it.id) }
 
+        var spacing = 0f
         for (mod in mods)
         {
             var search = currentSearchText.lowercase()
@@ -376,34 +414,53 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             var failed = false
 
             if (currentSearchText != "" && !mod.name.lowercase().contains(currentSearchText.lowercase()) && !mod.id.lowercase().contains(currentSearchText.lowercase())) failed = true
-            if (search != "" && result.score > 50) failed = false
+            if (search != "" && result.score > 60) failed = false
             if (failed) continue
 
-            var button = LunaUIButton(false, false,width - 15, 60f, mod, "ModsButtons", subpanel!!, subpanelElement!!).apply {
-                this.buttonText!!.text = "${mod.name.trimAfter(40)}\nVersion: ${mod.version.trimAfter(20)}"
-                this.buttonText!!.setHighlight("${mod.name.trimAfter(40)}")
-                this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
-                //this.position!!.inTL(0f,0f)
 
+            var cardPanel = LunaUIPlaceholder(true, width - 15 , 60f, mod, "ModsButton", subpanel!!, subpanelElement!!).apply {
+
+                var text = "${mod.name}\n" +
+                        "Version: ${mod.version}\n" +
+                        "Author: ${mod.author}\n" +
+                        "\n" +
+                        "${mod.desc}"
+
+                this.uiElement.addTooltipToPrevious(TooltipHelper(text, 400f, "${mod.name}"), TooltipMakerAPI.TooltipLocation.RIGHT)
+
+                this.backgroundAlpha = 0.9f
 
                 if (selectedMod == mod) {
-                    this.backgroundAlpha = 1f
+                    this.darkColor = Misc.getDarkPlayerColor().brighter().brighter()
                     this.setSelected()
                 }
                 else {
-                    this.backgroundAlpha = 0.5f
+                    this.darkColor = Misc.getDarkPlayerColor()
                 }
-                this.borderAlpha = 0.5f
+                this.borderAlpha = 0.75f
+
+                onClick {
+                    this.setSelected()
+                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
+                }
 
                 onUpdate {
                     if (this.isSelected())
                     {
-                        this.backgroundAlpha = 1f
+                        this.darkColor = Misc.getDarkPlayerColor().brighter().brighter()
+
                     }
                     else
                     {
-                        this.backgroundAlpha = 0.5f
+                        this.darkColor = Misc.getDarkPlayerColor()
                     }
+                }
+
+                onHover {
+                    borderAlpha = 1f
+                }
+                onNotHover {
+                    borderAlpha = 0.75f
                 }
 
                 onHoverEnter {
@@ -412,15 +469,51 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
                 onSelect {
                     if (!saving)
-                    setUnsavedData()
+                        setUnsavedData()
                     selectedMod = mod
-                }
-
-                onClick {
+                    lastSelectedMod = mod.id
                 }
             }
 
+            var spriteElement = cardPanel.lunaElement!!.createUIElement(width - 15, 60f, false)
+            spriteElement.position.inTL(0f,0f)
+
+            cardPanel.lunaElement!!.addUIElement(spriteElement)
+
+            var icon = "graphics/icons/default_mod_icon.png"
+            var potentialIcon = LunaSettingsConfigLoader.getIconPath(mod.id)
+            if (potentialIcon != "") icon = potentialIcon
+
+            var sprite = LunaUISprite(icon, 40f, 40f, 40f, 40f, 40f, 40f, "", "Group", cardPanel.lunaElement!!, spriteElement!!)
+            sprite.position!!.inTL(5f,spriteElement.position!!.height / 2 - sprite.height / 2 )
+            sprite.position!!.inTL(5f,spriteElement.position!!.height / 2 - sprite.height / 2 )
+
+            var paragraphElement = cardPanel.lunaElement!!.createUIElement(width - 70, 60f, false)
+            paragraphElement.position.inTL(55f,0f)
+
+            cardPanel.lunaElement!!.addUIElement(paragraphElement)
+
+            var text = mod.name
+            var para = paragraphElement.addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), text)
+            para.position.inTL(0f, (30f - para.position.height / 2) + 1f)
+
             subpanelElement!!.addSpacer(5f)
+
+            spacing += cardPanel.position!!.height
+
+            if (lastSelectedMod == mod.id)
+            {
+                cardPanel.setSelected()
+                cardPanel.backgroundAlpha = 1f
+                selectedMod = mod
+
+            }
+            else if (lastSelectedMod == "")
+            {
+                lastSelectedMod = mod.id
+                selectedMod = mod
+                cardPanel.setSelected()
+            }
         }
 
         subpanel!!.addUIElement(subpanelElement)
@@ -446,6 +539,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                 if (selectedMod == null) return
                 setUnsavedData()
                 LunaSettingsUISettingsPanel.unsaved = false
+                LunaSettingsUISettingsPanel.unsavedCounter.clear()
 
                 var changed = LunaSettingsUISettingsPanel.changedSettings
                 var changedMods = changed.map { it.modID }.distinct()
