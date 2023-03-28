@@ -5,12 +5,13 @@ import com.fs.starfarer.api.Global
 import lunalib.backend.scripts.KeybindsScript
 import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.ui.settings.LunaSettingsLoader
+import lunalib.backend.ui.versionchecker.VCModPlugin
 import lunalib.lunaDebug.LunaDebug
 import lunalib.lunaDebug.snippets.LunaLibDataSnippet
 import lunalib.lunaDebug.snippets.ModListSnippet
 import lunalib.lunaDebug.snippets.SnippetsListSnippet
-import lunalib.lunaSettings.LunaSettings
 import java.lang.Exception
+import java.lang.Thread.UncaughtExceptionHandler
 
 
 class LunaLibPlugin : BaseModPlugin()
@@ -23,17 +24,6 @@ class LunaLibPlugin : BaseModPlugin()
 
     override fun onApplicationLoad()
     {
-
-
-        var rat = Global.getSettings().modManager.getModSpec("assortment_of_things")
-        if (rat != null)
-        {
-            if (rat.version == "1.0.0" || rat.version == "0.3.2")
-            {
-                throw Exception("Your version of Random-Assortment-of-Things is not compatible with this version of Lunalib, make sure to update it")
-            }
-        }
-
         var pc = Global.getSettings().modManager.getModSpec("parallel_construction")
         if (pc != null)
         {
@@ -50,6 +40,8 @@ class LunaLibPlugin : BaseModPlugin()
         LunaDebug.addSnippet(ModListSnippet())
         LunaDebug.addSnippet(LunaLibDataSnippet())
         LunaDebug.addSnippet(SnippetsListSnippet())
+
+        VCModPlugin().onApplicationLoad()
     }
 }
 

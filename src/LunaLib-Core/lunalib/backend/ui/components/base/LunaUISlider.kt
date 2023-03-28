@@ -14,7 +14,7 @@ import kotlin.math.round
 internal class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var borderColor = Misc.getDarkPlayerColor()
-    var sliderCenterColor = Misc.getDarkPlayerColor().brighter()
+    var sliderCenterColor = Misc.getDarkPlayerColor()
 
     var sliderPosX = 0f
     var level = 0f
@@ -47,10 +47,10 @@ internal class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue
             borderColor = Misc.getDarkPlayerColor().brighter()
         }
         onHover {event ->
-            sliderCenterColor = Misc.getDarkPlayerColor().brighter().brighter()
+            sliderCenterColor = Misc.getDarkPlayerColor().brighter()
         }
         onNotHover {
-            sliderCenterColor = Misc.getDarkPlayerColor().brighter()
+            sliderCenterColor = Misc.getDarkPlayerColor()
         }
     }
 

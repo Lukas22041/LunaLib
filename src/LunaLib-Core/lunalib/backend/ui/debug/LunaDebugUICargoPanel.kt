@@ -18,7 +18,12 @@ import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUISlider
 import lunalib.backend.ui.components.base.LunaUITextField
+import lunalib.lunaExtensions.TooltipMakerExtensions.addLunaElement
+import lunalib.lunaExtensions.TooltipMakerExtensions.addLunaToggleButton
+import org.lazywizard.lazylib.MathUtils
+import org.lwjgl.input.Mouse
 import java.awt.Color
+import java.lang.Exception
 
 internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
 
@@ -190,6 +195,23 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
             cardPanel.lunaElement!!.addUIElement(descriptionElement)
 
             descriptionElement.addSpacer(5f)
+
+            /*descriptionElement.addLunaElement(200f, 50f).apply {
+                addText("Test")
+                addTooltip("Test", 300f, TooltipMakerAPI.TooltipLocation.RIGHT)
+                centerText()
+
+                onHoverEnter {
+                    playScrollSound()
+                    borderColor = Misc.getDarkPlayerColor().brighter()
+                }
+                onHoverExit {
+                    borderColor = Misc.getDarkPlayerColor()
+                }
+                onClick { playClickSound() }
+            }*/
+
+           // descriptionElement.addLunaToggleButton(true, 200f, 50f)
 
             var name = when (item)
             {

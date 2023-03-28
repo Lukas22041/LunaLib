@@ -1,10 +1,11 @@
 {
     "masterVersionFile":"https://raw.githubusercontent.com/Lukas22041/LunaLib/main/LunaLib.version",
     "modName":"LunaLib",
+	"modThreadId":25658,
     "modVersion":
     {
         "major":1,
         "minor":5,
-        "patch":0 # Can be a number, character or string (1, 2, a, b, "-RC2", etc)
-    }
+        "patch":1 # Can be a number, character or string (1, 2, a, b, "-RC2", etc)
+    },
 }

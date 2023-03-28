@@ -3,14 +3,10 @@ package lunalib.backend.ui.settings
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
+import com.fs.starfarer.api.campaign.StarSystemAPI
 import com.fs.starfarer.api.input.InputEventAPI
-import com.fs.starfarer.api.ui.Alignment
-import com.fs.starfarer.api.ui.CustomPanelAPI
-import com.fs.starfarer.api.ui.PositionAPI
-import com.fs.starfarer.api.ui.TooltipMakerAPI
+import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.Misc
-import com.fs.starfarer.campaign.accidents.B
-import data.scripts.util.MagicSettings
 import lunalib.backend.ui.components.LunaUIColorPicker
 import lunalib.backend.ui.components.LunaUIKeybindButton
 import lunalib.backend.ui.components.LunaUIRadioButton
@@ -18,6 +14,7 @@ import lunalib.backend.ui.components.LunaUITextFieldWithSlider
 import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUITextField
+import lunalib.backend.util.getLunaString
 import lunalib.lunaSettings.LunaSettings
 import java.awt.Color
 
@@ -650,10 +647,101 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
     override fun advance(amount: Float) {
         if (LunaSettingsUIModsPanel.selectedMod != null && LunaSettingsUIModsPanel.selectedMod != selectedMod)
         {
+            createdAbout = false
             selectedMod = LunaSettingsUIModsPanel.selectedMod
             recreateTabs()
             recreatePanel()
         }
+        else if (!createdAbout && LunaSettingsUIModsPanel.selectedMod == null && LunaSettingsUIModsPanel.lastSelectedMod == "LunaAboutSection")
+        {
+            selectedMod = null
+            recreateAboutSection()
+            createdAbout = true
+        }
+    }
+
+    var createdAbout = false
+    fun recreateAboutSection()
+    {
+        if (tabspanel != null)
+        {
+            panel!!.removeComponent(tabspanel)
+        }
+        if (subpanel != null)
+        {
+            panel!!.removeComponent(subpanel)
+        }
+
+        var mHeight = panel!!.position.height * 0.9f
+
+        subpanel = panel!!.createCustomPanel(width, height, null)
+        subpanel!!.position.inTL(0f, 3f)
+        panel!!.addComponent(subpanel)
+        subpanelElement = subpanel!!.createUIElement(width, height, false)
+        subpanel!!.addUIElement(subpanelElement)
+
+        subpanelElement!!.position.inTL(0f, 0f)
+        subpanelElement!!.addSpacer(2f)
+
+        subpanelElement!!.addSpacer(100f)
+
+        var cardPanel = LunaUIPlaceholder(true, width - 20 , height - 3, "empty", "none", subpanel!!, subpanelElement!!)
+        cardPanel.position!!.inTL(10f, 0f)
+
+        var description = cardPanel.lunaElement!!.createUIElement(width - 20, height- 3, true)
+        description.position.inTL(0f, 5f)
+
+        description.setParaFont(Fonts.ORBITRON_24AABOLD)
+        var title = description.addPara("aboutTitle".getLunaString(), 0f, Misc.getBrightPlayerColor(), Misc.getHighlightColor())
+        description.setParaFont(Fonts.ORBITRON_20AABOLD)
+        var subtitle = description.addPara("aboutSubtitle".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
+
+        title!!.position.inTL(width / 2 - title!!.computeTextWidth(title!!.text) / 2, 10f)
+        subtitle!!.position.inTL(width / 2 - subtitle!!.computeTextWidth(subtitle!!.text) / 2, 35f)
+
+        description.setParaFont(Fonts.DEFAULT_SMALL)
+        description.addPara("", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor()).position.inTL(5f, 40f)
+
+        description.addSpacer(20f)
+        description.addPara("aboutDescription".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
+
+        description.addSpacer(20f)
+        description.addPara("aboutFaQ2".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getPositiveHighlightColor(), "FaQ:")
+        description.addSpacer(10f)
+
+        description.addPara("aboutFaQ3".getLunaString(), 0f, Misc.getHighlightColor(), Misc.getHighlightColor())
+        description.addPara("aboutFaQ4".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
+
+        description.addSpacer(10f)
+
+        description.addPara("aboutFaQ5".getLunaString(), 0f, Misc.getHighlightColor(), Misc.getHighlightColor())
+        description.addPara("aboutFaQ6".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
+
+        description.addSpacer(10f)
+
+        description.addPara("aboutFaQ7".getLunaString(), 0f, Misc.getHighlightColor(), Misc.getHighlightColor())
+        description.addPara("aboutFaQ8".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
+
+        description.addSpacer(10f)
+
+        description.addPara("aboutFaQ9".getLunaString(), 0f, Misc.getHighlightColor(), Misc.getHighlightColor())
+        description.addPara("aboutFaQ10".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
+
+        description.addSpacer(10f)
+
+        description.addPara("aboutFaQ11".getLunaString(), 0f, Misc.getHighlightColor(), Misc.getHighlightColor())
+        description.addPara("aboutFaQ12".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
+
+       /* for (i in 0..30)
+        {
+            description.addPara("Test.", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
+        }*/
+
+        cardPanel.lunaElement!!.addUIElement(description)
+
+
+
+
 
     }
 

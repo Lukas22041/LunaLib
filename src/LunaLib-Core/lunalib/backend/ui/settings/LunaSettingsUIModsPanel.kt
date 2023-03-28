@@ -49,7 +49,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
     companion object
     {
-        var lastSelectedMod = ""
+        var lastSelectedMod = "LunaAboutSection"
         var selectedMod: ModSpecAPI? = null
     }
 
@@ -257,12 +257,12 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
         panelElement!!.addSpacer(3f)
 
-        var aboutButton = LunaUIButton(false, false,width - 15, 30f,"Test", "SettingGroup", panel!!, panelElement!!).apply {
+        var aboutButton = LunaUIButton(false, false,width - 15, 30f,"Test", "ModsButton", panel!!, panelElement!!).apply {
             this.buttonText!!.text = "aboutButtonName".getLunaString()
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
             this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
 
-            var tooltip1 = "aboutButtonTooltip1".getLunaString()
+           /* var tooltip1 = "aboutButtonTooltip1".getLunaString()
             var tooltip2 = "aboutButtonTooltip2".getLunaString()
             var tooltip3 = "aboutButtonTooltip3".getLunaString()
             var tooltip4 = "aboutButtonTooltip4".getLunaString()
@@ -271,18 +271,45 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             var tooltip = TooltipHelper(tooltip1 + tooltip2 + tooltip3 + tooltip4 + tooltip5,
                 500f, "Lunalib", "not", "hotkey", "new game creation", "persist", "Starsector\\saves\\common\\LunaSettings", "not", "modify", "delete")
 
-            this.uiElement.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.RIGHT)
+            this.uiElement.addTooltipToPrevious(tooltip, TooltipMakerAPI.TooltipLocation.RIGHT)*/
         }
         aboutButton!!.onHoverEnter {
             Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
         }
-        aboutButton!!.onHover {
+      /*  aboutButton!!.onHover {
             backgroundAlpha = 1f
         }
         aboutButton!!.onNotHover {
             backgroundAlpha = 0.5f
-        }
+        }*/
         aboutButton!!.borderAlpha = 0.5f
+
+        if (lastSelectedMod == "LunaAboutSection")
+        {
+            selectedMod = null
+            aboutButton.setSelected()
+        }
+
+        aboutButton.onClick {
+            lastSelectedMod = "LunaAboutSection"
+            selectedMod = null
+            aboutButton.setSelected()
+        }
+
+        aboutButton.onUpdate {
+            if (isHovering)
+            {
+                backgroundAlpha = 1f
+            }
+            else if (isSelected())
+            {
+                backgroundAlpha = 0.9f
+            }
+            else
+            {
+                backgroundAlpha = 0.5f
+            }
+        }
 
         panelElement!!.addSpacer(3f)
 
@@ -495,7 +522,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
             var text = mod.name
             var para = paragraphElement.addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), text)
-            para.position.inTL(0f, (30f - para.position.height / 2) + 1f)
+            para.position.inTL(0f, (30f - para.position.height / 2))
 
             subpanelElement!!.addSpacer(5f)
 

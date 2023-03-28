@@ -24,13 +24,31 @@
 		"resetButtonName":"Reset Mod To Default",
 		"resetButtonTooltip":"Resets every option in the currently selected mod (and all of its tabs) back to it's default value. Still needs to be manualy saved.",
 
+		#About Section
 		"aboutButtonName":"About",
-		"aboutButtonTooltip1":"Mod Settings added by Lunalib.\n\n",
-		"aboutButtonTooltip2":"This Menu displays configs added by mods that can be freely modified ingame. This is not related to other configs like the \"modSettings.json\" file from MagicLib and wont load anything from them.\n\n",
-		"aboutButtonTooltip3":"The hotkey for opening this menu can be changed in the \"LunaLib\" mod config. It can also be opened during new game creation.\n\n",
-		"aboutButtonTooltip4":"Configs persist between updates of Lunalib and the mod adding the config, unless a config is removed by the mod in an update.\n\n",
-		"aboutButtonTooltip5":"All config files can be located under \"Starsector\\saves\\common\\LunaSettings\". Do not modify or delete them while the game is open. Deleting a file will reset its config.",
-
+		"aboutTitle":"Mod Settings",
+		"aboutSubtitle":"Added by Lunalib",
+		"aboutDescription":"This menu loads configs from different mods & lets you modify them ingame.\nAfter modifying the settings, you have to press the \"Save All\" Button in the top left, otherwise exiting will cause all changes to be lost.",
+		
+		"aboutFaQ1":"",
+		"aboutFaQ2":"FaQ:",
+		
+		"aboutFaQ3":"> Where can i open this menu?",
+		"aboutFaQ4":"This menu can be opened during the new game creation dialog, and it can also be opened in the Campaign by pressing its configured Hotkey, set to F2 by default, which can be changed under the \"Lunalib\" mod config. Pressing Shift + F2 will always open this menu, even if the hotkey is bound to something else. ",
+		
+		"aboutFaQ5":"> If i modify a config while playing the campaign, will it immediately be in effect?",
+		"aboutFaQ6":"This differs per mod and per config, by default you can asume that something is immediately in effect, unless the description of a config says otherwise.",
+		
+		"aboutFaQ7":"> Which configs does this modify?",
+		"aboutFaQ8":"This Menu only loads configs from mods that add specific support for this system, it does not interact with things like settings.json or modSettings.json",
+		
+		"aboutFaQ9":"> Where are the config files located?",
+		"aboutFaQ10":"All config files can be located under \"Starsector\\saves\\common\\LunaSettings\".\nDo not modify or delete them while the game is open. Deleting a file will reset its config.",
+		
+		"aboutFaQ11":"> Does updating a mod reset its configs?",
+		"aboutFaQ12":"Unless a modder removes a config or changes its ID, settings are preserved between mod updates and dont need to be set again.",
+		
+		
 		"searchFieldName":"Search Mod",
 		"searchFieldTooltip":"Select and type in a mods name to filter out all mods that dont match the name or id.",
 

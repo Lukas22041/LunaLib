@@ -55,6 +55,8 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
     var isHovering = false
 
     init {
+
+        //Should be "lunaElement = Global.getSettings().createCustom(width, height, this)" instead, as that removes the requirement for the panel parameter.
         lunaElement = panel.createCustomPanel(width, height, this)
         uiElement.addCustom(lunaElement, 0f)
     }
@@ -171,7 +173,7 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
         GL11.glPushMatrix()
         GL11.glDisable(GL11.GL_TEXTURE_2D)
         GL11.glEnable(GL11.GL_BLEND)
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+        //GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
         GL11.glColor4f(color.red / 255f,
             color.green / 255f,
             color.blue / 255f,

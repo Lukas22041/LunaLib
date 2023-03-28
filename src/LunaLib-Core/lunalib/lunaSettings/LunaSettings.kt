@@ -27,7 +27,6 @@ object LunaSettings
         log.level = Level.ALL
     }
 
-
     /*fun addListener(listener: LunaSettingsListener)
     {
         if (!listeners.contains(listener))

@@ -30,11 +30,19 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
     private var width = 0f
     private var height = 0f
 
+    companion object
+    {
+        var panelOpen = false
+        var closeCooldown = 0
+    }
+
 
     fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?, dialog: InteractionDialogAPI?) {
         this.panel = panel
         this.callbacks = callbacks
         this.dialog = dialog
+
+        panelOpen = true
 
         width = panel!!.position.width
         height = panel!!.position.height
@@ -96,11 +104,6 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
     override fun advance(amount: Float) {
 
     }
-
-    companion object {
-        var closeCooldown = 0
-    }
-
     override fun processInput(events: MutableList<InputEventAPI>) {
 
         if (closeCooldown > 1)
@@ -129,6 +132,8 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
                 //Not clearing this will cause a memory leak
                 LunaUIBaseElement.selectedMap.clear()
 
+                panelOpen = false
+
                 closeCooldown = 30
                 return@forEach
             }
@@ -147,6 +152,8 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
                 LunaSettingsUISettingsPanel.changedSettings.clear()
                 LunaSettingsUISettingsPanel.unsavedCounter.clear()
                 LunaSettingsUISettingsPanel.unsaved = false
+
+                panelOpen = false
 
                 //Not clearing this will cause a memory leak
                 LunaUIBaseElement.selectedMap.clear()
