@@ -36,8 +36,6 @@ class CombatHandler : EveryFrameCombatPlugin
 
     var buttonsEnabled = LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
 
-    var sprite = Global.getSettings().getSprite("rat", "skeleton")
-
     var buttonWidth = 130f
     var buttonHeight = 50f
 
