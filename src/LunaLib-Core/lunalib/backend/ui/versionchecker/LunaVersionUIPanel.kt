@@ -162,7 +162,8 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
                 var buttonHeight = 0f
                 if (updateURL != null) buttonHeight = 30f
 
-                inner.addLunaElement(width - 30f, 60f + buttonHeight).apply {
+                // + 50 just for testing atm
+                inner.addLunaElement(width - 30f, 60f + buttonHeight + 50).apply {
                     this.backgroundColor = Misc.getDarkPlayerColor().darker().darker()
                     this.innerElement.addSpacer(5f)
                     this.innerElement.addPara("${mod.name} (Update Available)", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Update Available")
@@ -172,7 +173,15 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
                     if (mod.remoteVersion.directDownloadURL != null)
                     {
-                        this.innerElement.addPara("Test: ${mod.remoteVersion.directDownloadURL}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.remoteVersion.version}")
+                        this.innerElement.addPara("Direct: ${mod.remoteVersion.directDownloadURL}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.remoteVersion.version}")
+                    }
+                    if (mod.remoteVersion.changelogURL != null)
+                    {
+                        this.innerElement.addPara("ChangelogURL: ${mod.remoteVersion.changelogURL}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.remoteVersion.version}")
+                    }
+                    if (mod.remoteVersion.changelog != null)
+                    {
+                        this.innerElement.addPara("Changelog: ${mod.remoteVersion.changelog}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.remoteVersion.version}")
                     }
 
                     if (updateURL != null)
@@ -218,13 +227,26 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
                 var buttonHeight = 0f
                 if (updateURL != null) buttonHeight = 30f
 
-                inner.addLunaElement(width - 30f, 60f + buttonHeight).apply {
+                inner.addLunaElement(width - 30f, 60f + buttonHeight + 50f).apply {
                     this.backgroundColor = Misc.getDarkPlayerColor().darker().darker()
                     this.innerElement.addSpacer(5f)
                     this.innerElement.addPara("${mod.name}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "")
                     this.innerElement.addSpacer(2f)
                     this.innerElement.addPara("Installed Version: ${mod.localVersion.version}", 0f, Misc.getBasePlayerColor(), Misc.getNegativeHighlightColor(), "")
                     this.innerElement.addPara("Latest Version: ${mod.remoteVersion.version}", 0f, Misc.getBasePlayerColor(), Misc.getPositiveHighlightColor(), "")
+
+                    if (mod.remoteVersion.directDownloadURL != null)
+                    {
+                        this.innerElement.addPara("Direct: ${mod.remoteVersion.directDownloadURL}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.remoteVersion.version}")
+                    }
+                    if (mod.remoteVersion.changelogURL != null)
+                    {
+                        this.innerElement.addPara("ChangelogURL: ${mod.remoteVersion.changelogURL}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.remoteVersion.version}")
+                    }
+                    if (mod.remoteVersion.changelog != null)
+                    {
+                        this.innerElement.addPara("Changelog: ${mod.remoteVersion.changelog}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.remoteVersion.version}")
+                    }
 
                     if (updateURL != null)
                     {

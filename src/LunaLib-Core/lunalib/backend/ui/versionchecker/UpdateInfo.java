@@ -3,8 +3,13 @@ package lunalib.backend.ui.versionchecker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public final class UpdateInfo
 {
@@ -150,8 +155,9 @@ public final class UpdateInfo
         private static final String MOD_NEXUS_FORMAT
                 = "https://www.nexusmods.com/starsector/mods/%d?tab=files";
         private final int major, minor, modThreadId, modNexusId;
-        private final String patch, masterURL, modName, directDownloadURL, changelogURL, changelog;
+        private final String patch, masterURL, modName;
 
+        private String  directDownloadURL, changelogURL, changelog;
 
         VersionFile(final JSONObject json, boolean isMaster) throws JSONException
         {
@@ -162,9 +168,27 @@ public final class UpdateInfo
             modNexusId = (isMaster ? 0 : (int) json.optDouble("modNexusId", 0));
 
             directDownloadURL = json.optString("directDownloadURL");
-            changelogURL = json.optString("changelogURL");
+            if (directDownloadURL.equals("")) directDownloadURL = null;
 
-            changelog = "";
+            changelogURL = json.optString("changelogURL");
+            if (changelogURL.equals("")) changelogURL = null;
+
+            if (changelogURL != null)
+            {
+                try (InputStream stream = new URL(changelogURL).openStream();
+                     Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A"))
+                {
+                    changelog = scanner.next();
+                }
+                catch (MalformedURLException ex)
+                {
+                    Log.error("Invalid changelog file URL \"" + changelogURL + "\"", ex);
+                }
+                catch (IOException ex)
+                {
+                    Log.error("Failed to load master changelog file from URL \"" + changelogURL + "\"", ex);
+                }
+            }
 
             // Parse version number
             JSONObject modVersion = json.getJSONObject("modVersion");
@@ -232,7 +256,7 @@ public final class UpdateInfo
             return changelogURL;
         }
 
-        String getChangelogL()
+        String getChangelog()
         {
             return changelog;
         }
