@@ -4,6 +4,7 @@ import com.fs.starfarer.api.GameState
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.combat.*
 import com.fs.starfarer.api.input.InputEventAPI
+import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.Fonts
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.combat.CombatState
@@ -35,13 +36,11 @@ class CombatHandler : EveryFrameCombatPlugin
     var settingsKeybind = ""
 
     var buttonsEnabled = LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
-
     var buttonWidth = 130f
     var buttonHeight = 50f
 
     companion object {
         var isUpdateCheckDone = false
-
     }
 
     override fun init(engine: CombatEngineAPI?)
@@ -57,7 +56,6 @@ class CombatHandler : EveryFrameCombatPlugin
 
         settingsButtonText = font.createText("Mod Settings", Misc.getBasePlayerColor(), 15f)
         versionButtonText = font.createText("Version Checker", Misc.getBasePlayerColor(), 15f)
-
     }
 
     override fun processInputPreCoreControls(amount: Float, events: MutableList<InputEventAPI>?) {

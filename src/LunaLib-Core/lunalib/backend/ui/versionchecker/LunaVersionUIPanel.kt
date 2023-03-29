@@ -170,6 +170,11 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
                     this.innerElement.addPara("Installed Version: ${mod.localVersion.version}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.localVersion.version}")
                     this.innerElement.addPara("Latest Version: ${mod.remoteVersion.version}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.remoteVersion.version}")
 
+                    if (mod.remoteVersion.directDownloadURL != null)
+                    {
+                        this.innerElement.addPara("Test: ${mod.remoteVersion.directDownloadURL}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "${mod.remoteVersion.version}")
+                    }
+
                     if (updateURL != null)
                     {
                         this.innerElement.addSpacer(3f)

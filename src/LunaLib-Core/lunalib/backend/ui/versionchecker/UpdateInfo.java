@@ -150,7 +150,8 @@ public final class UpdateInfo
         private static final String MOD_NEXUS_FORMAT
                 = "https://www.nexusmods.com/starsector/mods/%d?tab=files";
         private final int major, minor, modThreadId, modNexusId;
-        private final String patch, masterURL, modName;
+        private final String patch, masterURL, modName, directDownloadURL, changelogURL, changelog;
+
 
         VersionFile(final JSONObject json, boolean isMaster) throws JSONException
         {
@@ -159,6 +160,11 @@ public final class UpdateInfo
             modName = (isMaster ? null : json.optString("modName", "<unknown>"));
             modThreadId = (isMaster ? 0 : (int) json.optDouble("modThreadId", 0));
             modNexusId = (isMaster ? 0 : (int) json.optDouble("modNexusId", 0));
+
+            directDownloadURL = json.optString("directDownloadURL");
+            changelogURL = json.optString("directDownloadURL");
+
+            changelog = "";
 
             // Parse version number
             JSONObject modVersion = json.getJSONObject("modVersion");
@@ -214,6 +220,21 @@ public final class UpdateInfo
         String getMasterURL()
         {
             return masterURL;
+        }
+
+        String getDirectDownloadURL()
+        {
+            return directDownloadURL;
+        }
+
+        String getChangelogURL()
+        {
+            return changelogURL;
+        }
+
+        String getChangelogL()
+        {
+            return changelog;
         }
 
         String getUpdateURL()
