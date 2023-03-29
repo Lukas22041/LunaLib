@@ -1,13 +1,13 @@
 {
     "masterVersionFile":"https://raw.githubusercontent.com/Lukas22041/LunaLib/main/LunaLib.version",
-    "modName":"LunaLib",
-	"modThreadId":25658,
-    "modVersion":
+	"modVersion":
     {
         "major":1,
         "minor":5,
         "patch":2 # Can be a number, character or string (1, 2, a, b, "-RC2", etc)
     },
+    "modName":"LunaLib",
+	"modThreadId":25658,
 	"directDownloadURL":"https://github.com/Lukas22041/LunaLib/releases/latest/download/LunaLib.zip",
-	"changelogURL" : ""
+	"changelogURL" : "https://raw.githubusercontent.com/Lukas22041/LunaLib/main/changelog.txt",
 }

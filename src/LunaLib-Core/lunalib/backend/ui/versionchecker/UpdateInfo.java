@@ -162,7 +162,7 @@ public final class UpdateInfo
             modNexusId = (isMaster ? 0 : (int) json.optDouble("modNexusId", 0));
 
             directDownloadURL = json.optString("directDownloadURL");
-            changelogURL = json.optString("directDownloadURL");
+            changelogURL = json.optString("changelogURL");
 
             changelog = "";
 
