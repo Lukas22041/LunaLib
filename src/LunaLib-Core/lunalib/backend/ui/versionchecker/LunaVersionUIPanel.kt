@@ -110,7 +110,6 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
         var inner = element.elementPanel.createUIElement(width - 20, height - 40, true)
         inner.position.inTL(0f, 0f)
 
-
         inner.addLunaElement(width - 30f, 120f).apply {
             this.innerElement.addSpacer(5f)
 

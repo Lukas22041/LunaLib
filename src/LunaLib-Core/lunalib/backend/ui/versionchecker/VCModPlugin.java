@@ -99,11 +99,11 @@ public final class VCModPlugin extends BaseModPlugin
                 unsupportedMods.add(mod);
             }
         }
-        LunaVersionUIPanel.setUnsupportedMods(unsupportedMods);
+        LunaVersionUIPanelV2.setUnsupportedMods(unsupportedMods);
 
         if (!versionFiles.isEmpty())
         {
-            LunaVersionUIPanel.setFutureUpdateInfo(VersionChecker.scheduleUpdateCheck(versionFiles));
+            LunaVersionUIPanelV2.setFutureUpdateInfo(VersionChecker.scheduleUpdateCheck(versionFiles));
         }
     }
 

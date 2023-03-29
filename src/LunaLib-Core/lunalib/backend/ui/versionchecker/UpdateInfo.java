@@ -159,6 +159,7 @@ public final class UpdateInfo
 
         private String  directDownloadURL, changelogURL, changelog;
 
+
         VersionFile(final JSONObject json, boolean isMaster) throws JSONException
         {
             // Parse mod details (local version file only)
