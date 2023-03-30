@@ -2,6 +2,7 @@ Version 1.5.4
 -> Potentially fixed a Version Checker related crash.
 
 
+
 Version 1.5.3
 -> Improved the look of the Version Checker menu
 -> The VC screen now allows for a direct download button that opens the download link in the browser (Mods that have direct downloads for mod managers already support this)
@@ -20,8 +21,6 @@ Version 1.5.1
 -> Clicking the "About" button in the mod settings now shows an FaQ screen instead of just being a tooltip.
 -> Experimental Additions:
 Added buttons that open the Mod Settings and a Version Checker Screen to the main menu, those additions are Windows only and will not work on MacOS or Linux. Other methods of accessing the menu are still available as before. The next Starsector update may make it possible for me to include those buttons on Mac and Linux aswell. The Version Checker included works independent of the one included in Nexelerin & the Standalone version, you can have both active.
-
-For Devs:
 -> Added "LunaElement" for the Kotlin Part of the Library, which is an easily extendable UI Component.
 
 
@@ -33,8 +32,6 @@ Version 1.5.0
 -> The settings menu now automaticly selects the first mod in the list when opened for the first time in a session.
 -> Fixed the "Save All" button not being highlighted when changes were made.
 -> Moved the mod list scrollbar a little again.
-
-For Devs:
 -> Added Radio-Buttons as a Field Type for the Settings menu.
 -> New "secondaryValue" column for the LunaSettings.csv, currently only used for Radio Buttons.
 -> The Strings for the Settings Menu have been externalised, making translation of the mod a bit easier.
@@ -58,12 +55,9 @@ Version 1.4.0
 -> Switching between mods does not reset any changes made anymore.
 -> Pressing the Save button now saves all changes made across all mods.
 -> Leaving the Menu without pressing the save button will still erase all changes made.
-
 -> The Debug Screen now Displays Icons in the Cargo tab.
 -> Fixed certain UI elements flickering when interacting with other parts of the UI.
 -> Fixed the mod search in the settings menu not working if an underscore was used.
 -> Fixed some snippet ui elements not being updated for some of the recent UI changes.
-
-For Devs only:
 -> LunaSnippets are now abstract classes instead of interfaces, snippets from before this change will crash the game.
 -> Added the JavaWuzzy library to Lunalib, which allows for the useage of text matching algorithms. Can be found under /jars/libs/
