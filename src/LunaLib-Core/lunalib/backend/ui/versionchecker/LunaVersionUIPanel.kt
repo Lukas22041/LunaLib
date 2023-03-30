@@ -119,7 +119,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
         leftElement!!.addSpacer(3f)
 
-        var saveButton = LunaUIButton(false, false,250f - 15, 30f,"", "Button", leftPanel!!, leftElement!!).apply {
+        var indexButton = LunaUIButton(false, false,250f - 15, 30f,"", "Button", leftPanel!!, leftElement!!).apply {
             this.buttonText!!.text = "Mod Index"
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
 
@@ -145,7 +145,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
                 }
             }
         }
-        saveButton.borderAlpha = 0.5f
+        indexButton.borderAlpha = 0.5f
         //subpanelElement!!.addPara("Test", 0f)
 
         leftElement!!.addSpacer(3f)
@@ -425,12 +425,12 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
         if (downloadURL != null)
         {
-            downloadButton.addText("Open Direct Download", Misc.getBasePlayerColor())
+            downloadButton.addText("Open Download Link", Misc.getBasePlayerColor())
             downloadButton.backgroundColor = color
         }
         else
         {
-            downloadButton.addText("No Direct Download", Misc.getBasePlayerColor())
+            downloadButton.addText("No Download Link", Misc.getBasePlayerColor())
             downloadButton.backgroundColor = color.darker()
         }
         /* forumButton.addText("Open Forum/Nexus Page", Misc.getBasePlayerColor())
