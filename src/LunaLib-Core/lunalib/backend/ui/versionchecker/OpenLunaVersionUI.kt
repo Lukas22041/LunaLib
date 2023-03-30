@@ -30,7 +30,7 @@ internal class OpenVersionPanelInteraction : InteractionDialogPlugin
 
         dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.8f,
             Global.getSettings().screenHeight * 0.8f,
-            OpenVersionPanelDelegate(LunaVersionUIPanelV2(), dialog))
+            OpenVersionPanelDelegate(LunaVersionUIPanel(), dialog))
     }
 
     override fun optionSelected(optionText: String?, optionData: Any?) {
@@ -57,11 +57,11 @@ internal class OpenVersionPanelInteraction : InteractionDialogPlugin
     }
 }
 
-internal class OpenVersionPanelDelegate(missionPanel: LunaVersionUIPanelV2?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
+internal class OpenVersionPanelDelegate(missionPanel: LunaVersionUIPanel?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
 {
 
     private var callbacks: DialogCallbacks? = null
-    private var plugin: LunaVersionUIPanelV2? = null
+    private var plugin: LunaVersionUIPanel? = null
     private var dialog: InteractionDialogAPI? = null
 
     init {

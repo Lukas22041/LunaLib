@@ -3,6 +3,7 @@ Version 1.5.2
 -> Fixed a crash caused by some leftover code
 
 
+
 Version 1.5.1 
 
 -> Clicking the "About" button in the mod settings now shows an FaQ screen instead of just being a tooltip.
@@ -11,6 +12,7 @@ Added buttons that open the Mod Settings and a Version Checker Screen to the mai
 
 For Devs:
 -> Added "LunaElement" for the Kotlin Part of the Library, which is an easily extendable UI Component.
+
 
 
 Version 1.5.0
@@ -25,3 +27,32 @@ For Devs:
 -> Added Radio-Buttons as a Field Type for the Settings menu.
 -> New "secondaryValue" column for the LunaSettings.csv, currently only used for Radio Buttons.
 -> The Strings for the Settings Menu have been externalised, making translation of the mod a bit easier.
+
+
+
+Version 1.4.1
+
+-> Added an "About" section the mod settings menu that can be hovered over to get more details about the menu.
+-> The debug menu now displays sprites (Credit to Ruddygreat for the code that renders planets within the menu)
+-> Improved some tooltips in the settings menu to make them more clear.
+-> Added a new Snippet that displays all active Snippets.
+-> Moved the mod lists scroller a bit more to the left, to make it not intersect with other elements.
+
+
+
+Version 1.4.0
+
+-> Configs can now be categorized in to different Tabs.
+-> Reworked the settings saving system.
+-> Switching between mods does not reset any changes made anymore.
+-> Pressing the Save button now saves all changes made across all mods.
+-> Leaving the Menu without pressing the save button will still erase all changes made.
+
+-> The Debug Screen now Displays Icons in the Cargo tab.
+-> Fixed certain UI elements flickering when interacting with other parts of the UI.
+-> Fixed the mod search in the settings menu not working if an underscore was used.
+-> Fixed some snippet ui elements not being updated for some of the recent UI changes.
+
+For Devs only:
+-> LunaSnippets are now abstract classes instead of interfaces, snippets from before this change will crash the game.
+-> Added the JavaWuzzy library to Lunalib, which allows for the useage of text matching algorithms. Can be found under /jars/libs/

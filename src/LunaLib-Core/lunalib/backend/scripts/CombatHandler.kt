@@ -4,7 +4,6 @@ import com.fs.starfarer.api.GameState
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.combat.*
 import com.fs.starfarer.api.input.InputEventAPI
-import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.Fonts
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.combat.CombatState
@@ -12,7 +11,7 @@ import com.fs.starfarer.title.TitleScreenState
 import com.fs.state.AppDriver
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
 import lunalib.backend.ui.settings.OpenSettingsPanelInteraction
-import lunalib.backend.ui.versionchecker.LunaVersionUIPanelV2
+import lunalib.backend.ui.versionchecker.LunaVersionUIPanel
 import lunalib.backend.ui.versionchecker.OpenVersionPanelInteraction
 import lunalib.backend.util.getLunaString
 import lunalib.lunaSettings.LunaSettings
@@ -115,7 +114,7 @@ class CombatHandler : EveryFrameCombatPlugin
         {
             border = Misc.getDarkPlayerColor().brighter()
 
-            if (cooldown < 1 && Mouse.isButtonDown(0) && !LunaSettingsUIMainPanel.panelOpen && !LunaVersionUIPanelV2.panelOpen)
+            if (cooldown < 1 && Mouse.isButtonDown(0) && !LunaSettingsUIMainPanel.panelOpen && !LunaVersionUIPanel.panelOpen)
             {
                 cooldown = 60f
                 Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
@@ -164,7 +163,7 @@ class CombatHandler : EveryFrameCombatPlugin
         {
             border = Misc.getDarkPlayerColor().brighter()
 
-            if (cooldown < 1 && Mouse.isButtonDown(0) && !LunaSettingsUIMainPanel.panelOpen && !LunaVersionUIPanelV2.panelOpen)
+            if (cooldown < 1 && Mouse.isButtonDown(0) && !LunaSettingsUIMainPanel.panelOpen && !LunaVersionUIPanel.panelOpen)
             {
                 cooldown = 60f
                 Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
@@ -189,7 +188,7 @@ class CombatHandler : EveryFrameCombatPlugin
 
         drawButton(x, y, buttonWidth, buttonHeight, back, border)
 
-        var count = LunaVersionUIPanelV2.getUpdatedModsCount()
+        var count = LunaVersionUIPanel.getUpdatedModsCount()
 
         versionButtonText!!.text = "Version Checker"
         if (count == 1)
@@ -217,14 +216,14 @@ class CombatHandler : EveryFrameCombatPlugin
         {
             if (!isUpdateCheckDone) {
                 // We can't do anything if it's not done checking for updates
-                if (!LunaVersionUIPanelV2.futureUpdateInfo!!.isDone) {
+                if (!LunaVersionUIPanel.futureUpdateInfo!!.isDone) {
                     return
                 }
 
                 // Attempt to retrieve the update results from the other thread
                 try {
-                    LunaVersionUIPanelV2.updateInfo = LunaVersionUIPanelV2.futureUpdateInfo!![1L, TimeUnit.SECONDS]
-                    LunaVersionUIPanelV2.futureUpdateInfo = null
+                    LunaVersionUIPanel.updateInfo = LunaVersionUIPanel.futureUpdateInfo!![1L, TimeUnit.SECONDS]
+                    LunaVersionUIPanel.futureUpdateInfo = null
                 } catch (ex: Exception) {
                     /* Log.error("Failed to retrieve mod update info", ex)
                      ui.addMessage("Failed to retrieve mod update info!", Color.RED)
@@ -235,9 +234,9 @@ class CombatHandler : EveryFrameCombatPlugin
                 }
                 isUpdateCheckDone = true
 
-                if (LunaVersionUIPanelV2.updateInfo != null)
+                if (LunaVersionUIPanel.updateInfo != null)
                 {
-                    LunaVersionUIPanelV2.reconstruct = true
+                    LunaVersionUIPanel.reconstruct = true
                 }
             }
 
