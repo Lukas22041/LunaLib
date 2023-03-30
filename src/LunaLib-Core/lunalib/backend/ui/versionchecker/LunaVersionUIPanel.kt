@@ -265,10 +265,12 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
                 }
 
                 onClick {
-                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
-                    this.setSelected()
-                    addRightPanel()
-
+                    if (selectedMod != mod)
+                    {
+                        Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
+                        this.setSelected()
+                        addRightPanel()
+                    }
                 }
 
                 onUpdate {
@@ -433,6 +435,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
             downloadButton.addText("No Download Link", Misc.getBasePlayerColor())
             downloadButton.backgroundColor = color.darker()
         }
+
         /* forumButton.addText("Open Forum/Nexus Page", Misc.getBasePlayerColor())
          */
         downloadButton.centerText()

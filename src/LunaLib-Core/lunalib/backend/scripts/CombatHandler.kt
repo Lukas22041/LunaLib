@@ -171,14 +171,14 @@ class CombatHandler : EveryFrameCombatPlugin
                 try {
                     var combatscreen: CombatState = AppDriver.getInstance().currentState as CombatState
 
-                    var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenVersionPanelInteraction(), combatscreen.screenPanel, combatscreen);
-                    test.show(0.3f, 0.2f)
+                    var idp = com.fs.starfarer.ui.newui.o0Oo(null, OpenVersionPanelInteraction(), combatscreen.screenPanel, combatscreen);
+                    idp.show(0.3f, 0.2f)
                 } catch (e: Throwable) {
                     try {
                         var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
 
-                        var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenVersionPanelInteraction(), titlescreen.screenPanel, titlescreen);
-                        test.show(0.3f, 0.2f)
+                        var idp = com.fs.starfarer.ui.newui.o0Oo(null, OpenVersionPanelInteraction(), titlescreen.screenPanel, titlescreen);
+                        idp.show(0.3f, 0.2f)
 
                     } catch (e: Throwable) {}
                 }

@@ -176,9 +176,10 @@ public final class UpdateInfo
 
             if (changelogURL != null)
             {
-                try (InputStream stream = new URL(changelogURL).openStream();
-                     Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A"))
+                try
                 {
+                    InputStream stream = new URL(changelogURL).openStream();
+                    Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
                     changelog = scanner.next();
                 }
                 catch (MalformedURLException ex)
@@ -189,6 +190,11 @@ public final class UpdateInfo
                 {
                     Log.error("Failed to load master changelog file from URL \"" + changelogURL + "\"", ex);
                 }
+                catch (ExceptionInInitializerError ex)
+                {
+
+                }
+
             }
 
             // Parse version number

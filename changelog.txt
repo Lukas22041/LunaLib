@@ -1,3 +1,7 @@
+Version 1.5.4
+-> Potentially fixed a Version Checker related crash.
+
+
 Version 1.5.3
 -> Improved the look of the Version Checker menu
 -> The VC screen now allows for a direct download button that opens the download link in the browser (Mods that have direct downloads for mod managers already support this)
