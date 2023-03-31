@@ -21,6 +21,9 @@ import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.lwjgl.input.Keyboard
 import java.awt.Color
 import java.awt.Desktop
+import java.awt.Toolkit
+import java.awt.datatransfer.Clipboard
+import java.awt.datatransfer.StringSelection
 import java.net.URI
 import java.util.concurrent.Future
 
@@ -123,7 +126,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
             this.buttonText!!.text = "Mod Index"
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
 
-            this.uiElement.addTooltipToPrevious(TooltipHelper("Opens the Forum Mods Index in the Browser", 300f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
+            this.uiElement.addTooltipToPrevious(TooltipHelper("Left click to open in Browser, Rightclick to copy the URL to the clipboard.", 400f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
 
             onHover {
                 backgroundAlpha = 1f
@@ -138,10 +141,20 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
             onClick {
 
-                try {
-                    Desktop.getDesktop().browse(URI.create(indexThread))
-                } catch (ex: Exception) {
+                if (it.eventValue == 0)
+                {
+                    try {
+                        Desktop.getDesktop().browse(URI.create(indexThread))
+                    } catch (ex: Exception) {
 
+                    }
+                }
+
+                if (it.eventValue == 1)
+                {
+                    val stringSelection = StringSelection(indexThread)
+                    val clipboard: Clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+                    clipboard.setContents(stringSelection, null)
                 }
             }
         }
@@ -364,10 +377,11 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
         rightElement!!.addSpacer(100f)
 
-        var cardPanel = LunaUIPlaceholder(true, width - 240 - 20 , height * 0.96f - 3, "empty", "none", rightPanel!!, rightElement!!)
+        var cardpanelheight = height * 0.96f - 3
+        var cardPanel = LunaUIPlaceholder(true, width - 240 - 20 , cardpanelheight , "empty", "none", rightPanel!!, rightElement!!)
         cardPanel.position!!.inTL(10f, 0f)
 
-        var description = cardPanel.lunaElement!!.createUIElement(width - 240 - 20, height * 0.96f - 3, true)
+        var description = cardPanel.lunaElement!!.createUIElement(width - 240 - 20, height * 0.96f - 3, false)
         description.position.inTL(0f, 5f)
 
         description.addSpacer(10f)
@@ -376,13 +390,20 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
         var buttonX = 0f
 
-        var forumURL = mod!!.localVersion.updateURL
 
         var color = Misc.getDarkPlayerColor().darker()
         color = Color((color.red * 0.95f).toInt(), (color.green * 0.95f).toInt(), (color.blue * 0.95f).toInt())
 
         //Forum Button
         var forumButton = description.addLunaElement(200f, 40f)
+        var forumURL = mod!!.localVersion.updateURL
+
+        if (forumURL != null)
+        {
+            var tooltipText = "Left click to open in Browser, Rightclick to copy the URL to the clipboard." +
+                    "\n\nLink: $forumURL"
+            forumButton.addTooltip(tooltipText, 400f, TooltipMakerAPI.TooltipLocation.BELOW, "Warning", "Link")
+        }
         forumButton.backgroundColor = color
 
         if (forumURL != null)
@@ -410,20 +431,37 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
             var ver = mod.localVersion
 
-            try {
-                val url: String = ver.updateURL
-                Desktop.getDesktop().browse(URI.create(url))
-            } catch (ex: Exception) {
+            if (it.eventValue == 0)
+            {
+                try {
+                    Desktop.getDesktop().browse(URI.create(forumURL))
+                } catch (ex: Exception) {
 
+                }
+            }
+
+            if (it.eventValue == 1)
+            {
+                val stringSelection = StringSelection(forumURL)
+                val clipboard: Clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+                clipboard.setContents(stringSelection, null)
             }
         }
         forumButton.position.inTL((cardPanel!!.position!!.width / 2) - forumButton.width - 10, 10f)
 
         //Download Button
         var downloadButton = description.addLunaElement(200f, 40f)
+        var downloadURL = mod!!.remoteVersion.directDownloadURL
+
+        if (downloadURL != null)
+        {
+            var tooltipText = "Left click to open in Browser, Rightclick to copy the URL to the clipboard. To stay safe, do not open any file downloaded that isnt a .zip or .rar" +
+                    "\n\nLink: $downloadURL"
+            downloadButton.addTooltip(tooltipText, 400f, TooltipMakerAPI.TooltipLocation.BELOW, "Warning", "Link")
+        }
+
         downloadButton.backgroundColor = color
 
-        var downloadURL = mod!!.localVersion.directDownloadURL
 
         if (downloadURL != null)
         {
@@ -450,19 +488,30 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
         downloadButton.onClick {
             downloadButton.playClickSound()
 
-            var ver = mod.localVersion
+            if (downloadURL != null)
+            {
+                if (it.eventValue == 0)
+                {
+                    try {
+                        val url: String = downloadURL
+                        Desktop.getDesktop().browse(URI.create(url))
+                    } catch (ex: Exception) {
 
-            try {
-                val url: String = ver.directDownloadURL
-                Desktop.getDesktop().browse(URI.create(url))
-            } catch (ex: Exception) {
+                    }
+                }
 
+                if (it.eventValue == 1)
+                {
+                    val stringSelection = StringSelection(downloadURL)
+                    val clipboard: Clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+                    clipboard.setContents(stringSelection, null)
+                }
             }
         }
         downloadButton.position.inTL((cardPanel!!.position!!.width / 2 + 10)   , 10f)
 
 
-        description.addPara("", 0f).position.inTL(10f, 80f)
+        description.addPara("", 0f).position.inTL(20f, 80f)
 
 
         description.addPara("Name: ${mod.name}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Name")
@@ -471,19 +520,41 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
         description.addSpacer(20f)
 
-        if (mod.remoteVersion.changelog != null)
-        {
-            description.addPara("Changelog:\n\n${mod.remoteVersion.changelog}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Changelog")
-        }
-        else
-        {
-            description.addPara("Changelog:\nNo Changelog Available", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Changelog")
+
+        description.addSpacer(5f)
+
+
+        var lunaElement = description.addLunaElement(width - 240 - 60 , cardpanelheight * 0.7f).apply {
+            enableTransparency = true
+
+          //  innerElement.addSpacer(5f)
+
         }
 
-         /*for (i in 0..80)
-         {
-             description.addPara("Test.", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
-         }*/
+        var scroller = lunaElement.elementPanel.createUIElement(width - 240 - 60 , cardpanelheight * 0.7f, true).apply {
+            var text = ""
+            var header = addSectionHeading("Changelog", Alignment.MID, 0f)
+            header.position.setSize(width - 240 - 60, 20f)
+            addSpacer(2f)
+
+            if (mod.remoteVersion.txtChangelog != null)
+            {
+                text = mod.remoteVersion.txtChangelog
+            }
+            else
+            {
+                text = "No changelog available"
+            }
+
+            var change = addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Online Version")
+            /*this.position.setSize(position.width, position.height + change.computeTextHeight(change.text))
+            this.position.setSize(position.width, position.height )*/
+        }
+
+
+
+
+        lunaElement.elementPanel.addUIElement(scroller)
 
         cardPanel.lunaElement!!.addUIElement(description)
     }

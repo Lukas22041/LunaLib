@@ -1,3 +1,11 @@
+v1.5.5
+-> The buttons in the version checker menu can now be rightclicked to copy their link to the clipboard.
+-> Added Tooltips for some of the version checker buttons.
+-> Improved how changelogs are displayed
+-> Fixed an issue that caused the main menu buttons to appear when they shouldnt, causing crashes if clicked.
+
+
+
 Version 1.5.4
 -> Potentially fixed a Version Checker related crash.
 

@@ -21,6 +21,8 @@ import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 import java.awt.Color
+import java.lang.invoke.MethodHandles
+import java.lang.invoke.MethodType
 import java.util.concurrent.TimeUnit
 
 
@@ -131,7 +133,6 @@ class CombatHandler : EveryFrameCombatPlugin
                         var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenSettingsPanelInteraction(), titlescreen.screenPanel, titlescreen);
                         test.show(0.3f, 0.2f)
 
-
                     } catch (e: Throwable) {}
                 }
             }
@@ -208,8 +209,13 @@ class CombatHandler : EveryFrameCombatPlugin
         versionButtonText!!.draw((x + buttonWidth / 2) - versionButtonText!!.width / 2f , (y + buttonHeight / 2) + versionButtonText!!.height / 2f)
     }
 
+    fun getDialogType()
+    {
+
+    }
 
     override fun renderInUICoords(viewport: ViewportAPI?) {
+
 
 
         if (Global.getCurrentState() == GameState.TITLE && tip != null)
@@ -240,11 +246,46 @@ class CombatHandler : EveryFrameCombatPlugin
                 }
             }
 
-            if (buttonsEnabled != null && buttonsEnabled!! && System.getProperty("os.name").startsWith("Windows"))
+            if (System.getProperty("os.name").startsWith("Windows") && buttonsEnabled != null && buttonsEnabled!!)
             {
-                addModSettingsButton()
-                addVersionButton()
+                var dialogActive: Any? = null
+
+                try {
+                    var combatscreen: CombatState = AppDriver.getInstance().currentState as CombatState
+
+                } catch (e: Throwable) {
+                    try {
+
+                        var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
+                        var instanceToGetFrom = titlescreen
+
+                        val fieldClass = Class.forName("java.lang.reflect.Field", false, Class::class.java.classLoader)
+                        val getMethod = MethodHandles.lookup().findVirtual(fieldClass, "get", MethodType.methodType(Any::class.java, Any::class.java))
+                        val getNameMethod = MethodHandles.lookup().findVirtual(fieldClass, "getName", MethodType.methodType(String::class.java))
+                        val setAcessMethod = MethodHandles.lookup().findVirtual(fieldClass,"setAccessible", MethodType.methodType(Void.TYPE, Boolean::class.javaPrimitiveType))
+
+                        val instancesOfFields: Array<out Any> = instanceToGetFrom.javaClass.getDeclaredFields()
+                        for (obj in instancesOfFields)
+                        {
+                            setAcessMethod.invoke(obj, true)
+                            val name = getNameMethod.invoke(obj)
+                            if (name.toString() == "dialogType")
+                            {
+                                dialogActive = getMethod.invoke(obj, instanceToGetFrom)
+                            }
+                        }
+
+                    } catch (e: Throwable) {}
+
+                }
+
+                if (dialogActive == null)
+                {
+                    addModSettingsButton()
+                    addVersionButton()
+                }
             }
+
             else
             {
                 settingsKeybind = Keyboard.getKeyName(LunaSettings.getInt("lunalib", "luna_SettingsKeybind")!!)

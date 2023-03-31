@@ -51,6 +51,9 @@ public final class VCModPlugin extends BaseModPlugin
 
         // Enable TLS v1.2 (required to use Bitbucket past December 1st, 2018)
         System.setProperty("https.protocols", "SSLv3,TLSv1,TLSv1.1,TLSv1.2");
+
+        // System.setProperty("https.protocols", "TLSv1.2,TLSv1.1,TLSv1,SSLv3");
+
         // TODO: Enable TLS v1.3 (required to use Bitbucket past August 24, 2020)
         //System.setProperty("https.cipherSuites", System.getProperty("https.cipherSuites") + ",");
 

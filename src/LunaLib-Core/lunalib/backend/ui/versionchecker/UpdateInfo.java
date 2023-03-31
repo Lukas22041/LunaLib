@@ -3,13 +3,12 @@ package lunalib.backend.ui.versionchecker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public final class UpdateInfo
 {
@@ -157,8 +156,10 @@ public final class UpdateInfo
         private final int major, minor, modThreadId, modNexusId;
         private final String patch, masterURL, modName;
 
-        private String  directDownloadURL, changelogURL, changelog;
+        private String  directDownloadURL, changelogURL, txtChangelog;
 
+        /*private String githubOwner, githubRepo;
+        private Map<String, String> githubChangelog = new HashMap<>();*/
 
         VersionFile(final JSONObject json, boolean isMaster) throws JSONException
         {
@@ -167,6 +168,12 @@ public final class UpdateInfo
             modName = (isMaster ? null : json.optString("modName", "<unknown>"));
             modThreadId = (isMaster ? 0 : (int) json.optDouble("modThreadId", 0));
             modNexusId = (isMaster ? 0 : (int) json.optDouble("modNexusId", 0));
+
+            /*githubOwner = json.optString("githubOwner");
+            if (githubOwner.equals("")) githubOwner = null;
+
+            githubRepo = json.optString("githubRepo");
+            if (githubRepo.equals("")) githubRepo = null;*/
 
             directDownloadURL = json.optString("directDownloadURL");
             if (directDownloadURL.equals("")) directDownloadURL = null;
@@ -180,7 +187,7 @@ public final class UpdateInfo
                 {
                     InputStream stream = new URL(changelogURL).openStream();
                     Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
-                    changelog = scanner.next();
+                    txtChangelog = scanner.next();
                 }
                 catch (MalformedURLException ex)
                 {
@@ -194,8 +201,45 @@ public final class UpdateInfo
                 {
 
                 }
-
             }
+
+            //Currently scrapped as Java7 is missing the required ciphers/protocols to work, if alex updates to java8 it should work.
+
+            /*if (githubRepo != null && githubOwner != null)
+            {
+                String url = "https://api.github.com/repos/Lukas22041/LunaLib/releases";
+                //String url = "https://api.github.com/repos/" + githubOwner + "/" + githubRepo + "/releases";
+                try {
+
+                    URL link = new URL(url);
+                    InputStream stream = link.openStream();
+                    Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
+                    JSONObject githubJson = new JSONObject(scanner.next());
+                    Iterator<String> keys = githubJson.keys();
+
+                    while (keys.hasNext())
+                    {
+                        try {
+                            String key = keys.next();
+                            if (githubJson.get(key) instanceof JSONObject) {
+                                String name = githubJson.getJSONObject(key).getString("name");
+                                String body = githubJson.getJSONObject(key).getString("body");
+                                githubChangelog.put(name, body);
+                            }
+                        }
+                        catch (Exception ex) {}
+                    }
+                }
+
+                catch (MalformedURLException ex)
+                {
+                    Log.error("Failed to load github from URL \"" + url + "\"", ex);
+                }
+                catch (IOException ex)
+                {
+                    Log.error("Failed to load github from URL \"" + url + "\"", ex);
+                }
+            }*/
 
             // Parse version number
             JSONObject modVersion = json.getJSONObject("modVersion");
@@ -263,9 +307,9 @@ public final class UpdateInfo
             return changelogURL;
         }
 
-        String getChangelog()
+        String getTxtChangelog()
         {
-            return changelog;
+            return txtChangelog;
         }
 
         String getUpdateURL()
