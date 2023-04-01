@@ -69,3 +69,6 @@ Version 1.4.0
 -> Fixed some snippet ui elements not being updated for some of the recent UI changes.
 -> LunaSnippets are now abstract classes instead of interfaces, snippets from before this change will crash the game.
 -> Added the JavaWuzzy library to Lunalib, which allows for the useage of text matching algorithms. Can be found under /jars/libs/
+
+
+Among us
