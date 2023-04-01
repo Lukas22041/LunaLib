@@ -255,7 +255,6 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
             var cardPanel = LunaUIPlaceholder(true, 250f - 15 , 60f, mod, "ModsButton", modsPanel!!, modsElement!!).apply {
 
-
                 if (mod.isUpdateAvailable)
                 {
                     this.uiElement.addTooltipToPrevious(TooltipHelper("Update Available", 200f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
@@ -535,7 +534,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
             var text = ""
             var header = addSectionHeading("Changelog", Alignment.MID, 0f)
             header.position.setSize(width - 240 - 60, 20f)
-            addSpacer(2f)
+            addSpacer(5f)
 
             if (mod.remoteVersion.txtChangelog != null)
             {
