@@ -11,7 +11,6 @@ import lunalib.lunaDebug.snippets.LunaLibDataSnippet
 import lunalib.lunaDebug.snippets.ModListSnippet
 import lunalib.lunaDebug.snippets.SnippetsListSnippet
 import java.lang.Exception
-import java.lang.Thread.UncaughtExceptionHandler
 
 
 class LunaLibPlugin : BaseModPlugin()
@@ -30,9 +29,10 @@ class LunaLibPlugin : BaseModPlugin()
             throw Exception("Parallel Construction is not compatible with this version of Lunalib, PC itself is not being updated anymore, but an updated version of PC is included in the mod \"Random Assortment of Things\"")
         }
 
-        LunaSettingsLoader.loadDefault()
-        LunaSettingsLoader.saveDefaultsToFile()
-        LunaSettingsLoader.loadSettings()
+        if (!LunaSettingsLoader.hasLoaded)
+        {
+            LunaSettingsLoader.load()
+        }
 
         /*LunaSettings.SettingsCreator.addColor("lunalib", "test", "Test Color", "Test Description", Color(255, 255, 255))
         LunaSettings.SettingsCreator.refresh("lunalib")*/

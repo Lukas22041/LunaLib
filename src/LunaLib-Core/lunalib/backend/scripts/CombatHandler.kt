@@ -3,12 +3,14 @@ package lunalib.backend.scripts
 import com.fs.starfarer.api.GameState
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.combat.*
+import com.fs.starfarer.api.impl.campaign.ids.Tags
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.Fonts
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.combat.CombatState
 import com.fs.starfarer.title.TitleScreenState
 import com.fs.state.AppDriver
+import data.scripts.util.MagicSettings
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
 import lunalib.backend.ui.settings.OpenSettingsPanelInteraction
 import lunalib.backend.ui.versionchecker.LunaVersionUIPanel
@@ -20,6 +22,7 @@ import org.lazywizard.lazylib.ui.LazyFont
 import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL20
 import java.awt.Color
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
@@ -56,6 +59,7 @@ class CombatHandler : EveryFrameCombatPlugin
         tip!!.maxWidth = 400f
 
         settingsButtonText = font.createText("Mod Settings", Misc.getBasePlayerColor(), 15f)
+
         versionButtonText = font.createText("Version Checker", Misc.getBasePlayerColor(), 15f)
     }
 
@@ -317,7 +321,7 @@ class CombatHandler : EveryFrameCombatPlugin
             back.alpha / 255f)
 
         GL11.glRectf(x, y , x + width, y + height)
-
+        
         GL11.glEnd()
         GL11.glPopMatrix()
 

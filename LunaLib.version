@@ -4,7 +4,7 @@
     {
         "major":1,
         "minor":5,
-        "patch":5 # Can be a number, character or string (1, 2, a, b, "-RC2", etc)
+        "patch":6 # Can be a number, character or string (1, 2, a, b, "-RC2", etc)
     },
     "modName":"LunaLib",
 	"modThreadId":25658,
@@ -13,6 +13,7 @@
 	"directDownloadURL":"https://github.com/Lukas22041/LunaLib/releases/latest/download/LunaLib.zip",
 	
 	#Link towards a directly accessible text file, which can be used to display a changelog ingame, is fetched from the online version file.
+	#The menu will highlight any line that beginns with "Version"
 	"changelogURL":"https://raw.githubusercontent.com/Lukas22041/LunaLib/main/changelog.txt",
 
 }

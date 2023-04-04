@@ -22,7 +22,7 @@
 		"saveButtonTooltip":"Saves the data for all mods that have changed data. If you exit the window without saving, all changes are lost.",
 
 		"resetButtonName":"Reset Mod To Default",
-		"resetButtonTooltip":"Resets every option in the currently selected mod (and all of its tabs) back to it's default value. Still needs to be manualy saved.",
+		"resetButtonTooltip":"Resets every option in the currently selected mod (and all of its tabs) back to its default value. Still needs to be manualy saved.",
 
 		#About Section
 		"aboutButtonName":"About",

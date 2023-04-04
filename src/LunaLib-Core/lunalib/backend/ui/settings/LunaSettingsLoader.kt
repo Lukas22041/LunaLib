@@ -25,6 +25,8 @@ Class that both loads and holds data for LunaSettings. Can not be used outside L
 internal object LunaSettingsLoader
 {
 
+    var hasLoaded = false
+
     @JvmStatic
     var Settings: MutableMap<String, JSONUtils.CommonDataJSONObject> = HashMap()
 
@@ -37,77 +39,95 @@ internal object LunaSettingsLoader
         log.level = Level.ALL
     }
 
+    fun load()
+    {
+        loadDefault()
+        saveDefaultsToFile()
+        loadSettings()
+    }
+
     fun loadDefault()
     {
-        //SettingsData.clear()
-        val CSV: JSONArray = Global.getSettings().getMergedSpreadsheetDataForMod("fieldID", "data/config/LunaSettings.csv", "LunaLib")
 
-        var data: MutableList<LunaSettingsData> = ArrayList()
-        for (index in 0 until CSV.length())
+        var mods = Global.getSettings().modManager.enabledModsCopy
+
+        for (mod in mods)
         {
-            val rows = CSV.getJSONObject(index)
+            var CSV: JSONArray? = null
 
-            val modID = rows.getString("modID");
-            val id = rows.getString("fieldID");
-            val name = rows.getString("fieldName");
-            val type = rows.getString("fieldType")
-
-            var description = ""
             try {
-                description = rows.getString("fieldTooltip")
+                CSV = Global.getSettings().loadCSV("data/config/LunaSettings.csv", mod.id)
             } catch (e: Throwable) {}
-            try {
-                description = rows.getString("fieldDescription")
-            } catch (e: Throwable) {}
+            if (CSV == null) continue
 
-            var tab = ""
-            try {
-                tab = rows.getString("tab")
-            } catch (e: Throwable) {}
-
-            var default: Any = rows.getString("defaultValue")
-
-            when (type)
+            for (index in 0 until CSV.length())
             {
-                "Int" -> default = default.toString().toInt()
-                "Boolean" -> default = default.toString().toBoolean()
-                "Double" -> default = default.toString().toDouble()
-                "String" -> default = default.toString()
-                "Enum" -> default = default.toString().split(",")
-                "Keycode" -> default = default.toString().toInt()
-            }
+                val row = CSV.getJSONObject(index)
 
-            var secondary = ""
-            try {
-                secondary = rows.getString("secondaryValue")
-            } catch (e: Throwable) {}
+               // val modID = row.getString("modID");
+                val id = row.getString("fieldID");
+                if (id == "") continue
+                val name = row.getString("fieldName");
+                val type = row.getString("fieldType")
 
-
-            var minValue = 0.0
-            var maxValue = 0.0
-
-            if (type == "Int" || type == "Double")
-            {
+                var description = ""
                 try {
-                    minValue = MathUtils.clamp(rows.getString("minValue").toFloat(), Int.MIN_VALUE.toFloat(), Int.MAX_VALUE.toFloat()).toDouble()
-                }
-                catch (e: Throwable)
-                {
-                    maxValue = 0.0
-                }
-
+                    description = row.getString("fieldTooltip")
+                } catch (e: Throwable) {}
                 try {
-                    maxValue =  MathUtils.clamp(rows.getString("maxValue").toFloat(), Int.MIN_VALUE.toFloat(), Int.MAX_VALUE.toFloat()).toDouble()
-                }
-                catch (e: Throwable)
-                {
-                    maxValue = 100.0
-                }
-            }
+                    description = row.getString("fieldDescription")
+                } catch (e: Throwable) {}
 
-            SettingsData.add(LunaSettingsData(modID, id, name, type, description, default, secondary, minValue, maxValue, tab))
-            log.debug("LunaSettings: Loaded default settings data: $id, from $modID")
+                var tab = ""
+                try {
+                    tab = row.getString("tab")
+                } catch (e: Throwable) {}
+
+                var default: Any = row.getString("defaultValue")
+
+                when (type)
+                {
+                    "Int" -> default = default.toString().toInt()
+                    "Boolean" -> default = default.toString().toBoolean()
+                    "Double" -> default = default.toString().toDouble()
+                    "String" -> default = default.toString()
+                    "Enum" -> default = default.toString().split(",")
+                    "Keycode" -> default = default.toString().toInt()
+                }
+
+                var secondary = ""
+                try {
+                    secondary = row.getString("secondaryValue")
+                } catch (e: Throwable) {}
+
+
+                var minValue = 0.0
+                var maxValue = 0.0
+
+                if (type == "Int" || type == "Double")
+                {
+                    try {
+                        minValue = MathUtils.clamp(row.getString("minValue").toFloat(), Int.MIN_VALUE.toFloat(), Int.MAX_VALUE.toFloat()).toDouble()
+                    }
+                    catch (e: Throwable)
+                    {
+                        maxValue = 0.0
+                    }
+
+                    try {
+                        maxValue =  MathUtils.clamp(row.getString("maxValue").toFloat(), Int.MIN_VALUE.toFloat(), Int.MAX_VALUE.toFloat()).toDouble()
+                    }
+                    catch (e: Throwable)
+                    {
+                        maxValue = 100.0
+                    }
+                }
+
+                SettingsData.add(LunaSettingsData(mod.id, id, name, type, description, default, secondary, minValue, maxValue, tab))
+                log.debug("LunaSettings: Loaded default settings data: $id, from ${mod.id}")
+            }
         }
+        hasLoaded = true
     }
 
     fun saveDefaultsToFile(modID: String = "")
@@ -133,14 +153,7 @@ internal object LunaSettingsLoader
                     }
                     catch (e: Throwable)
                     {
-                        if (default.fieldType == "Enum")
-                        {
-                            data!!.put(default.fieldID, (default.defaultValue as List<String>).get(0))
-                        }
-                        else
-                        {
-                            data!!.put(default.fieldID, default.defaultValue)
-                        }
+                        data!!.put(default.fieldID, default.defaultValue)
                     }
                 }
             }

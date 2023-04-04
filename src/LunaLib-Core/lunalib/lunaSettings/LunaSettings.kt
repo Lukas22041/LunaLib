@@ -27,6 +27,7 @@ object LunaSettings
         log.level = Level.ALL
     }
 
+
     /*fun addListener(listener: LunaSettingsListener)
     {
         if (!listeners.contains(listener))
@@ -45,6 +46,7 @@ object LunaSettings
     @JvmStatic
     fun getDouble(ModID: String, FieldID: String) : Double?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -74,6 +76,7 @@ object LunaSettings
     @JvmStatic
     fun getFloat(ModID: String, FieldID: String) : Float?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -103,6 +106,7 @@ object LunaSettings
     @JvmStatic
     fun getBoolean(ModID: String, FieldID: String) : Boolean?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -132,6 +136,7 @@ object LunaSettings
     @JvmStatic
     fun getInt(ModID: String, FieldID: String) : Int?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -161,6 +166,7 @@ object LunaSettings
     @JvmStatic
     fun getString(ModID: String, FieldID: String) : String?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -190,6 +196,7 @@ object LunaSettings
     @JvmStatic
     fun getColor(ModID: String, FieldID: String) : Color?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -386,6 +393,7 @@ object LunaSettings
     @JvmStatic
     fun getDouble(ModID: String, FieldID: String, SaveSpecific: Boolean) : Double?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -409,6 +417,7 @@ object LunaSettings
     @JvmStatic
     fun getFloat(ModID: String, FieldID: String, SaveSpecific: Boolean) : Float?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -432,6 +441,7 @@ object LunaSettings
     @JvmStatic
     fun getBoolean(ModID: String, FieldID: String, SaveSpecific: Boolean) : Boolean?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -455,6 +465,7 @@ object LunaSettings
     @JvmStatic
     fun getInt(ModID: String, FieldID: String, SaveSpecific: Boolean) : Int?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {
@@ -478,6 +489,7 @@ object LunaSettings
     @JvmStatic
     fun getString(ModID: String, FieldID: String, SaveSpecific: Boolean) : String?
     {
+        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
         if (LunaSettingsLoader.Settings.get(ModID) != null)
         {
             try {

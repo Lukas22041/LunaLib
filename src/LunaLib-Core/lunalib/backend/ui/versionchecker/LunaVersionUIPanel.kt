@@ -8,6 +8,7 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.Misc
+import com.fs.starfarer.combat.CombatEngine
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
@@ -18,6 +19,7 @@ import lunalib.backend.ui.versionchecker.UpdateInfo.ModInfo
 import lunalib.backend.util.getLunaString
 import lunalib.lunaExtensions.TooltipMakerExtensions.addLunaElement
 import me.xdrop.fuzzywuzzy.FuzzySearch
+import org.lazywizard.lazylib.combat.entities.SimpleEntity
 import org.lwjgl.input.Keyboard
 import java.awt.Color
 import java.awt.Desktop
@@ -536,9 +538,12 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
             header.position.setSize(width - 240 - 60, 20f)
             addSpacer(5f)
 
+            var highlightedLines: List<String> = ArrayList()
             if (mod.remoteVersion.txtChangelog != null)
             {
                 text = mod.remoteVersion.txtChangelog
+
+                highlightedLines = text.split("\n").filter { it.lowercase().trim().startsWith("version") }
             }
             else
             {
@@ -546,12 +551,10 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
             }
 
             var change = addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Online Version")
+            change.setHighlight(*highlightedLines.toTypedArray())
             /*this.position.setSize(position.width, position.height + change.computeTextHeight(change.text))
             this.position.setSize(position.width, position.height )*/
         }
-
-
-
 
         lunaElement.elementPanel.addUIElement(scroller)
 
