@@ -224,31 +224,7 @@ class CombatHandler : EveryFrameCombatPlugin
 
         if (Global.getCurrentState() == GameState.TITLE && tip != null)
         {
-            if (!isUpdateCheckDone) {
-                // We can't do anything if it's not done checking for updates
-                if (!LunaVersionUIPanel.futureUpdateInfo!!.isDone) {
-                    return
-                }
 
-                // Attempt to retrieve the update results from the other thread
-                try {
-                    LunaVersionUIPanel.updateInfo = LunaVersionUIPanel.futureUpdateInfo!![1L, TimeUnit.SECONDS]
-                    LunaVersionUIPanel.futureUpdateInfo = null
-                } catch (ex: Exception) {
-                    /* Log.error("Failed to retrieve mod update info", ex)
-                     ui.addMessage("Failed to retrieve mod update info!", Color.RED)
-                     ui.addMessage("Check starsector.log for details.", Color.RED)
-                     Global.getSector().removeTransientScript(this)
-                     isDone = true // Just in case*/
-                    return
-                }
-                isUpdateCheckDone = true
-
-                if (LunaVersionUIPanel.updateInfo != null)
-                {
-                    LunaVersionUIPanel.reconstruct = true
-                }
-            }
 
             if (System.getProperty("os.name").startsWith("Windows") && buttonsEnabled != null && buttonsEnabled!!)
             {
@@ -303,6 +279,32 @@ class CombatHandler : EveryFrameCombatPlugin
                 tip!!.text = "LunaLib "
                 tip!!.append(" \n", Misc.getBasePlayerColor())
                 tip!!.append("mainMenuText1".getLunaString() + settingsKeybind + "mainMenuText2".getLunaString() + location, Misc.getBasePlayerColor())
+            }
+
+            if (!isUpdateCheckDone) {
+                // We can't do anything if it's not done checking for updates
+                if (!LunaVersionUIPanel.futureUpdateInfo!!.isDone) {
+                    return
+                }
+
+                // Attempt to retrieve the update results from the other thread
+                try {
+                    LunaVersionUIPanel.updateInfo = LunaVersionUIPanel.futureUpdateInfo!![1L, TimeUnit.SECONDS]
+                    LunaVersionUIPanel.futureUpdateInfo = null
+                } catch (ex: Exception) {
+                    /* Log.error("Failed to retrieve mod update info", ex)
+                     ui.addMessage("Failed to retrieve mod update info!", Color.RED)
+                     ui.addMessage("Check starsector.log for details.", Color.RED)
+                     Global.getSector().removeTransientScript(this)
+                     isDone = true // Just in case*/
+                    return
+                }
+                isUpdateCheckDone = true
+
+                if (LunaVersionUIPanel.updateInfo != null)
+                {
+                    LunaVersionUIPanel.reconstruct = true
+                }
             }
         }
     }

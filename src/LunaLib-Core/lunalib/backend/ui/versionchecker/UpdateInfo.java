@@ -1,7 +1,9 @@
 package lunalib.backend.ui.versionchecker;
 
+import lunalib.lunaSettings.LunaSettings;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.lwjgl.input.Keyboard;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
@@ -175,6 +177,7 @@ public final class UpdateInfo
             githubRepo = json.optString("githubRepo");
             if (githubRepo.equals("")) githubRepo = null;*/
 
+
             directDownloadURL = json.optString("directDownloadURL");
             if (directDownloadURL.equals("")) directDownloadURL = null;
 
@@ -197,9 +200,13 @@ public final class UpdateInfo
                 {
                     Log.error("Failed to load master changelog file from URL \"" + changelogURL + "\"", ex);
                 }
-                catch (ExceptionInInitializerError ex)
+                catch (ExceptionInInitializerError | Exception ex)
                 {
-
+                    Log.error("Failed to load master changelog file from URL \"" + changelogURL + "\"", ex);
+                }
+                catch (Throwable ex)
+                {
+                    Log.error("Failed to load master changelog file from URL \"" + changelogURL + "\" due to an unknown error", ex);
                 }
             }
 

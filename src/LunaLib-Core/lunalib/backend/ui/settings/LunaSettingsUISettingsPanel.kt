@@ -3,7 +3,6 @@ package lunalib.backend.ui.settings
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
-import com.fs.starfarer.api.campaign.StarSystemAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.Misc
@@ -15,8 +14,14 @@ import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.util.getLunaString
+import lunalib.lunaExtensions.TooltipMakerExtensions.addLunaElement
 import lunalib.lunaSettings.LunaSettings
 import java.awt.Color
+import java.awt.Desktop
+import java.awt.Toolkit
+import java.awt.datatransfer.Clipboard
+import java.awt.datatransfer.StringSelection
+import java.net.URI
 
 data class ChangedSetting(var modID: String, var fieldID: String, var data: Any?)
 
@@ -737,10 +742,102 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             description.addPara("Test.", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
         }*/
 
+
+        description.addSpacer(40f)
+        description.addPara("Support", 0f, Misc.getPositiveHighlightColor(), Misc.getPositiveHighlightColor())
+
+        description.addPara("If you encounter an issue with this menu, or require help to integrate it with your own mod, you can message Lukas04#0856 on the Unofficial Starsector Discord. " +
+                "Reporting on the Forum thread works aswell, but expect responses to take significantly longer.", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
+
+        description.addSpacer(10f)
+
+        description.addLunaElement(width - 30, 60f).apply {
+            renderBackground = false
+            renderBorder = false
+
+            var discordLink = "https://discord.com/invite/a8AWVcPCPr"
+
+            var discordButton = innerElement.addLunaElement(200f, 40f)
+            discordButton.addText("Open USC Discord", Misc.getBasePlayerColor())
+            var tooltipText = "Left click to open in Browser. Rightclick to copy the URL to the clipboard." +
+                    "\n\nLink: $discordLink"
+
+            discordButton.addTooltip(tooltipText, 400f, TooltipMakerAPI.TooltipLocation.BELOW, "Warning", "Link")
+            discordButton.centerText()
+            discordButton.onHoverEnter {
+                discordButton.playScrollSound()
+                discordButton.borderColor = Misc.getDarkPlayerColor().brighter()
+            }
+            discordButton.onHoverExit {
+                discordButton.borderColor = Misc.getDarkPlayerColor()
+            }
+
+            discordButton.onClick {
+                discordButton.playClickSound()
+
+                if (it.eventValue == 0)
+                {
+                    try {
+                        Desktop.getDesktop().browse(URI.create(discordLink))
+                    } catch (ex: Exception) {
+
+                    }
+                }
+
+                if (it.eventValue == 1)
+                {
+                    val stringSelection = StringSelection(discordLink)
+                    val clipboard: Clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+                    clipboard.setContents(stringSelection, null)
+                }
+            }
+            discordButton.position.inTL((innerElement!!.position!!.width / 2) - discordButton.width - 30, 20f)
+
+            var forumLink = "https://fractalsoftworks.com/forum/index.php?topic=25658.0"
+
+            var forumButton = innerElement.addLunaElement(200f, 40f)
+            forumButton.addText("Open Lunalib Forum", Misc.getBasePlayerColor())
+            var tooltipText2 = "Left click to open in Browser. Rightclick to copy the URL to the clipboard." +
+                    "\n\nLink: $forumLink"
+
+            forumButton.addTooltip(tooltipText2, 400f, TooltipMakerAPI.TooltipLocation.BELOW, "Warning", "Link")
+            forumButton.centerText()
+            forumButton.onHoverEnter {
+                forumButton.playScrollSound()
+                forumButton.borderColor = Misc.getDarkPlayerColor().brighter()
+            }
+            forumButton.onHoverExit {
+                forumButton.borderColor = Misc.getDarkPlayerColor()
+            }
+
+            forumButton.onClick {
+                forumButton.playClickSound()
+
+                if (it.eventValue == 0)
+                {
+                    try {
+                        Desktop.getDesktop().browse(URI.create(forumLink))
+                    } catch (ex: Exception) {
+
+                    }
+                }
+
+                if (it.eventValue == 1)
+                {
+                    val stringSelection = StringSelection(forumLink)
+                    val clipboard: Clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+                    clipboard.setContents(stringSelection, null)
+                }
+            }
+            forumButton.position.inTL((innerElement!!.position!!.width / 2)  + 10, 20f)
+
+
+        }
+
+        description.addSpacer(20f)
+
+
         cardPanel.lunaElement!!.addUIElement(description)
-
-
-
 
 
     }

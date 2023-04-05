@@ -8,7 +8,6 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.Misc
-import com.fs.starfarer.combat.CombatEngine
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUIPlaceholder
@@ -19,7 +18,6 @@ import lunalib.backend.ui.versionchecker.UpdateInfo.ModInfo
 import lunalib.backend.util.getLunaString
 import lunalib.lunaExtensions.TooltipMakerExtensions.addLunaElement
 import me.xdrop.fuzzywuzzy.FuzzySearch
-import org.lazywizard.lazylib.combat.entities.SimpleEntity
 import org.lwjgl.input.Keyboard
 import java.awt.Color
 import java.awt.Desktop
@@ -50,6 +48,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
     private var height = 0f
 
     private val indexThread = "http://fractalsoftworks.com/forum/index.php?topic=177.0"
+    private val discordLink = "https://discord.com/invite/a8AWVcPCPr"
 
     var currentSearchText = ""
 
@@ -128,7 +127,8 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
             this.buttonText!!.text = "Mod Index"
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
 
-            this.uiElement.addTooltipToPrevious(TooltipHelper("Left click to open in Browser, Rightclick to copy the URL to the clipboard.", 400f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
+            this.uiElement.addTooltipToPrevious(TooltipHelper("The mod index is a list of many of the available mods on the Starsector Forum. \n\n" +
+                    "Left click to open in Browser. Rightclick to copy the URL to the clipboard.", 400f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
 
             onHover {
                 backgroundAlpha = 1f
@@ -161,6 +161,48 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
             }
         }
         indexButton.borderAlpha = 0.5f
+        //subpanelElement!!.addPara("Test", 0f)
+
+        leftElement!!.addSpacer(3f)
+
+        var uscButton = LunaUIButton(false, false,250f - 15, 30f,"", "Button", leftPanel!!, leftElement!!).apply {
+            this.buttonText!!.text = "Unofficial Discord"
+            this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
+
+            this.uiElement.addTooltipToPrevious(TooltipHelper("The Unofficial Starsector Discord server has a #mod_updates channel in which many modders will release beta releases for their mods before they create a forum page." +
+                    "\n\nLeft click to open in Browser. Rightclick to copy the URL to the clipboard.", 400f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
+
+            onHover {
+                backgroundAlpha = 1f
+            }
+            onNotHover {
+                backgroundAlpha = 0.5f
+            }
+
+            onHoverEnter {
+                Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+            }
+
+            onClick {
+
+                if (it.eventValue == 0)
+                {
+                    try {
+                        Desktop.getDesktop().browse(URI.create(discordLink))
+                    } catch (ex: Exception) {
+
+                    }
+                }
+
+                if (it.eventValue == 1)
+                {
+                    val stringSelection = StringSelection(discordLink)
+                    val clipboard: Clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+                    clipboard.setContents(stringSelection, null)
+                }
+            }
+        }
+        uscButton.borderAlpha = 0.5f
         //subpanelElement!!.addPara("Test", 0f)
 
         leftElement!!.addSpacer(3f)
@@ -226,7 +268,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
         }
 
         // 32 * amount of buttons + their spacers before + an extra gap between mods and the config buttons
-        var space = (30f * 3f)
+        var space = ((30f * 4f) + 3f)
 
         modsPanel = panel!!.createCustomPanel(250f - 9 , height - space, null)
         modsPanel!!.position.inTL(0f, space)
@@ -401,7 +443,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
         if (forumURL != null)
         {
-            var tooltipText = "Left click to open in Browser, Rightclick to copy the URL to the clipboard." +
+            var tooltipText = "Left click to open in Browser. Rightclick to copy the URL to the clipboard." +
                     "\n\nLink: $forumURL"
             forumButton.addTooltip(tooltipText, 400f, TooltipMakerAPI.TooltipLocation.BELOW, "Warning", "Link")
         }
@@ -456,7 +498,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
         if (downloadURL != null)
         {
-            var tooltipText = "Left click to open in Browser, Rightclick to copy the URL to the clipboard. To stay safe, do not open any file downloaded that isnt a .zip or .rar" +
+            var tooltipText = "Left click to open in Browser. Rightclick to copy the URL to the clipboard. To stay safe, do not open any file downloaded that isnt a .zip or .rar" +
                     "\n\nLink: $downloadURL"
             downloadButton.addTooltip(tooltipText, 400f, TooltipMakerAPI.TooltipLocation.BELOW, "Warning", "Link")
         }

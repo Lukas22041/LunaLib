@@ -117,7 +117,8 @@ internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean
                     event.consume()
                     continue
                 }
-                if (button!!.isSelected() && event.isKeyDownEvent && event.eventValue != -1 && event.eventValue != Keyboard.KEY_LSHIFT && event.eventValue != Keyboard.KEY_LCONTROL && event.eventValue != Keyboard.KEY_LMENU)
+                //if (button!!.isSelected() && event.isKeyDownEvent && event.eventValue != -1 && event.eventValue != Keyboard.KEY_LSHIFT && event.eventValue != Keyboard.KEY_LCONTROL && event.eventValue != Keyboard.KEY_LMENU)
+                if (button!!.isSelected() && event.isKeyDownEvent && event.eventValue != -1)
                 {
                     keycode = event.eventValue
                     button!!.unselect()
