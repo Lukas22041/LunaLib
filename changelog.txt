@@ -8,6 +8,7 @@ Version 1.5.7
 
 
 Version 1.5.6 ("Combat Activators" requires this version or above)
+
 -> The version checker changelogs now highlight any lines beginning with "Version" 
 -> Slightly Reduced Memory Useage from Loaded Settings
 
@@ -19,6 +20,7 @@ For Modders:
 
 
 Version 1.5.5
+
 -> The buttons in the version checker menu can now be rightclicked to copy their link to the clipboard.
 -> Added Tooltips for some of the version checker buttons.
 -> Improved how changelogs are displayed
@@ -27,11 +29,13 @@ Version 1.5.5
 
 
 Version 1.5.4
+
 -> Potentially fixed a Version Checker related crash.
 
 
 
 Version 1.5.3
+
 -> Improved the look of the Version Checker menu
 -> The VC screen now allows for a direct download button that opens the download link in the browser (Mods that have direct downloads for mod managers already support this)
 -> The VC screen now allows for a textfile to be displayed as a changelog.
@@ -89,6 +93,7 @@ Version 1.4.0
 -> Fixed some snippet ui elements not being updated for some of the recent UI changes.
 -> LunaSnippets are now abstract classes instead of interfaces, snippets from before this change will crash the game.
 -> Added the JavaWuzzy library to Lunalib, which allows for the useage of text matching algorithms. Can be found under /jars/libs/
+
 
 
 Among us
