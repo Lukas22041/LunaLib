@@ -2,6 +2,7 @@ package lunalib
 
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.combat.ShipwideAIFlags.AIFlags
 import lunalib.backend.scripts.KeybindsScript
 import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.ui.settings.LunaSettingsLoader

@@ -282,7 +282,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
         val mods = updateInfo!!.hasUpdate.sorted().toMutableList()
 
         mods.addAll(updateInfo!!.hasNoUpdate.sorted())
-        //mods.addAll(updateInfo!!.failed)
+        mods.addAll(updateInfo!!.failed)
 
         var spacing = 0f
 
@@ -362,21 +362,26 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
             cardPanel.lunaElement!!.addUIElement(paragraphElement)
 
-            var text = "${mod.name}\n${mod.remoteVersion.version}"
-            if (mod.failedUpdateCheck())
+            var text = ""
+            if (mod.failedUpdateCheck() || mod.remoteVersion == null)
             {
                 text = "${mod.name}\n" +
                         "Failed to get Version"
             }
-
-            if (mod.isUpdateAvailable)
+            else if (mod.isUpdateAvailable)
             {
                 text = "${mod.name}\n${mod.versionString}"
             }
+            else
+            {
+                text = "${mod.name}\n" + "${mod.remoteVersion.version}"
+            }
+
+
 
             var para = paragraphElement.addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
 
-            if (mod.failedUpdateCheck())
+            if (mod.failedUpdateCheck() || mod.remoteVersion == null)
             {
                 para.setHighlight("Failed to get Version")
                 para.setHighlightColor(Misc.getNegativeHighlightColor())
@@ -494,7 +499,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
         //Download Button
         var downloadButton = description.addLunaElement(200f, 40f)
-        var downloadURL = mod!!.remoteVersion.directDownloadURL
+        var downloadURL = mod!!.remoteVersion?.directDownloadURL
 
         if (downloadURL != null)
         {
@@ -559,7 +564,20 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
         description.addPara("Name: ${mod.name}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Name")
         description.addPara("Installed Version: ${mod.localVersion.version}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Installed Version")
-        description.addPara("Online Version: ${mod.remoteVersion.version}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Online Version")
+
+        if (selectedMod!!.failedUpdateCheck() || selectedMod!!.remoteVersion == null)
+        {
+            description.addPara("Online Version: Failed to get version", 0f, Misc.getBasePlayerColor(), Misc.getNegativeHighlightColor(), ).apply {
+                setHighlight("Online Version", "Failed to get version")
+                setHighlightColors(Misc.getHighlightColor(), Misc.getNegativeHighlightColor())
+            }
+            description.addSpacer(5f)
+            description.addPara("Error: " + selectedMod!!.errorMessage, 0f, Misc.getNegativeHighlightColor(), Misc.getNegativeHighlightColor())
+        }
+        else
+        {
+            description.addPara("Online Version: ${mod.remoteVersion.version}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Online Version")
+        }
 
         description.addSpacer(20f)
 
@@ -567,38 +585,44 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
         description.addSpacer(5f)
 
 
-        var lunaElement = description.addLunaElement(width - 240 - 60 , cardpanelheight * 0.7f).apply {
-            enableTransparency = true
+        if (!selectedMod!!.failedUpdateCheck() || selectedMod!!.remoteVersion != null)
+        {
+            var lunaElement = description.addLunaElement(width - 240 - 60 , cardpanelheight * 0.7f).apply {
+                enableTransparency = true
 
-          //  innerElement.addSpacer(5f)
+                //  innerElement.addSpacer(5f)
 
-        }
-
-        var scroller = lunaElement.elementPanel.createUIElement(width - 240 - 60 , cardpanelheight * 0.7f, true).apply {
-            var text = ""
-            var header = addSectionHeading("Changelog", Alignment.MID, 0f)
-            header.position.setSize(width - 240 - 60, 20f)
-            addSpacer(5f)
-
-            var highlightedLines: List<String> = ArrayList()
-            if (mod.remoteVersion.txtChangelog != null)
-            {
-                text = mod.remoteVersion.txtChangelog
-
-                highlightedLines = text.split("\n").filter { it.lowercase().trim().startsWith("version") }
-            }
-            else
-            {
-                text = "No changelog available"
             }
 
-            var change = addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Online Version")
-            change.setHighlight(*highlightedLines.toTypedArray())
-            /*this.position.setSize(position.width, position.height + change.computeTextHeight(change.text))
-            this.position.setSize(position.width, position.height )*/
+            var scroller = lunaElement.elementPanel.createUIElement(width - 240 - 60 , cardpanelheight * 0.7f, true).apply {
+                var text = ""
+                var header = addSectionHeading("Changelog", Alignment.MID, 0f)
+                header.position.setSize(width - 240 - 60, 20f)
+                addSpacer(5f)
+
+                var highlightedLines: List<String> = ArrayList()
+                if (!mod.failedUpdateCheck() && mod.remoteVersion != null && mod.remoteVersion.txtChangelog != null)
+                {
+                    text = mod.remoteVersion.txtChangelog
+
+                    highlightedLines = text.split("\n").filter { it.lowercase().trim().startsWith("version") }
+                }
+                else
+                {
+                    text = "No changelog available"
+                }
+
+                var change = addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Online Version")
+                change.setHighlight(*highlightedLines.toTypedArray())
+                /*this.position.setSize(position.width, position.height + change.computeTextHeight(change.text))
+                this.position.setSize(position.width, position.height )*/
+
+            }
+
+            lunaElement.elementPanel.addUIElement(scroller)
         }
 
-        lunaElement.elementPanel.addUIElement(scroller)
+
 
         cardPanel.lunaElement!!.addUIElement(description)
     }

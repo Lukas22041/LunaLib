@@ -192,21 +192,10 @@ public final class UpdateInfo
                     Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
                     txtChangelog = scanner.next();
                 }
-                catch (MalformedURLException ex)
+                //Temporarily removed stacktrace reporting for now, caused lots of issues when looking for actual issues.
+                catch (Exception ex)
                 {
-                    Log.error("Invalid changelog file URL \"" + changelogURL + "\"", ex);
-                }
-                catch (IOException ex)
-                {
-                    Log.error("Failed to load master changelog file from URL \"" + changelogURL + "\"", ex);
-                }
-                catch (ExceptionInInitializerError | Exception ex)
-                {
-                    Log.error("Failed to load master changelog file from URL \"" + changelogURL + "\"", ex);
-                }
-                catch (Throwable ex)
-                {
-                    Log.error("Failed to load master changelog file from URL \"" + changelogURL + "\" due to an unknown error", ex);
+                    Log.error("Error while loading remote changelog file from \"" + changelogURL + "\", exception type: " + ex.getClass());
                 }
             }
 

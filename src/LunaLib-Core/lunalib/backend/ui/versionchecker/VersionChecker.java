@@ -77,24 +77,26 @@ final class VersionChecker
         Log.info("Loading version info from remote URL " + versionFileURL);
 
         // Load JSON from external URL and parse version info from it
-        try (InputStream stream = new URL(versionFileURL).openStream();
-             Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A"))
+        try
         {
+            InputStream stream = new URL(versionFileURL).openStream();
+            Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
             return new VersionFile(sanitizeJSON(scanner.next()), true);
         }
+        //Temporarily removed stacktrace reporting for now, made it a lot harder to detect the real issues
         catch (MalformedURLException ex)
         {
-            Log.error("Invalid master version file URL \"" + versionFileURL + "\"", ex);
+            Log.error("Invalid master version file URL \"" + versionFileURL + "\"");
             return "invalid master version file URL \"" + versionFileURL + "\"";
         }
         catch (IOException ex)
         {
-            Log.error("Failed to load master version file from URL \"" + versionFileURL + "\"", ex);
+            Log.error("Failed to load master version file from URL \"" + versionFileURL + "\"");
             return "failed to load master version file from URL \"" + versionFileURL + "\"";
         }
         catch (JSONException ex)
         {
-            Log.error("Malformed JSON in remote version file at URL \"" + versionFileURL + "\"", ex);
+            Log.error("Malformed JSON in remote version file at URL \"" + versionFileURL + "\"");
             return "malformed JSON in remote version file at URL \"" + versionFileURL + "\"";
         }
     }
