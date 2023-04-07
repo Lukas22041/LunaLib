@@ -329,6 +329,8 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
                     parentClass!!.dialog!!.showTextPanel()
                     parentClass!!.dialog!!.showVisualPanel()
                     parentClass!!.dialog!!.dismiss()
+                    LunaUIBaseElement.selectedMap.clear()
+
                     Global.getSector().doHyperspaceTransition(Global.getSector().playerFleet, Global.getSector().playerFleet,
                         JumpPointAPI.JumpDestination(entity, ""), 0f)
                 }
@@ -339,6 +341,8 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
                     parentClass!!.dialog!!.showTextPanel()
                     parentClass!!.dialog!!.showVisualPanel()
                     parentClass!!.dialog!!.dismiss()
+                    LunaUIBaseElement.selectedMap.clear()
+
                     Global.getSector().doHyperspaceTransition(Global.getSector().playerFleet, Global.getSector().playerFleet,
                         JumpPointAPI.JumpDestination(entity.center, ""), 0f)
                 }

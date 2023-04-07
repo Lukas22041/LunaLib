@@ -1,3 +1,11 @@
+Version 1.5.8
+
+-> The Version Checker screen now properly shows mods that failed to load & mods that do not have support.
+-> Fixed a Memory Leak that occured when pressing the "Teleport" button in the debug menu.
+-> Reduced the amount of log-spam from lunalibs implementation of Version Checker.
+
+
+
 Version 1.5.7
 
 -> Keybind configs now accept L-Shift, L-CTRL and L-ALT

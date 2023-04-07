@@ -299,7 +299,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
 
             var cardPanel = LunaUIPlaceholder(true, 250f - 15 , 60f, mod, "ModsButton", modsPanel!!, modsElement!!).apply {
 
-                if (mod.isUpdateAvailable)
+                if (mod.isUpdateAvailable && !mod.failedUpdateCheck())
                 {
                     this.uiElement.addTooltipToPrevious(TooltipHelper("Update Available", 200f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
                 }
@@ -398,6 +398,8 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
             spacing += cardPanel.position!!.height
         }
 
+        unsupportedMods()
+
         modsPanel!!.addUIElement(modsElement)
 
         addRightPanel()
@@ -406,11 +408,11 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
     fun addRightPanel()
     {
 
-        if (selectedMod == null) return
         if (rightPanel != null)
         {
             panel!!.removeComponent(rightPanel)
         }
+        if (selectedMod == null) return
 
         var mHeight = panel!!.position.height * 0.9f
 
@@ -647,6 +649,81 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
         {
             reconstruct = false
             constructLeftPanel()
+        }
+    }
+
+    fun unsupportedMods()
+    {
+        var spacing = 0f
+        for (mod in unsupportedMods)
+        {
+            var search = currentSearchText.lowercase()
+            var result = FuzzySearch.extractOne(search, listOf(mod.name.lowercase()))
+
+            var failed = false
+
+            if (currentSearchText != "" && !mod.name.lowercase().contains(currentSearchText.lowercase())) failed = true
+            if (search != "" && result.score > 60) failed = false
+            if (failed) continue
+
+            var cardPanel = LunaUIPlaceholder(true, 250f - 15 , 60f, mod, "ModsButton", modsPanel!!, modsElement!!).apply {
+
+                this.uiElement.addTooltipToPrevious(TooltipHelper("This mod does not have Version Checker Support.", 300f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
+
+                this.backgroundAlpha = 0.9f
+                this.borderAlpha = 0.75f
+
+
+                onClick {
+                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
+                    this.setSelected()
+                    addRightPanel()
+                }
+
+                onUpdate {
+                    if (this.isSelected())
+                    {
+                        this.darkColor = Misc.getDarkPlayerColor().brighter().brighter()
+                    }
+                    else
+                    {
+                        this.darkColor = Misc.getDarkPlayerColor()
+                    }
+                }
+
+                onHover {
+                    borderAlpha = 1f
+                }
+                onNotHover {
+                    borderAlpha = 0.75f
+                }
+
+                onHoverEnter {
+                    Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+                }
+
+                onSelect {
+
+                    selectedMod = null
+                }
+            }
+
+            var paragraphElement = cardPanel.lunaElement!!.createUIElement(250f - 70, 60f, false)
+            paragraphElement.position.inTL(2f,5f)
+
+            cardPanel.lunaElement!!.addUIElement(paragraphElement)
+
+            var text = "${mod.name}\n" +
+                    "Unsupported"
+
+
+            var para = paragraphElement.addPara(text, 0f, Misc.getBasePlayerColor(), Color(150, 0, 255), "Unsupported")
+
+            //para.position.inTL(0f, (30f - para.position.height / 2))
+
+            modsElement!!.addSpacer(5f)
+
+            spacing += cardPanel.position!!.height
         }
     }
 
