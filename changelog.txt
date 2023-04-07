@@ -1,3 +1,8 @@
+Version 1.5.9
+
+-> Fixes a single crash on startup that happens on some hardware, yup thats it, dont bother to update if you dont get crashes on startup.
+
+
 Version 1.5.8
 
 -> The Version Checker screen now properly shows mods that failed to load & mods that do not have support.

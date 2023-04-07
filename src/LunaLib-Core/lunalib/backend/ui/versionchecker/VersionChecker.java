@@ -99,6 +99,16 @@ final class VersionChecker
             Log.error("Malformed JSON in remote version file at URL \"" + versionFileURL + "\"");
             return "malformed JSON in remote version file at URL \"" + versionFileURL + "\"";
         }
+        catch (NoClassDefFoundError ex)
+        {
+            Log.error("Encounterd unknown error while loading URL \"" + versionFileURL + "\"");
+            return "Encounterd unknown error while loading \"" + versionFileURL + "\"";
+        }
+        catch (Throwable ex)
+        {
+            Log.error("Encounterd unknown error while loading URL \"" + versionFileURL + "\"");
+            return "Encounterd unknown error while loading \"" + versionFileURL + "\"";
+        }
     }
 
     private static String getLatestSSVersion() throws IOException, NoSuchElementException
@@ -115,6 +125,11 @@ final class VersionChecker
         catch (MalformedURLException ex)
         {
             throw new RuntimeException("Invalid vanilla update URL \"" + VANILLA_UPDATE_URL + "\"", ex);
+        }
+        catch (Throwable ex)
+        {
+            Log.error("Error while loading vanilla update data: \"" + VANILLA_UPDATE_URL + "\"");
+            return null;
         }
     }
 
@@ -322,7 +337,7 @@ final class VersionChecker
                             + VANILLA_UPDATE_URL + "\"", ex);
                     results.setFailedSSError(ex.getClass().getSimpleName());
                 }
-                catch (Exception ex)
+                catch (Throwable ex)
                 {
                     Log.error("Failed to parse vanilla update data from URL \""
                             + VANILLA_UPDATE_URL + "\"", ex);

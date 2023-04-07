@@ -193,9 +193,10 @@ public final class UpdateInfo
                     txtChangelog = scanner.next();
                 }
                 //Temporarily removed stacktrace reporting for now, caused lots of issues when looking for actual issues.
-                catch (Exception ex)
+                //Temporarily removed stacktrace reporting for now, made it a lot harder to detect the real issues
+                catch (Throwable ex)
                 {
-                    Log.error("Error while loading remote changelog file from \"" + changelogURL + "\", exception type: " + ex.getClass());
+                    Log.error("Error while loading changelog from URL: \"" + txtChangelog + "\", Exception: " + ex.getClass());
                 }
             }
 
