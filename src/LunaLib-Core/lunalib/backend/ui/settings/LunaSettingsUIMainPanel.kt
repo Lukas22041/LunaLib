@@ -9,13 +9,14 @@ import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import lunalib.backend.scripts.LoadedSettings
+import lunalib.backend.ui.components.base.BaseCustomPanelPlugin
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.util.TooltipHelper
 import org.lwjgl.input.Keyboard
 import lunalib.backend.util.*
 
 //I dont recommend anyone to read through my UI code to learn from, its equivelant to the ramblings of an insane person, and such can only be understood by the crazy person themself.
-class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
+class LunaSettingsUIMainPanel(var newGame: Boolean) : BaseCustomPanelPlugin()
 {
     private var dialog: InteractionDialogAPI? = null
     private var callbacks: CustomVisualDialogDelegate.DialogCallbacks? = null
@@ -37,7 +38,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : CustomUIPanelPlugin
     }
 
 
-    fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?, dialog: InteractionDialogAPI?) {
+    override fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?, dialog: InteractionDialogAPI?) {
         this.panel = panel
         this.callbacks = callbacks
         this.dialog = dialog

@@ -5,8 +5,9 @@ import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CoreUITabId
 import com.fs.starfarer.api.impl.campaign.DebugFlags
 import com.fs.starfarer.api.util.IntervalUtil
-import lunalib.backend.ui.debug.OpenDebugWindowInteractionV2
-import lunalib.backend.ui.settings.OpenSettingsPanelInteraction
+import lunalib.backend.ui.OpenCustomPanelFromDialog
+import lunalib.backend.ui.debug.LunaDebugUIMainPanel
+import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
 import org.lwjgl.input.Keyboard
 
 internal class KeybindsScript :  EveryFrameScript
@@ -49,7 +50,7 @@ internal class KeybindsScript :  EveryFrameScript
         if (Keyboard.isKeyDown(Keyboard.KEY_NONE) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) return
         var ui = Global.getSector().campaignUI
 
-        ui.showInteractionDialog(OpenSettingsPanelInteraction(), Global.getSector().playerFleet)
+        ui.showInteractionDialog(OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), Global.getSector().playerFleet)
 
 
         keyPressed = true
@@ -61,7 +62,7 @@ internal class KeybindsScript :  EveryFrameScript
 
         var ui = Global.getSector().campaignUI
         //ui.showInteractionDialog(OpenDebugWindowInteraction(), Global.getSector().playerFleet)
-        ui.showInteractionDialog(OpenDebugWindowInteractionV2(), Global.getSector().playerFleet)
+        ui.showInteractionDialog(OpenCustomPanelFromDialog(LunaDebugUIMainPanel()), Global.getSector().playerFleet)
 
         keyPressed = true
     }

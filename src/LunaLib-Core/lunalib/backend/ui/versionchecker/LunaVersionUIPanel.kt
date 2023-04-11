@@ -8,9 +8,8 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.Misc
-import lunalib.backend.ui.components.base.LunaUIBaseElement
+import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
-import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.ui.components.util.TooltipHelper
 import lunalib.backend.ui.settings.LunaSettingsLoader
@@ -29,7 +28,7 @@ import java.util.concurrent.Future
 
 
 //I dont recommend anyone to read through my UI code to learn from, its equivelant to the ramblings of an insane person, and such can only be understood by the crazy person themself.
-class LunaVersionUIPanel() : CustomUIPanelPlugin
+class LunaVersionUIPanel() : BaseCustomPanelPlugin()
 {
     private var dialog: InteractionDialogAPI? = null
     private var callbacks: CustomVisualDialogDelegate.DialogCallbacks? = null
@@ -74,7 +73,7 @@ class LunaVersionUIPanel() : CustomUIPanelPlugin
         }
     }
 
-    fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?, dialog: InteractionDialogAPI?) {
+    override fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?, dialog: InteractionDialogAPI?) {
         this.panel = panel
         this.callbacks = callbacks
         this.dialog = dialog

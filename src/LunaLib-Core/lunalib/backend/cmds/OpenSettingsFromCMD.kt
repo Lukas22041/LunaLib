@@ -5,8 +5,8 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.campaign.rules.MemoryAPI
 import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin
 import com.fs.starfarer.api.util.Misc
+import lunalib.backend.ui.OpenCustomPanelFromDialog
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
-import lunalib.backend.ui.settings.OpenSettingsPanelDelegate
 
 // Used to open the LunaSettingsUI from Rules.CSV
 // Not part of the other rules utilities.
@@ -21,7 +21,7 @@ class OpenSettingsFromCMD : BaseCommandPlugin() {
 
         dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.8f,
             Global.getSettings().screenHeight * 0.8f,
-            OpenSettingsPanelDelegate(LunaSettingsUIMainPanel(true), dialog))
+            OpenCustomPanelFromDialog.VisualDelegate(LunaSettingsUIMainPanel(true), dialog))
 
         return true
     }

@@ -1,4 +1,4 @@
-package lunalib.backend.ui.settings
+package lunalib.backend.ui
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin
@@ -9,9 +9,10 @@ import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate.DialogCallbacks
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
+import lunalib.backend.ui.components.base.BaseCustomPanelPlugin
 
 
-internal class OpenSettingsPanelInteraction : InteractionDialogPlugin
+internal class OpenCustomPanelFromDialog(var plugin: BaseCustomPanelPlugin) : InteractionDialogPlugin
 {
 
     var dialog: InteractionDialogAPI? = null
@@ -26,7 +27,7 @@ internal class OpenSettingsPanelInteraction : InteractionDialogPlugin
 
         dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.8f,
             Global.getSettings().screenHeight * 0.8f,
-            OpenSettingsPanelDelegate(LunaSettingsUIMainPanel(false), dialog))
+            VisualDelegate(plugin, dialog))
     }
 
     override fun optionSelected(optionText: String?, optionData: Any?) {
@@ -51,39 +52,40 @@ internal class OpenSettingsPanelInteraction : InteractionDialogPlugin
     override fun getMemoryMap(): MutableMap<String, MemoryAPI>? {
         return null
     }
+
+    internal class VisualDelegate(missionPanel: BaseCustomPanelPlugin?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
+    {
+
+        private var callbacks: DialogCallbacks? = null
+        private var plugin: BaseCustomPanelPlugin? = null
+        private var dialog: InteractionDialogAPI? = null
+
+        init {
+            this.plugin = missionPanel;
+            this.dialog = dialog;
+        }
+
+        override fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?) {
+            this.callbacks = callbacks;
+            plugin!!.init(panel, callbacks, dialog);
+        }
+
+        override fun getCustomPanelPlugin(): CustomUIPanelPlugin? {
+            return plugin
+        }
+
+        override fun getNoiseAlpha(): Float {
+            return 0f
+        }
+
+        override fun advance(amount: Float) {
+
+        }
+
+        override fun reportDismissed(option: Int) {
+
+        }
+
+    }
 }
 
-internal class OpenSettingsPanelDelegate(missionPanel: LunaSettingsUIMainPanel?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
-{
-
-    private var callbacks: DialogCallbacks? = null
-    private var plugin: LunaSettingsUIMainPanel? = null
-    private var dialog: InteractionDialogAPI? = null
-
-    init {
-        this.plugin = missionPanel;
-        this.dialog = dialog;
-    }
-
-    override fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?) {
-        this.callbacks = callbacks;
-        plugin!!.init(panel, callbacks, dialog);
-    }
-
-    override fun getCustomPanelPlugin(): CustomUIPanelPlugin? {
-        return plugin
-    }
-
-    override fun getNoiseAlpha(): Float {
-        return 0f
-    }
-
-    override fun advance(amount: Float) {
-
-    }
-
-    override fun reportDismissed(option: Int) {
-
-    }
-
-}

@@ -11,10 +11,9 @@ import com.fs.starfarer.combat.CombatState
 import com.fs.starfarer.title.TitleScreenState
 import com.fs.state.AppDriver
 import data.scripts.util.MagicSettings
+import lunalib.backend.ui.OpenCustomPanelFromDialog
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
-import lunalib.backend.ui.settings.OpenSettingsPanelInteraction
 import lunalib.backend.ui.versionchecker.LunaVersionUIPanel
-import lunalib.backend.ui.versionchecker.OpenVersionPanelInteraction
 import lunalib.backend.util.getLunaString
 import lunalib.lunaSettings.LunaSettings
 import org.lazywizard.lazylib.MathUtils
@@ -128,13 +127,13 @@ class CombatHandler : EveryFrameCombatPlugin
                 try {
                     var combatscreen: CombatState = AppDriver.getInstance().currentState as CombatState
 
-                    var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenSettingsPanelInteraction(), combatscreen.screenPanel, combatscreen);
+                    var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), combatscreen.screenPanel, combatscreen);
                     test.show(0.3f, 0.2f)
                 } catch (e: Throwable) {
                     try {
                         var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
 
-                        var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenSettingsPanelInteraction(), titlescreen.screenPanel, titlescreen);
+                        var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), titlescreen.screenPanel, titlescreen);
                         test.show(0.3f, 0.2f)
 
                     } catch (e: Throwable) {}
@@ -176,13 +175,13 @@ class CombatHandler : EveryFrameCombatPlugin
                 try {
                     var combatscreen: CombatState = AppDriver.getInstance().currentState as CombatState
 
-                    var idp = com.fs.starfarer.ui.newui.o0Oo(null, OpenVersionPanelInteraction(), combatscreen.screenPanel, combatscreen);
+                    var idp = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaVersionUIPanel()), combatscreen.screenPanel, combatscreen);
                     idp.show(0.3f, 0.2f)
                 } catch (e: Throwable) {
                     try {
                         var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
 
-                        var idp = com.fs.starfarer.ui.newui.o0Oo(null, OpenVersionPanelInteraction(), titlescreen.screenPanel, titlescreen);
+                        var idp = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaVersionUIPanel()), titlescreen.screenPanel, titlescreen);
                         idp.show(0.3f, 0.2f)
 
                     } catch (e: Throwable) {}
@@ -254,7 +253,6 @@ class CombatHandler : EveryFrameCombatPlugin
                                 dialogActive = getMethod.invoke(obj, instanceToGetFrom)
                             }
                         }
-
                     } catch (e: Throwable) {}
 
                 }
