@@ -8,6 +8,8 @@ import com.fs.starfarer.api.util.IntervalUtil
 import lunalib.backend.ui.OpenCustomPanelFromDialog
 import lunalib.backend.ui.debug.LunaDebugUIMainPanel
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
+import lunalib.backend.ui.testpanel.TestPanel
+import lunalib.lunaExtensions.openLunaCustomPanel
 import org.lwjgl.input.Keyboard
 
 internal class KeybindsScript :  EveryFrameScript
@@ -43,6 +45,7 @@ internal class KeybindsScript :  EveryFrameScript
         if (Keyboard.isKeyDown(LoadedSettings.settingsKeybind!!)) openSettings()
         else if (Keyboard.isKeyDown(Keyboard.KEY_F2) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) openSettings()
         else if (Keyboard.isKeyDown(LoadedSettings.debugKeybind!!)) openDebug()
+        else if (Keyboard.isKeyDown(LoadedSettings.uidebugKeybind!!)) openTestPanel()
     }
 
     fun openSettings()
@@ -50,7 +53,8 @@ internal class KeybindsScript :  EveryFrameScript
         if (Keyboard.isKeyDown(Keyboard.KEY_NONE) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMENU)) return
         var ui = Global.getSector().campaignUI
 
-        ui.showInteractionDialog(OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), Global.getSector().playerFleet)
+        //ui.showInteractionDialog(OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), Global.getSector().playerFleet)
+        Global.getSector().openLunaCustomPanel(LunaSettingsUIMainPanel(false))
 
 
         keyPressed = true
@@ -62,7 +66,20 @@ internal class KeybindsScript :  EveryFrameScript
 
         var ui = Global.getSector().campaignUI
         //ui.showInteractionDialog(OpenDebugWindowInteraction(), Global.getSector().playerFleet)
-        ui.showInteractionDialog(OpenCustomPanelFromDialog(LunaDebugUIMainPanel()), Global.getSector().playerFleet)
+        // ui.showInteractionDialog(OpenCustomPanelFromDialog(LunaDebugUIMainPanel()), Global.getSector().playerFleet)
+        Global.getSector().openLunaCustomPanel(LunaDebugUIMainPanel())
+
+        keyPressed = true
+    }
+
+    fun openTestPanel()
+    {
+        if (Keyboard.isKeyDown(Keyboard.KEY_NONE) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) return
+
+        var ui = Global.getSector().campaignUI
+        //ui.showInteractionDialog(OpenDebugWindowInteraction(), Global.getSector().playerFleet)
+        // ui.showInteractionDialog(OpenCustomPanelFromDialog(LunaDebugUIMainPanel()), Global.getSector().playerFleet)
+        Global.getSector().openLunaCustomPanel(TestPanel())
 
         keyPressed = true
     }

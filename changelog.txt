@@ -1,3 +1,33 @@
+
+Version 1.6.0
+
+Will Crash "Random Assortment of Things" v1.2.0 or lower in certain sections.
+
+For Devs:
+All features in this patch are kotlin related, sorry java people.
+
+-> Added 5 new UI Elements, can be accessed from TooltipMakerAPI through the TooltipMakerExtensions class.
+ - LunaChargeButton, a button that needs to be hold for a short time to be activated.
+ - LunaProgressBar, a simple bar that fills from left to right depending on its value.
+ - LunaColorPicker, allows to select a color from a hue-based picker.
+ - LunaTextField, a recreation of the vanilla textfield that allows multiline text.
+ - LunaSpriteElement, a simple element displaying a sprite that can be modified unlike the vanilla equievalance.
+
+-> Added a new config option under "Debug" that lets you bind a hotkey that opens a custom panel that displays all Lunalib UI elements.
+-> LunaElements now hold a "CustomData" variable to store data.
+
+-> Added the "LunaCustomPanelPlugin" class.
+ - A Simple Class that can be used to easily open a custom panel.
+ - Used through SectorAPI.openLunaCustomPanel() or InteractionDialogAPI.openLunaCustomPanel()
+
+Extension Functions
+ - Removed "addScript" and "addTransientScript" as they dont fit the context of the lib.
+ - Added SectorAPI.openLunaCustomPanel() & InteractionDialogAPI.openLunaCustomPanel()
+ - Added Extenstion Functions to TooltipMakerAPI for each new UI element.
+ - Fixed TooltipMakerExtensions being inside an object.
+
+
+
 Version 1.5.9
 
 -> Fixes a single crash on startup that happens on some hardware, yup thats it, dont bother to update if you dont get crashes on startup.

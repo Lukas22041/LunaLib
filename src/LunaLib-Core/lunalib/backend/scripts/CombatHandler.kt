@@ -3,14 +3,15 @@ package lunalib.backend.scripts
 import com.fs.starfarer.api.GameState
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.combat.*
-import com.fs.starfarer.api.impl.campaign.ids.Tags
 import com.fs.starfarer.api.input.InputEventAPI
+import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.Fonts
+import com.fs.starfarer.api.ui.UIComponentAPI
+import com.fs.starfarer.api.ui.UIPanelAPI
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.combat.CombatState
 import com.fs.starfarer.title.TitleScreenState
 import com.fs.state.AppDriver
-import data.scripts.util.MagicSettings
 import lunalib.backend.ui.OpenCustomPanelFromDialog
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
 import lunalib.backend.ui.versionchecker.LunaVersionUIPanel
@@ -21,7 +22,6 @@ import org.lazywizard.lazylib.ui.LazyFont
 import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL20
 import java.awt.Color
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
@@ -67,6 +67,9 @@ class CombatHandler : EveryFrameCombatPlugin
 
     override fun advance(amount: Float, events: MutableList<InputEventAPI>?)
     {
+
+
+
         if (buttonsEnabled == null)
         {
             LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
@@ -127,16 +130,45 @@ class CombatHandler : EveryFrameCombatPlugin
                 try {
                     var combatscreen: CombatState = AppDriver.getInstance().currentState as CombatState
 
-                    var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), combatscreen.screenPanel, combatscreen);
-                    test.show(0.3f, 0.2f)
+
+
+                    /*var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), combatscreen.screenPanel, combatscreen);
+                    test.show(0.3f, 0.2f)*/
                 } catch (e: Throwable) {
                     try {
                         var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
 
+                     /*   var createIDP = ReflectionUtils.createClass(CreateInteractionDialog::class.java)
+                        createIDP.invoke()
+
+                        var handle = ReflectionUtils.getConstructor(com.fs.starfarer.ui.newui.o0Oo::class.java)
+                        var dialog = handle.invoke(null, OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), titlescreen.screenPanel, titlescreen)*/
+
                         var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), titlescreen.screenPanel, titlescreen);
                         test.show(0.3f, 0.2f)
 
-                    } catch (e: Throwable) {}
+
+
+
+
+
+
+                        //Technicly works, requires a new panel plugin though that does what the panel provided by the dialog gives though, aka a dark background and it consuming inputs from outside of the panel.
+
+                       /* var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
+
+                        var plugin = LunaSettingsUIMainPanel(false)
+                        var panel = Global.getSettings().createCustom(Global.getSettings().screenWidth * 0.8f, Global.getSettings().screenHeight * 0.8f, plugin)
+                        plugin.init(panel, null, null)
+                        panel.position.inTL(Global.getSettings().screenWidth * 0.1f, Global.getSettings().screenHeight * 0.1f)
+                        (titlescreen.screenPanel as UIPanelAPI).addComponent(panel)*/
+
+
+
+                    } catch (e: Throwable) {
+                        Global.getLogger(this::class.java).error("Would have crashed ${e.printStackTrace()}")
+                       // println("Would have crashed ${e.printStackTrace()}")
+                    }
                 }
             }
         }
@@ -220,11 +252,8 @@ class CombatHandler : EveryFrameCombatPlugin
     override fun renderInUICoords(viewport: ViewportAPI?) {
 
 
-
         if (Global.getCurrentState() == GameState.TITLE && tip != null)
         {
-
-
             if (System.getProperty("os.name").startsWith("Windows") && buttonsEnabled != null && buttonsEnabled!!)
             {
                 var dialogActive: Any? = null

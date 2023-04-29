@@ -326,9 +326,7 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
             if (entity is SectorEntityToken)
             {
                 button.onClick {
-                    parentClass!!.dialog!!.showTextPanel()
-                    parentClass!!.dialog!!.showVisualPanel()
-                    parentClass!!.dialog!!.dismiss()
+                    parentClass!!.close()
                     LunaUIBaseElement.selectedMap.clear()
 
                     Global.getSector().doHyperspaceTransition(Global.getSector().playerFleet, Global.getSector().playerFleet,
@@ -338,9 +336,7 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
             if (entity is StarSystemAPI)
             {
                 button.onClick {
-                    parentClass!!.dialog!!.showTextPanel()
-                    parentClass!!.dialog!!.showVisualPanel()
-                    parentClass!!.dialog!!.dismiss()
+                    parentClass!!.close()
                     LunaUIBaseElement.selectedMap.clear()
 
                     Global.getSector().doHyperspaceTransition(Global.getSector().playerFleet, Global.getSector().playerFleet,

@@ -9,10 +9,10 @@ import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate.DialogCallbacks
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
-import lunalib.backend.ui.components.base.BaseCustomPanelPlugin
+import lunalib.lunaUI.panel.LunaBaseCustomPanelPlugin
 
 
-internal class OpenCustomPanelFromDialog(var plugin: BaseCustomPanelPlugin) : InteractionDialogPlugin
+class OpenCustomPanelFromDialog(var plugin: LunaBaseCustomPanelPlugin) : InteractionDialogPlugin
 {
 
     var dialog: InteractionDialogAPI? = null
@@ -27,7 +27,7 @@ internal class OpenCustomPanelFromDialog(var plugin: BaseCustomPanelPlugin) : In
 
         dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.8f,
             Global.getSettings().screenHeight * 0.8f,
-            VisualDelegate(plugin, dialog))
+            VisualDelegate(plugin, dialog, false))
     }
 
     override fun optionSelected(optionText: String?, optionData: Any?) {
@@ -53,21 +53,24 @@ internal class OpenCustomPanelFromDialog(var plugin: BaseCustomPanelPlugin) : In
         return null
     }
 
-    internal class VisualDelegate(missionPanel: BaseCustomPanelPlugin?, dialog: InteractionDialogAPI) : CustomVisualDialogDelegate
+    class VisualDelegate(missionPanel: LunaBaseCustomPanelPlugin?, dialog: InteractionDialogAPI, existing: Boolean) : CustomVisualDialogDelegate
     {
 
         private var callbacks: DialogCallbacks? = null
-        private var plugin: BaseCustomPanelPlugin? = null
+        private var plugin: LunaBaseCustomPanelPlugin? = null
         private var dialog: InteractionDialogAPI? = null
+
+        private var existing: Boolean
 
         init {
             this.plugin = missionPanel;
             this.dialog = dialog;
+            this.existing = existing
         }
 
         override fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?) {
             this.callbacks = callbacks;
-            plugin!!.init(panel, callbacks, dialog);
+            plugin!!.init(panel!!, callbacks!!, dialog!!, existing);
         }
 
         override fun getCustomPanelPlugin(): CustomUIPanelPlugin? {

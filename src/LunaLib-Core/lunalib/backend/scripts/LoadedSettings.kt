@@ -11,6 +11,7 @@ class LoadedSettings : LunaSettingsListener
         var debugKeybind = LunaSettings.getInt("lunalib", "luna_DebugKeybind")
         var devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind")
         var debugEntryCap = LunaSettings.getInt("lunalib", "luna_DebugEntries")
+        var uidebugKeybind = LunaSettings.getInt("lunalib", "luna_UIDebugKeybind")
 
        // var enableMainMenuButtons = LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
     }
@@ -24,6 +25,7 @@ class LoadedSettings : LunaSettingsListener
         debugKeybind = LunaSettings.getInt("lunalib", "luna_DebugKeybind")
         devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind")
         debugEntryCap = LunaSettings.getInt("lunalib", "luna_DebugEntries")
+        uidebugKeybind = LunaSettings.getInt("lunalib", "luna_UIDebugKeybind")
 
        // enableMainMenuButtons = LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
     }

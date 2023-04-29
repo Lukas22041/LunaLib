@@ -1,7 +1,6 @@
 package lunalib.backend.ui.debug
 
 import com.fs.starfarer.api.Global
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.input.InputEventAPI
@@ -11,17 +10,15 @@ import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.backend.scripts.LoadedSettings
-import lunalib.backend.ui.components.base.BaseCustomPanelPlugin
+import lunalib.lunaUI.panel.LunaBaseCustomPanelPlugin
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.util.TooltipHelper
 import org.lwjgl.input.Keyboard
 
-class LunaDebugUIMainPanel() : BaseCustomPanelPlugin()
+class LunaDebugUIMainPanel() : LunaBaseCustomPanelPlugin()
 {
-    var dialog: InteractionDialogAPI? = null
-    private var callbacks: CustomVisualDialogDelegate.DialogCallbacks? = null
-    private var panel: CustomPanelAPI? = null
+
 
 
     private var width = 0f
@@ -36,10 +33,7 @@ class LunaDebugUIMainPanel() : BaseCustomPanelPlugin()
         var closeCooldown = 0
     }
 
-    override fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?, dialog: InteractionDialogAPI?) {
-        this.panel = panel
-        this.callbacks = callbacks
-        this.dialog = dialog
+    override fun init() {
 
         width = panel!!.position.width
         height = panel!!.position.height
@@ -211,14 +205,7 @@ class LunaDebugUIMainPanel() : BaseCustomPanelPlugin()
             {
                 event.consume()
 
-                dialog!!.showTextPanel()
-                dialog!!.showVisualPanel()
-                callbacks!!.dismissDialog()
-
-                //Not clearing this will cause a memory leak
-                LunaUIBaseElement.selectedMap.clear()
-
-                dialog!!.dismiss()
+                close()
 
                 closeCooldown = 30
                 return@forEach
@@ -227,14 +214,7 @@ class LunaDebugUIMainPanel() : BaseCustomPanelPlugin()
             {
                 event.consume()
 
-                dialog!!.showTextPanel()
-                dialog!!.showVisualPanel()
-                callbacks!!.dismissDialog()
-
-                //Not clearing this will cause a memory leak
-                LunaUIBaseElement.selectedMap.clear()
-
-                dialog!!.dismiss()
+                close()
 
                 return@forEach
             }

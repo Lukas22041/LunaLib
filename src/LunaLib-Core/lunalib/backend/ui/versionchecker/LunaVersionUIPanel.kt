@@ -2,7 +2,6 @@ package lunalib.backend.ui.versionchecker
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.input.InputEventAPI
@@ -15,7 +14,8 @@ import lunalib.backend.ui.components.util.TooltipHelper
 import lunalib.backend.ui.settings.LunaSettingsLoader
 import lunalib.backend.ui.versionchecker.UpdateInfo.ModInfo
 import lunalib.backend.util.getLunaString
-import lunalib.lunaExtensions.TooltipMakerExtensions.addLunaElement
+import lunalib.lunaExtensions.*
+import lunalib.lunaUI.panel.LunaBaseCustomPanelPlugin
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.lwjgl.input.Keyboard
 import java.awt.Color
@@ -28,11 +28,8 @@ import java.util.concurrent.Future
 
 
 //I dont recommend anyone to read through my UI code to learn from, its equivelant to the ramblings of an insane person, and such can only be understood by the crazy person themself.
-class LunaVersionUIPanel() : BaseCustomPanelPlugin()
+class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
 {
-    private var dialog: InteractionDialogAPI? = null
-    private var callbacks: CustomVisualDialogDelegate.DialogCallbacks? = null
-    private var panel: CustomPanelAPI? = null
 
     var leftPanel: CustomPanelAPI? = null
     var leftElement: TooltipMakerAPI? = null
@@ -73,10 +70,7 @@ class LunaVersionUIPanel() : BaseCustomPanelPlugin()
         }
     }
 
-    override fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?, dialog: InteractionDialogAPI?) {
-        this.panel = panel
-        this.callbacks = callbacks
-        this.dialog = dialog
+    override fun init() {
 
         panelOpen = true
 
@@ -739,11 +733,7 @@ class LunaVersionUIPanel() : BaseCustomPanelPlugin()
             {
                 event.consume()
 
-                dialog!!.showTextPanel()
-                dialog!!.showVisualPanel()
-                callbacks!!.dismissDialog()
-
-                dialog!!.dismiss()
+                close()
 
                 //Not clearing this will cause a memory leak
                 LunaUIBaseElement.selectedMap.clear()

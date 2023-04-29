@@ -1,13 +1,16 @@
-package lunalib.lunaUI
+package lunalib.lunaUI.elements
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
-import java.awt.Color
 
 class LunaToggleButton(var value: Boolean, tooltip: TooltipMakerAPI, width: Float, height: Float) : LunaElement(tooltip, width, height) {
+
+    private var enabledText = "Enabled"
+    private var disabledText = "Disabled"
+
     init {
-        if (value) addText("Enabled", baseColor = Misc.getBasePlayerColor())
-        else addText("Disabled", baseColor = Misc.getBasePlayerColor())
+        if (value) addText(enabledText, baseColor = Misc.getBasePlayerColor())
+        else addText(disabledText, baseColor = Misc.getBasePlayerColor())
         centerText()
 
         onHoverEnter {
@@ -24,15 +27,31 @@ class LunaToggleButton(var value: Boolean, tooltip: TooltipMakerAPI, width: Floa
 
             if (value)
             {
-                changeText("Enabled")
+                changeText(enabledText)
                 backgroundColor = Misc.getDarkPlayerColor().darker()
             }
             else
             {
-                changeText("Disabled")
+                changeText(disabledText)
                 backgroundColor = Misc.getDarkPlayerColor().darker().darker()
             }
             centerText()
+        }
+    }
+
+    fun changeStateText(enabled: String, disabled: String)
+    {
+        enabledText = enabled
+        disabledText = disabled
+        if (value)
+        {
+            changeText(enabledText)
+            backgroundColor = Misc.getDarkPlayerColor().darker()
+        }
+        else
+        {
+            changeText(disabledText)
+            backgroundColor = Misc.getDarkPlayerColor().darker().darker()
         }
     }
 }

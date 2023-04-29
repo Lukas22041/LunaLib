@@ -14,8 +14,9 @@ import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.util.getLunaString
-import lunalib.lunaExtensions.TooltipMakerExtensions.addLunaElement
+import lunalib.lunaExtensions.*
 import lunalib.lunaSettings.LunaSettings
+import lunalib.lunaUI.elements.LunaSpriteElement
 import java.awt.Color
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -704,8 +705,15 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
         title!!.position.inTL(width / 2 - title!!.computeTextWidth(title!!.text) / 2, 10f)
         subtitle!!.position.inTL(width / 2 - subtitle!!.computeTextWidth(subtitle!!.text) / 2, 35f)
 
+
         description.setParaFont(Fonts.DEFAULT_SMALL)
         description.addPara("", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor()).position.inTL(5f, 40f)
+
+
+
+
+
+
 
         description.addSpacer(20f)
         description.addPara("aboutDescription".getLunaString(), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())

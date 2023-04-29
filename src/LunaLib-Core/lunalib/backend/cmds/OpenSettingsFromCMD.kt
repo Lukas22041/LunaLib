@@ -7,6 +7,8 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin
 import com.fs.starfarer.api.util.Misc
 import lunalib.backend.ui.OpenCustomPanelFromDialog
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
+import lunalib.lunaExtensions.openLunaCustomPanel
+
 
 // Used to open the LunaSettingsUI from Rules.CSV
 // Not part of the other rules utilities.
@@ -19,9 +21,11 @@ class OpenSettingsFromCMD : BaseCommandPlugin() {
 
         var scale = Global.getSettings().screenScaleMult
 
-        dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.8f,
+        /*dialog.showCustomVisualDialog(Global.getSettings().screenWidth * 0.8f,
             Global.getSettings().screenHeight * 0.8f,
-            OpenCustomPanelFromDialog.VisualDelegate(LunaSettingsUIMainPanel(true), dialog))
+            OpenCustomPanelFromDialog.VisualDelegate(LunaSettingsUIMainPanel(true), dialog, true))*/
+
+        dialog.openLunaCustomPanel(LunaSettingsUIMainPanel(true))
 
         return true
     }

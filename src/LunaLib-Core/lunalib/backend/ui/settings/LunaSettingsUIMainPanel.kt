@@ -1,6 +1,5 @@
 package lunalib.backend.ui.settings
 
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.input.InputEventAPI
@@ -9,18 +8,15 @@ import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import lunalib.backend.scripts.LoadedSettings
-import lunalib.backend.ui.components.base.BaseCustomPanelPlugin
+import lunalib.lunaUI.panel.LunaBaseCustomPanelPlugin
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.util.TooltipHelper
 import org.lwjgl.input.Keyboard
 import lunalib.backend.util.*
 
 //I dont recommend anyone to read through my UI code to learn from, its equivelant to the ramblings of an insane person, and such can only be understood by the crazy person themself.
-class LunaSettingsUIMainPanel(var newGame: Boolean) : BaseCustomPanelPlugin()
+class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin()
 {
-    private var dialog: InteractionDialogAPI? = null
-    private var callbacks: CustomVisualDialogDelegate.DialogCallbacks? = null
-    private var panel: CustomPanelAPI? = null
 
     private var modsPanel: CustomPanelAPI? = null
     private var modsPanelPlugin: LunaSettingsUIModsPanel? = null
@@ -38,10 +34,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : BaseCustomPanelPlugin()
     }
 
 
-    override fun init(panel: CustomPanelAPI?, callbacks: CustomVisualDialogDelegate.DialogCallbacks?, dialog: InteractionDialogAPI?) {
-        this.panel = panel
-        this.callbacks = callbacks
-        this.dialog = dialog
+    override fun init() {
 
         panelOpen = true
 
@@ -118,11 +111,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : BaseCustomPanelPlugin()
             {
                 event.consume()
 
-                dialog!!.showTextPanel()
-                dialog!!.showVisualPanel()
-                callbacks!!.dismissDialog()
-
-                if (!newGame) dialog!!.dismiss()
+                close()
 
                 LunaSettingsUIModsPanel.selectedMod = null
                 LunaSettingsUISettingsPanel.addedElements.clear()
@@ -142,11 +131,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : BaseCustomPanelPlugin()
             {
                 event.consume()
 
-                dialog!!.showTextPanel()
-                dialog!!.showVisualPanel()
-                callbacks!!.dismissDialog()
-
-                if (!newGame) dialog!!.dismiss()
+                close()
 
                 LunaSettingsUIModsPanel.selectedMod = null
                 LunaSettingsUISettingsPanel.addedElements.clear()

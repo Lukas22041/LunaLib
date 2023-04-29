@@ -1,4 +1,4 @@
-package lunalib.lunaUI
+package lunalib.lunaUI.elements
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
@@ -9,8 +9,8 @@ import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipLocation
 import com.fs.starfarer.api.util.Misc
-import com.fs.starfarer.campaign.CampaignState
 import lunalib.backend.ui.components.util.TooltipHelper
+import lunalib.lunaUI.LunaUIUtils
 import org.lwjgl.opengl.GL11
 import java.awt.Color
 
@@ -19,7 +19,7 @@ An Empty UI Element that can be used as a foundation for other Elements.
 */
 open class LunaElement : CustomUIPanelPlugin {
 
-    var elementID = Misc.genUID() ?: ""
+    private var elementID = Misc.genUID() ?: ""
 
     var parentElement: TooltipMakerAPI
     var elementPanel: CustomPanelAPI
@@ -32,10 +32,15 @@ open class LunaElement : CustomUIPanelPlugin {
     var y: Float
 
     var isHeld = false
+        private set
+
     var isHovering = false
+        private set
     var hoverEnter = false
+        private set
 
     var position: PositionAPI
+        private set
 
     var backgroundColor = Misc.getDarkPlayerColor().darker()
     var borderColor = Misc.getDarkPlayerColor()
@@ -48,6 +53,8 @@ open class LunaElement : CustomUIPanelPlugin {
     var backgroundAlpha = 1f
 
     var selectionGroup = ""
+
+    private var customData: HashMap<String, Any?> = HashMap()
 
     private var positionFunc: MutableList<(position: PositionAPI) -> Unit> = ArrayList()
     private var advanceFunc: MutableList<(amount: Float) -> Unit> = ArrayList()
@@ -78,6 +85,8 @@ open class LunaElement : CustomUIPanelPlugin {
 
         this.innerElement = elementPanel.createUIElement(width, height, false)
         elementPanel.addUIElement(innerElement)
+
+        selectionGroup = "all"
     }
 
     fun playClickSound() {
@@ -86,6 +95,11 @@ open class LunaElement : CustomUIPanelPlugin {
 
     fun playScrollSound()  {
         Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+    }
+
+    fun playSound(id: String, volume: Float = 1f, pitch: Float = 1f)
+    {
+        Global.getSoundPlayer().playUISound(id, pitch, volume)
     }
 
     fun addText(text: String, baseColor: Color = Misc.getTextColor(), highlightColor: Color = Misc.getHighlightColor(),  highlights: List<String> = listOf())
@@ -134,6 +148,8 @@ open class LunaElement : CustomUIPanelPlugin {
         return false
     }
 
+    fun getCustomData(id: String) = customData.get(id)
+    fun setCustomData(id: String, value: Any?) = customData.set(id, value)
 
     override fun positionChanged(position: PositionAPI?) {
         if (position != null)

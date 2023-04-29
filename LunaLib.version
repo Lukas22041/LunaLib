@@ -3,8 +3,8 @@
 	"modVersion":
     {
         "major":1,
-        "minor":5,
-        "patch":9 # Can be a number, character or string (1, 2, a, b, "-RC2", etc)
+        "minor":6,
+        "patch":0 # Can be a number, character or string (1, 2, a, b, "-RC2", etc)
     },
     "modName":"LunaLib",
 	"modThreadId":25658,

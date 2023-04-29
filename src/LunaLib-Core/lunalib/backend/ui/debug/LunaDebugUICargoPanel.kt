@@ -18,12 +18,9 @@ import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUISlider
 import lunalib.backend.ui.components.base.LunaUITextField
-import lunalib.lunaExtensions.TooltipMakerExtensions.addLunaElement
-import lunalib.lunaExtensions.TooltipMakerExtensions.addLunaToggleButton
 import org.lazywizard.lazylib.MathUtils
 import org.lwjgl.input.Mouse
 import java.awt.Color
-import java.lang.Exception
 
 internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
 
