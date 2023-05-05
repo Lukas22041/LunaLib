@@ -1,3 +1,10 @@
+Version 1.7.1
+
+-> Fixed crash in combat when pressing ESC
+-> "hasListenerOfClass" should work now
+
+
+
 Version 1.7.0 (Starsector v0.96a)
 
 For Users:
@@ -11,6 +18,7 @@ For Devs:
  -> It is now added through the "LunaSettings" class instead through the "addListener" method.
  -> This lets the listener be added on game start, previously it could only run in the campaign.
 -> Removed deprecated methods with the "SaveSpecific" parameter in the "LunaSettings" class.
+
 
 
 Version 1.6.0

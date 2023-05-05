@@ -7,6 +7,7 @@ import com.fs.starfarer.api.impl.campaign.procgen.themes.BaseThemeGenerator
 import lunalib.backend.scripts.KeybindsScript
 import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.ui.settings.LunaSettingsLoader
+import lunalib.backend.ui.testpanel.TestPanel
 import lunalib.backend.ui.versionchecker.VCModPlugin
 import lunalib.lunaDebug.LunaDebug
 import lunalib.lunaDebug.snippets.LunaLibDataSnippet
@@ -26,6 +27,7 @@ class LunaLibPlugin : BaseModPlugin()
     override fun onApplicationLoad()
     {
         LunaSettings.addListener(LoadedSettings())
+       // var test = LunaSettings.hasListenerOfClass(LoadedSettings::class.java)
 
         var pc = Global.getSettings().modManager.getModSpec("parallel_construction")
         if (pc != null)

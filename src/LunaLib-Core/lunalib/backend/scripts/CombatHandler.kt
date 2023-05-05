@@ -75,6 +75,7 @@ class CombatHandler : EveryFrameCombatPlugin
 
         events!!.forEach {
             if (it.isConsumed) return@forEach
+            if (AppDriver.getInstance().currentState !is TitleScreenState) return@forEach
             if (it.isKeyDownEvent && it.eventValue == Keyboard.KEY_ESCAPE)
             {
                 var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState

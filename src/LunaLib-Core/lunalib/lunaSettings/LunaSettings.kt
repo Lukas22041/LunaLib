@@ -37,7 +37,7 @@ object LunaSettings
     }
 
     fun hasListenerOfClass(listenerClass: Class<*>) : Boolean {
-        return listeners.any { it.javaClass == listenerClass }
+        return listeners.any { it.javaClass.name == listenerClass.name }
     }
 
     /*fun addListener(listener: LunaSettingsListener)
