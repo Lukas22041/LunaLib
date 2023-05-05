@@ -3,6 +3,7 @@ Version 1.7.0 (Starsector v0.96a)
 For Users:
 -> Updated to 0.96a
 -> The main menu version checker and mod configs are now available on all platforms
+-> Removed the dialog option within new game creation that opened the mod settings as it is now redundant with the buttons working on all platforms.
 -> Keybind configs now use better names for certain keys, for example LMENU has been changed to L-Alt
 
 For Devs:
