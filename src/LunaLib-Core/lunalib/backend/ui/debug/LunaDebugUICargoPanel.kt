@@ -438,4 +438,8 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
     override fun processInput(events: MutableList<InputEventAPI>?) {
 
     }
+
+    override fun buttonPressed(buttonId: Any?) {
+        TODO("Not yet implemented")
+    }
 }

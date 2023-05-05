@@ -278,7 +278,7 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
 
 
             }
-            if (entity is StarSystemAPI)
+            else if (entity is StarSystemAPI)
             {
                 if (entity.center is PlanetAPI)
                 {
@@ -293,17 +293,21 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
                     space += 40 * 2  + 10
                 }
             }
-            if (entity is CustomCampaignEntity)
+            else if (entity is CampaignFleetAPI)
             {
-                if (entity.spec.spriteName != null)
+                space += 40
+            }
+            else if (entity is SectorEntityToken)
+            {
+                if (entity.customEntitySpec.spriteName != null)
                 {
-                    var sprite = LunaUISprite(entity.spec.spriteName, 80f, 80f, 40f, 40f, 300f, 600f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
+                    var sprite = LunaUISprite(entity.customEntitySpec.spriteName, 80f, 80f, 40f, 40f, 300f, 600f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
                     sprite.position!!.inTL(interactbleElement.position!!.width / 2 - sprite.textureWidth / 2, space)
                     space += sprite.textureHeight + 20f
                 }
-                else if (entity.spec.iconName != null)
+                else if (entity.customEntitySpec.iconName != null)
                 {
-                    var sprite = LunaUISprite(entity.spec.iconName, 80f, 80f, 40f, 40f, 300f, 600f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
+                    var sprite = LunaUISprite(entity.customEntitySpec.iconName, 80f, 80f, 40f, 40f, 300f, 600f, "", "Group", cardPanel.lunaElement!!, interactbleElement)
                     sprite.position!!.inTL(interactbleElement.position!!.width / 2 - sprite.textureWidth / 2, space)
                     space += sprite.textureHeight + 20f
                 }
@@ -311,10 +315,6 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
                 {
                     space += 40 * 2  + 10
                 }
-            }
-            if (entity is CampaignFleetAPI)
-            {
-                space += 40
             }
 
 
@@ -479,6 +479,10 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
     }
 
     override fun processInput(events: MutableList<InputEventAPI>?) {
+
+    }
+
+    override fun buttonPressed(buttonId: Any?) {
 
     }
 }

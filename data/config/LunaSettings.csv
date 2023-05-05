@@ -9,10 +9,6 @@ luna_DebugEntries,Debug Menu Entries,Int,25,,Controls how many entries can show 
 luna_DevmodeKeybind,Devmode Keybind,Keycode,0,,Changes the keybind for the devmode toggle.,,,
 luna_UIDebugKeybind,UI Debug Panel,Keycode,0,,"When pressed in the campaign, opens a debug panel showcasing different UI elements added by Lunalib. Only useful for mod developers.",,,
 ,,,,,,,,
-luna_experimentalHeader,Experimental,Header,Experimental,,,,,
-luna_enableMainMenuButtons,Enable Main Menu Buttons,Boolean,true,,"Adds Buttons to the Main Menu that open the Mod Settings and a custom integration of Version Checker. If this config is changed while in the Main Menu, it will only be applied once it is reloaded.
-[Windows Exclusive due to API limitations.]",,,
-,,,,,,,,
 ,,,,,,,,
 luna_exampleHeader,Example Header,Header,Example Section,,,,,Examples
 luna_exampleText,Example Text Field,Text,"Any value below is merely an example for Modders. 

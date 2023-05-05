@@ -866,6 +866,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
     }
 
+    override fun buttonPressed(buttonId: Any?) {
+
+    }
+
     private fun String.trimAfter(cap: Int, addText: Boolean = true) : String
     {
         return if (this.length <= cap)

@@ -627,12 +627,12 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
     }
 
     override fun renderBelow(alphaMult: Float) {
-
+        super.renderBelow(alphaMult)
 
     }
 
     override fun render(alphaMult: Float) {
-
+        super.render(alphaMult)
     }
 
     override fun advance(amount: Float) {

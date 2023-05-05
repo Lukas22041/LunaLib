@@ -4,7 +4,6 @@ import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
-import com.fs.starfarer.combat.systems.H
 import kotlinx.coroutines.GlobalScope
 import lunalib.backend.ui.settings.LunaSettingsLoader
 import lunalib.lunaDebug.LunaDebug

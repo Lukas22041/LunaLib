@@ -18,6 +18,7 @@ import lunalib.backend.ui.components.base.LunaUISprite
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.ui.components.util.TooltipHelper
 import lunalib.backend.util.getLunaString
+import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsListener
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.lazywizard.lazylib.JSONUtils
@@ -55,7 +56,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
     private fun callSettingsChangedListener(data: ModSpecAPI)
     {
-        val listeners = Global.getSector().listenerManager.getListeners(LunaSettingsListener::class.java)
+        val listeners = LunaSettings.listeners
         for (listener in listeners)
         {
             try {
@@ -627,6 +628,10 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
     override fun processInput(events: MutableList<InputEventAPI>) {
 
+
+    }
+
+    override fun buttonPressed(buttonId: Any?) {
 
     }
 

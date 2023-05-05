@@ -22,11 +22,23 @@ object LunaSettings
 
    // internal var listeners: MutableList<LunaSettingsListener> = ArrayList()
     private val log = Global.getLogger(LunaSettings::class.java)
+    internal var listeners: MutableList<LunaSettingsListener> = ArrayList()
 
     init {
         log.level = Level.ALL
     }
 
+    fun addListener(listener: LunaSettingsListener) {
+        listeners.add(listener)
+    }
+
+    fun removeListener(listener: LunaSettingsListener) {
+        listeners.remove(listener)
+    }
+
+    fun hasListenerOfClass(listenerClass: Class<*>) : Boolean {
+        return listeners.any { it.javaClass == listenerClass }
+    }
 
     /*fun addListener(listener: LunaSettingsListener)
     {
@@ -383,127 +395,6 @@ object LunaSettings
         fun addColor(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: Color)
         {
             addColor(ModID, FieldID, FieldName, Tooltip, DefaultValue, "")
-        }
-    }
-
-
-    /**
-    Deprecated, use the methods without the [SaveSpecific] parameter
-     */
-    @JvmStatic
-    fun getDouble(ModID: String, FieldID: String, SaveSpecific: Boolean) : Double?
-    {
-        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
-        if (LunaSettingsLoader.Settings.get(ModID) != null)
-        {
-            try {
-                return LunaSettingsLoader.Settings.get(ModID)!!.getDouble(FieldID)
-            }
-            catch(e: Throwable) {
-                log.error("LunaSettings: Value $FieldID of type Double not found in JSONObject (ModID: $ModID)")
-                return null
-            }
-        }
-        else
-        {
-            log.error("LunaSettings: Could not find mod $ModID")
-            return null
-        }
-    }
-
-    /**
-    Deprecated, use the methods without the [SaveSpecific] parameter
-     */
-    @JvmStatic
-    fun getFloat(ModID: String, FieldID: String, SaveSpecific: Boolean) : Float?
-    {
-        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
-        if (LunaSettingsLoader.Settings.get(ModID) != null)
-        {
-            try {
-                return LunaSettingsLoader.Settings.get(ModID)!!.getDouble(FieldID).toFloat()
-            }
-            catch(e: Throwable) {
-                log.error("LunaSettings: Value $FieldID of type Float not found in JSONObject (ModID: $ModID)")
-                return null
-            }
-        }
-        else
-        {
-            log.error("LunaSettings: Could not find mod $ModID")
-            return null
-        }
-    }
-
-    /**
-    Deprecated, use the methods without the [SaveSpecific] parameter
-     */
-    @JvmStatic
-    fun getBoolean(ModID: String, FieldID: String, SaveSpecific: Boolean) : Boolean?
-    {
-        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
-        if (LunaSettingsLoader.Settings.get(ModID) != null)
-        {
-            try {
-                return LunaSettingsLoader.Settings.get(ModID)!!.getBoolean(FieldID)
-            }
-            catch(e: Throwable) {
-                log.error("LunaSettings: Value $FieldID of type Boolean not found in JSONObject (ModID: $ModID)")
-                return null
-            }
-        }
-        else
-        {
-            log.error("LunaSettings: Could not find mod $ModID")
-            return null
-        }
-    }
-
-    /**
-    Deprecated, use the methods without the [SaveSpecific] parameter
-     */
-    @JvmStatic
-    fun getInt(ModID: String, FieldID: String, SaveSpecific: Boolean) : Int?
-    {
-        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
-        if (LunaSettingsLoader.Settings.get(ModID) != null)
-        {
-            try {
-                return LunaSettingsLoader.Settings.get(ModID)!!.getInt(FieldID)
-            }
-            catch(e: Throwable) {
-                log.error("LunaSettings: Value $FieldID of type Int not found in JSONObject (ModID: $ModID)")
-                return null
-            }
-        }
-        else
-        {
-            log.error("LunaSettings: Could not find mod $ModID")
-            return null
-        }
-    }
-
-    /**
-    Deprecated, use the methods without the [SaveSpecific] parameter
-     */
-    @JvmStatic
-    fun getString(ModID: String, FieldID: String, SaveSpecific: Boolean) : String?
-    {
-        if (!LunaSettingsLoader.hasLoaded) LunaSettingsLoader.load()
-        if (LunaSettingsLoader.Settings.get(ModID) != null)
-        {
-            try {
-                return LunaSettingsLoader.Settings.get(ModID)!!.getString(FieldID)
-            }
-            catch(e: Throwable) {
-                log.error("LunaSettings: Value $FieldID of type String not found in JSONObject (ModID: $ModID)")
-                return null
-            }
-        }
-        else
-        {
-            log.error("LunaSettings: Could not find mod $ModID")
-            return null
         }
     }
 }

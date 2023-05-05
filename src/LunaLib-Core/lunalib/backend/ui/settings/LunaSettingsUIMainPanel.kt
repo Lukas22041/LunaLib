@@ -72,6 +72,8 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin(
     }
 
     override fun renderBelow(alphaMult: Float) {
+        super.renderBelow(alphaMult)
+
 
        /* var color = Color(0, 0, 10)
 
@@ -92,12 +94,14 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin(
     }
 
     override fun render(alphaMult: Float) {
-
+        super.render(alphaMult)
     }
 
     override fun advance(amount: Float) {
 
     }
+
+
     override fun processInput(events: MutableList<InputEventAPI>) {
 
         if (closeCooldown > 1)

@@ -6,14 +6,14 @@ import com.fs.starfarer.api.combat.*
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.Fonts
-import com.fs.starfarer.api.ui.UIComponentAPI
 import com.fs.starfarer.api.ui.UIPanelAPI
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.combat.CombatState
 import com.fs.starfarer.title.TitleScreenState
 import com.fs.state.AppDriver
-import lunalib.backend.ui.OpenCustomPanelFromDialog
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
+import lunalib.backend.ui.settings.LunaSettingsUIModsPanel
+import lunalib.backend.ui.settings.LunaSettingsUISettingsPanel
 import lunalib.backend.ui.versionchecker.LunaVersionUIPanel
 import lunalib.backend.util.getLunaString
 import lunalib.lunaSettings.LunaSettings
@@ -38,9 +38,15 @@ class CombatHandler : EveryFrameCombatPlugin
 
     var settingsKeybind = ""
 
-    var buttonsEnabled = LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
+    //var buttonsEnabled = LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
     var buttonWidth = 130f
     var buttonHeight = 50f
+
+    var settingsPlugin: LunaSettingsUIMainPanel? = null
+    var settingsPanel: CustomPanelAPI? = null
+
+    var versionPlugin: LunaVersionUIPanel? = null
+    var versionPanel: CustomPanelAPI? = null
 
     companion object {
         var isUpdateCheckDone = false
@@ -48,6 +54,8 @@ class CombatHandler : EveryFrameCombatPlugin
 
     override fun init(engine: CombatEngineAPI?)
     {
+
+
         this.engine = engine
 
         val font: LazyFont
@@ -63,35 +71,73 @@ class CombatHandler : EveryFrameCombatPlugin
     }
 
     override fun processInputPreCoreControls(amount: Float, events: MutableList<InputEventAPI>?) {
+
+
+        events!!.forEach {
+            if (it.isConsumed) return@forEach
+            if (it.isKeyDownEvent && it.eventValue == Keyboard.KEY_ESCAPE)
+            {
+                var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
+
+                if (LunaSettingsUIMainPanel.panelOpen)
+                {
+                    getScreenPanel().removeComponent(settingsPanel)
+
+                    settingsPlugin!!.close()
+                    LunaSettingsUIMainPanel.panelOpen = false
+
+                    LunaSettingsUIModsPanel.selectedMod = null
+                    LunaSettingsUISettingsPanel.addedElements.clear()
+                    LunaSettingsUISettingsPanel.changedSettings.clear()
+                    LunaSettingsUISettingsPanel.unsavedCounter.clear()
+                    LunaSettingsUISettingsPanel.unsaved = false
+
+                    it.consume()
+                    return@forEach
+                }
+                if (LunaVersionUIPanel.panelOpen)
+                {
+                    getScreenPanel().removeComponent(versionPanel)
+                    versionPlugin!!.close()
+                    LunaVersionUIPanel.panelOpen = false
+
+                    it.consume()
+                    return@forEach
+                }
+            }
+
+            if (it.isKeyDownEvent && it.eventValue == Keyboard.KEY_ESCAPE && versionPanel != null)
+            {
+                getScreenPanel().removeComponent(versionPanel)
+            }
+        }
+    }
+
+    fun getScreenPanel() : UIPanelAPI
+    {
+        var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
+
+
+        val methodClass = Class.forName("java.lang.reflect.Method", false, Class::class.java.classLoader)
+        val getNameMethod = MethodHandles.lookup().findVirtual(methodClass, "getName", MethodType.methodType(String::class.java))
+        val invokeMethod = MethodHandles.lookup().findVirtual(methodClass, "invoke", MethodType.methodType(Any::class.java, Any::class.java, Array<Any>::class.java))
+
+        var foundMethod: Any? = null
+        for (method in titlescreen::class.java.methods as Array<Any>)
+        {
+            if (getNameMethod.invoke(method) == "getScreenPanel")
+            {
+                foundMethod = method
+            }
+        }
+
+        return invokeMethod.invoke(foundMethod, titlescreen) as UIPanelAPI
     }
 
     override fun advance(amount: Float, events: MutableList<InputEventAPI>?)
     {
 
 
-
-        if (buttonsEnabled == null)
-        {
-            LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
-        }
-       /* if (Mouse.isButtonDown(0))
-        {
-
-            try {
-                var combatscreen: CombatState = AppDriver.getInstance().currentState as CombatState
-
-                var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenSettingsPanelInteraction(), combatscreen.screenPanel, combatscreen);
-                test.show(0.3f, 0.2f)
-            } catch (e: Throwable) {
-                try {
-                    var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
-
-                    var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenSettingsPanelInteraction(), titlescreen.screenPanel, titlescreen);
-                    test.show(0.3f, 0.2f)
-
-                } catch (e: Throwable) {}
-            }
-        }*/
     }
 
     override fun renderInWorldCoords(viewport: ViewportAPI?)
@@ -124,52 +170,22 @@ class CombatHandler : EveryFrameCombatPlugin
 
             if (cooldown < 1 && Mouse.isButtonDown(0) && !LunaSettingsUIMainPanel.panelOpen && !LunaVersionUIPanel.panelOpen)
             {
-                cooldown = 60f
+                cooldown = 20f
                 Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
 
                 try {
-                    var combatscreen: CombatState = AppDriver.getInstance().currentState as CombatState
+                    settingsPlugin = LunaSettingsUIMainPanel(false)
+                    settingsPanel = Global.getSettings().createCustom(Global.getSettings().screenWidth * 0.8f, Global.getSettings().screenHeight * 0.8f, settingsPlugin)
+                    settingsPlugin!!.initFromScript(settingsPanel!!)
+                    settingsPanel!!.position.inTL(Global.getSettings().screenWidth * 0.1f, Global.getSettings().screenHeight * 0.1f)
+
+                    var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
+                    getScreenPanel().addComponent(settingsPanel)
+
+                    LunaSettingsUIMainPanel.panelOpen = true
 
 
-
-                    /*var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), combatscreen.screenPanel, combatscreen);
-                    test.show(0.3f, 0.2f)*/
-                } catch (e: Throwable) {
-                    try {
-                        var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
-
-                     /*   var createIDP = ReflectionUtils.createClass(CreateInteractionDialog::class.java)
-                        createIDP.invoke()
-
-                        var handle = ReflectionUtils.getConstructor(com.fs.starfarer.ui.newui.o0Oo::class.java)
-                        var dialog = handle.invoke(null, OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), titlescreen.screenPanel, titlescreen)*/
-
-                        var test = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaSettingsUIMainPanel(false)), titlescreen.screenPanel, titlescreen);
-                        test.show(0.3f, 0.2f)
-
-
-
-
-
-
-
-                        //Technicly works, requires a new panel plugin though that does what the panel provided by the dialog gives though, aka a dark background and it consuming inputs from outside of the panel.
-
-                       /* var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
-
-                        var plugin = LunaSettingsUIMainPanel(false)
-                        var panel = Global.getSettings().createCustom(Global.getSettings().screenWidth * 0.8f, Global.getSettings().screenHeight * 0.8f, plugin)
-                        plugin.init(panel, null, null)
-                        panel.position.inTL(Global.getSettings().screenWidth * 0.1f, Global.getSettings().screenHeight * 0.1f)
-                        (titlescreen.screenPanel as UIPanelAPI).addComponent(panel)*/
-
-
-
-                    } catch (e: Throwable) {
-                        Global.getLogger(this::class.java).error("Would have crashed ${e.printStackTrace()}")
-                       // println("Would have crashed ${e.printStackTrace()}")
-                    }
-                }
+                } catch (e: Throwable) { }
             }
         }
 
@@ -201,23 +217,22 @@ class CombatHandler : EveryFrameCombatPlugin
 
             if (cooldown < 1 && Mouse.isButtonDown(0) && !LunaSettingsUIMainPanel.panelOpen && !LunaVersionUIPanel.panelOpen)
             {
-                cooldown = 60f
+                cooldown = 20f
                 Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
 
                 try {
-                    var combatscreen: CombatState = AppDriver.getInstance().currentState as CombatState
+                    versionPlugin = LunaVersionUIPanel()
+                    versionPanel = Global.getSettings().createCustom(Global.getSettings().screenWidth * 0.8f, Global.getSettings().screenHeight * 0.8f, versionPlugin)
+                    versionPlugin!!.initFromScript(versionPanel!!)
+                    versionPanel!!.position.inTL(Global.getSettings().screenWidth * 0.1f, Global.getSettings().screenHeight * 0.1f)
 
-                    var idp = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaVersionUIPanel()), combatscreen.screenPanel, combatscreen);
-                    idp.show(0.3f, 0.2f)
-                } catch (e: Throwable) {
-                    try {
-                        var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
+                    var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
+                    getScreenPanel().addComponent(versionPanel)
 
-                        var idp = com.fs.starfarer.ui.newui.o0Oo(null, OpenCustomPanelFromDialog(LunaVersionUIPanel()), titlescreen.screenPanel, titlescreen);
-                        idp.show(0.3f, 0.2f)
+                    LunaVersionUIPanel.panelOpen = true
 
-                    } catch (e: Throwable) {}
-                }
+
+                } catch (e: Throwable) { }
             }
         }
 
@@ -244,17 +259,17 @@ class CombatHandler : EveryFrameCombatPlugin
         versionButtonText!!.draw((x + buttonWidth / 2) - versionButtonText!!.width / 2f , (y + buttonHeight / 2) + versionButtonText!!.height / 2f)
     }
 
-    fun getDialogType()
-    {
-
-    }
-
     override fun renderInUICoords(viewport: ViewportAPI?) {
+
+      //  panel!!.render(1f)
+
 
 
         if (Global.getCurrentState() == GameState.TITLE && tip != null)
         {
-            if (System.getProperty("os.name").startsWith("Windows") && buttonsEnabled != null && buttonsEnabled!!)
+           // if (System.getProperty("os.name").startsWith("Windows") && buttonsEnabled != null && buttonsEnabled!!)
+            // if (buttonsEnabled != null && buttonsEnabled!!)
+            if (true)
             {
                 var dialogActive: Any? = null
 
@@ -286,7 +301,7 @@ class CombatHandler : EveryFrameCombatPlugin
 
                 }
 
-                if (dialogActive == null)
+                if (dialogActive == null && !LunaSettingsUIMainPanel.panelOpen && !LunaVersionUIPanel.panelOpen)
                 {
                     addModSettingsButton()
                     addVersionButton()

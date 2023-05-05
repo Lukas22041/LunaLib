@@ -29,7 +29,7 @@ internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean
 
             var key = "keybindText".getLunaString()
             button = LunaUIButton(false, false, width, height,"Test", group, panel!!, pan!!)
-            button!!.buttonText!!.text = "$key: ${Keyboard.getKeyName(keycode!!)}"
+            button!!.buttonText!!.text = "$key: ${getKeyName(keycode!!)}"
             if (keycode == 0)
             {
                 button!!.buttonText!!.text = "keybindTextNone".getLunaString()
@@ -94,6 +94,21 @@ internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean
         }
     }
 
+    fun getKeyName(keycode: Int) : String
+    {
+        return when (keycode) {
+            Keyboard.KEY_LMENU -> "L-Alt"
+            Keyboard.KEY_RMENU -> "R-Alt"
+            Keyboard.KEY_LCONTROL -> "L-Ctrl"
+            Keyboard.KEY_RCONTROL -> "R-Ctrl"
+            Keyboard.KEY_LSHIFT -> "L-Shift"
+            Keyboard.KEY_RSHIFT -> "R-Shift"
+            Keyboard.KEY_CAPITAL -> "Caps"
+            Keyboard.KEY_RETURN -> "Enter"
+            else -> Keyboard.getKeyName(keycode!!).lowercase().capitalize()
+        }
+    }
+
     override fun renderBelow(alphaMult: Float) {
     }
 
@@ -125,8 +140,10 @@ internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean
 
                     var key = "keybindText".getLunaString()
 
+
                     if (event.eventValue == Keyboard.KEY_ESCAPE) keycode = 0
-                    button!!.buttonText!!.text = "$key: ${Keyboard.getKeyName(keycode!!)}"
+
+                    button!!.buttonText!!.text = "$key: ${getKeyName(keycode!!)}"
                     button!!.buttonText!!.position.inTL(width / 2 - button!!.buttonText!!.computeTextWidth(button!!.buttonText!!.text) / 2, height / 2 - button!!.buttonText!!.computeTextHeight(button!!.buttonText!!.text) / 2)
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
 

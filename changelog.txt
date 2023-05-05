@@ -1,3 +1,16 @@
+Version 1.7.0 (Starsector v0.96a)
+
+For Users:
+-> Updated to 0.96a
+-> The main menu version checker and mod configs are now available on all platforms
+-> Keybind configs now use better names for certain keys, for example LMENU has been changed to L-Alt
+
+For Devs:
+-> The LunaSettingsListener has been changed.
+ -> It is now added through the "LunaSettings" class instead through the "addListener" method.
+ -> This lets the listener be added on game start, previously it could only run in the campaign.
+-> Removed deprecated methods with the "SaveSpecific" parameter in the "LunaSettings" class.
+
 
 Version 1.6.0
 

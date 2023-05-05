@@ -392,4 +392,8 @@ open class LunaElement : CustomUIPanelPlugin {
     {
         onHoverExitFunctions.add(function)
     }
+
+    final override fun buttonPressed(buttonId: Any?) {
+
+    }
 }

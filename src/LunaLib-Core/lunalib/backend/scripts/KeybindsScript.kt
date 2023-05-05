@@ -12,7 +12,7 @@ import lunalib.backend.ui.testpanel.TestPanel
 import lunalib.lunaExtensions.openLunaCustomPanel
 import org.lwjgl.input.Keyboard
 
-internal class KeybindsScript :  EveryFrameScript
+internal class KeybindsScript : EveryFrameScript
 {
 
     var keyPressed = false

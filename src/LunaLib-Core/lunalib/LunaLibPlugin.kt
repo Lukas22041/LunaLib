@@ -12,6 +12,7 @@ import lunalib.lunaDebug.LunaDebug
 import lunalib.lunaDebug.snippets.LunaLibDataSnippet
 import lunalib.lunaDebug.snippets.ModListSnippet
 import lunalib.lunaDebug.snippets.SnippetsListSnippet
+import lunalib.lunaSettings.LunaSettings
 import java.lang.Exception
 
 
@@ -20,11 +21,12 @@ class LunaLibPlugin : BaseModPlugin()
     override fun onGameLoad(newGame: Boolean)
     {
         Global.getSector().addTransientScript(KeybindsScript())
-        LoadedSettings()
     }
 
     override fun onApplicationLoad()
     {
+        LunaSettings.addListener(LoadedSettings())
+
         var pc = Global.getSettings().modManager.getModSpec("parallel_construction")
         if (pc != null)
         {

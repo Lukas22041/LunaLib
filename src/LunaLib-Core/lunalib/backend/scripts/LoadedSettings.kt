@@ -13,11 +13,6 @@ class LoadedSettings : LunaSettingsListener
         var debugEntryCap = LunaSettings.getInt("lunalib", "luna_DebugEntries")
         var uidebugKeybind = LunaSettings.getInt("lunalib", "luna_UIDebugKeybind")
 
-       // var enableMainMenuButtons = LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
-    }
-
-    init {
-        Global.getSector().listenerManager.addListener(this, true)
     }
 
     override fun settingsChanged(modID: String) {
@@ -27,6 +22,5 @@ class LoadedSettings : LunaSettingsListener
         debugEntryCap = LunaSettings.getInt("lunalib", "luna_DebugEntries")
         uidebugKeybind = LunaSettings.getInt("lunalib", "luna_UIDebugKeybind")
 
-       // enableMainMenuButtons = LunaSettings.getBoolean("lunalib", "luna_enableMainMenuButtons")
     }
 }

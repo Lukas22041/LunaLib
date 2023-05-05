@@ -454,6 +454,10 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
     override fun processInput(events: MutableList<InputEventAPI>?) {
 
     }
+
+    override fun buttonPressed(buttonId: Any?) {
+
+    }
 }
 
 
