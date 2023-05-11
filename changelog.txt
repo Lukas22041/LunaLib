@@ -1,3 +1,13 @@
+Version 1.7.3
+
+-> Version checker now shows if your starsector install is up to date.
+-> Version checker now highlights when the installed version is ahead of the remote one, and displays the differences between both numbers.
+-> Version checker changelogs are temporarily trimmed after 10.000 characters. This is due to performance concerns that i will look in to improving in a future version.
+-> Fixed an issue that caused the Main Menu UI to not render correctly on some systems. Thanks to both Cieve and JamesTripleQ for helping me fix it.
+-> Fixed an issue that let you sometimes click on the Vanilla starsector buttons in the main menu while the version checker or mod config was open.
+
+
+
 Version 1.7.2
 
 -> Fixed version checker crashing if a changelog had a % symbol in it
