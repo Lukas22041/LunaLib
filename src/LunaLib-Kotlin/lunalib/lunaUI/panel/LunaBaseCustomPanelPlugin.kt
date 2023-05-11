@@ -10,9 +10,12 @@ import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.backend.ui.components.base.LunaUIBaseElement
+import lunalib.lunaExtensions.addLunaElement
 import lunalib.lunaUI.LunaUIUtils
 import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL20
 import java.awt.Color
+import java.lang.Exception
 
 abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
 
@@ -32,6 +35,7 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
 
         this.openedFromExistingDialog = openedFromExistingDialog
 
+
         init()
     }
 
@@ -41,6 +45,16 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
 
         this.openedFromExistingDialog = false
         this.openedFromScript = true
+
+        var backgroundPanel = panel.createCustomPanel(panel.position.width, panel.position.height, null)
+        panel.addComponent(backgroundPanel)
+        var backgroundElement = backgroundPanel.createUIElement(panel.position.width, panel.position.height, false)
+        backgroundPanel.addUIElement(backgroundElement)
+        backgroundElement.addLunaElement(panel.position.width, panel.position.height).apply {
+            renderBackground = true
+            renderBorder = false
+            backgroundColor = Color(0, 0, 0)
+        }
 
         init()
     }
@@ -54,7 +68,7 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
     override fun renderBelow(alphaMult: Float) {
         if (openedFromScript)
         {
-            var c = Color(0, 0, 0)
+          /*  var c = Color(0, 0, 0)
             GL11.glPushMatrix()
             GL11.glDisable(GL11.GL_TEXTURE_2D)
 
@@ -67,38 +81,41 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
 
             GL11.glRectf(panel.position.x, panel.position.y , panel.position.x + panel.position.width, panel.position.y + panel.position.height)
 
-            GL11.glEnd()
-            GL11.glPopMatrix()
+            //GL11.glEnd()
+            GL11.glPopMatrix()*/
         }
     }
 
     override fun render(alphaMult: Float) {
-        var c = Misc.getDarkPlayerColor()
-        GL11.glPushMatrix()
+        if (openedFromScript)
+        {
+            var c = Misc.getDarkPlayerColor()
+            GL11.glPushMatrix()
 
-        GL11.glTranslatef(0f, 0f, 0f)
-        GL11.glRotatef(0f, 0f, 0f, 1f)
+            GL11.glTranslatef(0f, 0f, 0f)
+            GL11.glRotatef(0f, 0f, 0f, 1f)
 
-        GL11.glDisable(GL11.GL_TEXTURE_2D)
+            GL11.glDisable(GL11.GL_TEXTURE_2D)
 
-        GL11.glDisable(GL11.GL_BLEND)
+            GL11.glDisable(GL11.GL_BLEND)
 
-        GL11.glColor4f(c.red / 255f,
-            c.green / 255f,
-            c.blue / 255f,
-            c.alpha / 255f * (alphaMult * 1f))
+            GL11.glColor4f(c.red / 255f,
+                c.green / 255f,
+                c.blue / 255f,
+                c.alpha / 255f * (alphaMult * 1f))
 
-        GL11.glEnable(GL11.GL_LINE_SMOOTH)
-        GL11.glBegin(GL11.GL_LINE_STRIP)
+            GL11.glEnable(GL11.GL_LINE_SMOOTH)
+            GL11.glBegin(GL11.GL_LINE_STRIP)
 
-        GL11.glVertex2f(panel.position.x, panel.position.y)
-        GL11.glVertex2f(panel.position.x, panel.position.y + panel.position.height)
-        GL11.glVertex2f(panel.position.x + panel.position.width, panel.position.y + panel.position.height)
-        GL11.glVertex2f(panel.position.x + panel.position.width, panel.position.y)
-        GL11.glVertex2f(panel.position.x, panel.position.y)
+            GL11.glVertex2f(panel.position.x, panel.position.y)
+            GL11.glVertex2f(panel.position.x, panel.position.y + panel.position.height)
+            GL11.glVertex2f(panel.position.x + panel.position.width, panel.position.y + panel.position.height)
+            GL11.glVertex2f(panel.position.x + panel.position.width, panel.position.y)
+            GL11.glVertex2f(panel.position.x, panel.position.y)
 
-        GL11.glEnd()
-        GL11.glPopMatrix()
+            GL11.glEnd()
+            GL11.glPopMatrix()
+        }
     }
 
     override fun advance(amount: Float) {

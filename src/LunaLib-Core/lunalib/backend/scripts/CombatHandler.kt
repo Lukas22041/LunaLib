@@ -186,7 +186,9 @@ class CombatHandler : EveryFrameCombatPlugin
                     LunaSettingsUIMainPanel.panelOpen = true
 
 
-                } catch (e: Throwable) { }
+                } catch (e: Throwable) {
+                    throw Exception("Error occured while creating panel" + e.printStackTrace())
+                }
             }
         }
 

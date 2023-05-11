@@ -169,7 +169,7 @@ open class LunaElement : CustomUIPanelPlugin {
         if (renderBackground)
         {
             var c = backgroundColor
-            GL11.glPushMatrix()
+         /*   GL11.glPushMatrix()
             GL11.glDisable(GL11.GL_TEXTURE_2D)
 
             if (enableTransparency)
@@ -189,7 +189,37 @@ open class LunaElement : CustomUIPanelPlugin {
 
             GL11.glRectf(x, y , x + width, y + height)
 
-            GL11.glEnd()
+           // GL11.glEnd()
+            GL11.glPopMatrix()*/
+
+            var color = backgroundColor
+
+            GL11.glPushMatrix()
+            GL11.glDisable(GL11.GL_TEXTURE_2D)
+            GL11.glDisable(GL11.GL_CULL_FACE)
+
+            if (enableTransparency)
+            {
+                GL11.glEnable(GL11.GL_BLEND)
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+            }
+            else
+            {
+                GL11.glDisable(GL11.GL_BLEND)
+            }
+
+            /* GL11.glEnable(GL11.GL_CULL_FACE)
+             GL11.glCullFace(GL11.GL_FRONT)
+             GL11.glFrontFace(GL11.GL_CW)*/
+            //GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+            GL11.glColor4f(color.red / 255f,
+                color.green / 255f,
+                color.blue / 255f,
+                color.alpha / 255f * (alphaMult * backgroundAlpha))
+
+            GL11.glRectf(x, y , x + width, y + height)
+
+            GL11.glFinish()
             GL11.glPopMatrix()
         }
 

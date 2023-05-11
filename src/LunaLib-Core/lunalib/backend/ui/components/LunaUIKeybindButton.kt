@@ -105,7 +105,8 @@ internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean
             Keyboard.KEY_RSHIFT -> "R-Shift"
             Keyboard.KEY_CAPITAL -> "Caps"
             Keyboard.KEY_RETURN -> "Enter"
-            else -> Keyboard.getKeyName(keycode!!).lowercase().capitalize()
+            Keyboard.KEY_BACK -> "Backspace"
+            else -> Keyboard.getKeyName(keycode).lowercase().capitalize()
         }
     }
 

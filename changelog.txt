@@ -1,3 +1,9 @@
+Version 1.7.2
+
+-> Fixed version checker crashing if a changelog had a % symbol in it
+
+
+
 Version 1.7.1
 
 -> Fixed crash in combat when pressing ESC

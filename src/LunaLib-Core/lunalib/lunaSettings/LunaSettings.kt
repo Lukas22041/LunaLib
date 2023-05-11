@@ -4,11 +4,9 @@ import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.SettingsAPI
 import com.fs.starfarer.loading.specs.BaseWeaponSpec
 import com.fs.starfarer.util.ReplaceableSprite
-import javafx.scene.control.Tab
 import lunalib.backend.ui.settings.LunaSettingsData
 import lunalib.backend.ui.settings.LunaSettingsLoader
 import org.apache.log4j.Level
-import org.codehaus.janino.Mod
 import java.awt.Color
 
 /**

@@ -172,6 +172,10 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
     {
         GL11.glPushMatrix()
         GL11.glDisable(GL11.GL_TEXTURE_2D)
+        GL11.glDisable(GL11.GL_CULL_FACE)
+       /* GL11.glEnable(GL11.GL_CULL_FACE)
+        GL11.glCullFace(GL11.GL_FRONT)
+        GL11.glFrontFace(GL11.GL_CW)*/
         GL11.glEnable(GL11.GL_BLEND)
         //GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
         GL11.glColor4f(color.red / 255f,
@@ -181,7 +185,7 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
 
         function()
 
-        GL11.glEnd()
+        GL11.glFinish()
         GL11.glPopMatrix()
     }
 

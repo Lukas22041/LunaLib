@@ -3,9 +3,9 @@
     "name": "LunaLib",
     "author": "Lukas04",
     "utility": "true",
-    "version": "1.7.1",
+    "version": "1.7.3",
     "description": "Library including useful utilities for mod devs",
-    "gameVersion": "0.96a-RC7",
+    "gameVersion": "0.96a-RC8",
 	"jars":["jars/LunaLib.jar", "jars/LunaLib-Kotlin.jar", "jars/libs/fuzzywuzzy-1.3.0.jar"],
 	"modPlugin":"lunalib.LunaLibPlugin",
 	"dependencies": [

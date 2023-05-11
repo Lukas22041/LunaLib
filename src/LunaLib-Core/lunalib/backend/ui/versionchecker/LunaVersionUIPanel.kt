@@ -2,8 +2,6 @@ package lunalib.backend.ui.versionchecker
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.ModSpecAPI
-import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
-import com.fs.starfarer.api.campaign.InteractionDialogAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.Misc
@@ -113,6 +111,27 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
             leftElement!!.addPara("No Update Data available, an error may have occured.", 0f)
             return
         }
+
+        leftElement!!.addSpacer(3f)
+
+        var starsectorButton = LunaUIButton(false, false,250f - 15, 30f,"", "Button", leftPanel!!, leftElement!!).apply {
+            this.buttonText!!.text = "Starsector Version"
+            this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
+
+            this.uiElement.addTooltipToPrevious(TooltipHelper("", 400f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
+
+            onHover {
+                backgroundAlpha = 1f
+            }
+            onNotHover {
+                backgroundAlpha = 0.5f
+            }
+
+            onHoverEnter {
+                Global.getSoundPlayer().playUISound("ui_number_scrolling", 1f, 0.8f)
+            }
+        }
+        starsectorButton.borderAlpha = 0.5f
 
         leftElement!!.addSpacer(3f)
 
@@ -249,6 +268,10 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
             }
         }
 
+        leftElement!!.addSpacer(3f)
+
+
+
         createModsList()
 
     }
@@ -261,7 +284,7 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
         }
 
         // 32 * amount of buttons + their spacers before + an extra gap between mods and the config buttons
-        var space = ((30f * 4f) + 3f)
+        var space = ((30f * 5f) + 5f)
 
         modsPanel = panel!!.createCustomPanel(250f - 9 , height - space, null)
         modsPanel!!.position.inTL(0f, space)
@@ -365,6 +388,10 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
             {
                 text = "${mod.name}\n${mod.versionString}"
             }
+            else if (mod.isLocalNewer)
+            {
+                text = "${mod.name}\n${mod.localVersion.version} vs ${mod.remoteVersion.version}"
+            }
             else
             {
                 text = "${mod.name}\n" + "${mod.remoteVersion.version}"
@@ -383,6 +410,11 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
             {
                 para.setHighlight(mod.versionString)
                 para.setHighlightColor(Misc.getHighlightColor())
+            }
+            else if (mod.isLocalNewer)
+            {
+                para.setHighlight("${mod.localVersion.version} vs ${mod.remoteVersion.version}")
+                para.setHighlightColor(Misc.getPositiveHighlightColor())
             }
             //para.position.inTL(0f, (30f - para.position.height / 2))
 
@@ -560,6 +592,8 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
         description.addPara("Name: ${mod.name}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Name")
         description.addPara("Installed Version: ${mod.localVersion.version}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Installed Version")
 
+
+
         if (selectedMod!!.failedUpdateCheck() || selectedMod!!.remoteVersion == null)
         {
             description.addPara("Online Version: Failed to get version", 0f, Misc.getBasePlayerColor(), Misc.getNegativeHighlightColor(), ).apply {
@@ -574,8 +608,15 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
             description.addPara("Online Version: ${mod.remoteVersion.version}", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Online Version")
         }
 
-        description.addSpacer(20f)
-
+        if (mod.isLocalNewer)
+        {
+            description.addPara("Installed version is ahead of Remote version.", 0f, Misc.getPositiveHighlightColor(), Misc.getPositiveHighlightColor(), "Installed Version")
+            description.addSpacer(5f)
+        }
+        else
+        {
+            description.addSpacer(20f)
+        }
 
         description.addSpacer(5f)
 
@@ -598,7 +639,7 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
                 var highlightedLines: List<String> = ArrayList()
                 if (!mod.failedUpdateCheck() && mod.remoteVersion != null && mod.remoteVersion.txtChangelog != null)
                 {
-                    text = mod.remoteVersion.txtChangelog
+                    text = mod.remoteVersion.txtChangelog.trimAfter(10000)
 
                     highlightedLines = text.split("\n").filter { it.lowercase().trim().startsWith("version") }
                 }
@@ -607,7 +648,7 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
                     text = "No changelog available"
                 }
 
-                var change = addPara(text, 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Online Version")
+                var change = addPara(text.replace("%", "%%"), 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor(), "Online Version")
                 change.setHighlight(*highlightedLines.toTypedArray())
                 /*this.position.setSize(position.width, position.height + change.computeTextHeight(change.text))
                 this.position.setSize(position.width, position.height )*/
@@ -717,6 +758,20 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
             modsElement!!.addSpacer(5f)
 
             spacing += cardPanel.position!!.height
+        }
+    }
+
+    private fun String.trimAfter(cap: Int, addText: Boolean = true) : String
+    {
+        return if (this.length <= cap)
+        {
+            this
+        }
+        else
+        {
+            var text = ""
+            if (addText) text = "..."
+            this.substring(0, cap).trim() + "..."
         }
     }
 
