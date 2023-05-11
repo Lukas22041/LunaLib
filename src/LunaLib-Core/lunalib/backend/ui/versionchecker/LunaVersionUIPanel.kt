@@ -115,12 +115,17 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
         leftElement!!.addSpacer(3f)
 
         var starsectorButton = LunaUIButton(false, false,250f - 15, 30f,"", "Button", leftPanel!!, leftElement!!).apply {
+
             this.buttonText!!.text = "Starsector Version"
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
+
 
             var text = ""
             if (updateInfo!!.isStarsectorAhead)
             {
+                this.buttonText!!.setHighlight("Starsector Version")
+                this.buttonText!!.setHighlightColor(Misc.getHighlightColor())
+
                 text = "New Starsector Version Available!\n" +
                         "\n" +
                         "Installed Version: ${Global.getSettings().getVersionString()}\n" +
@@ -657,7 +662,7 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
                 {
                     text = mod.remoteVersion.txtChangelog.trimAfter(10000)
 
-                    highlightedLines = text.split("\n").filter { it.lowercase().trim().startsWith("version") }
+                    highlightedLines = text.split("\n").filter { it.lowercase().trim().startsWith("version")}
                 }
                 else
                 {
