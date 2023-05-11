@@ -123,14 +123,14 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
             {
                 text = "New Starsector Version Available!\n" +
                         "\n" +
-                        "Installed Version: ${updateInfo!!.ssUpdate}" +
+                        "Installed Version: ${Global.getSettings().getVersionString()}\n" +
                         "Latest Version: ${updateInfo!!.ssUpdate}"
             }
             else
             {
                 text = "The installed Starsector is up to date.\n" +
                         "\n" +
-                        "Installed Version: ${updateInfo!!.ssUpdate}" +
+                        "Installed Version: ${Global.getSettings().getVersionString()}\n" +
                         "Latest Version: ${updateInfo!!.ssUpdate}"
             }
 
