@@ -118,7 +118,23 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
             this.buttonText!!.text = "Starsector Version"
             this.buttonText!!.position.inTL(this.buttonText!!.position.width / 2 - this.buttonText!!.computeTextWidth(this.buttonText!!.text) / 2, this.buttonText!!.position.height - this.buttonText!!.computeTextHeight(this.buttonText!!.text) / 2)
 
-            this.uiElement.addTooltipToPrevious(TooltipHelper("", 400f, ""), TooltipMakerAPI.TooltipLocation.RIGHT)
+            var text = ""
+            if (updateInfo!!.isStarsectorAhead)
+            {
+                text = "New Starsector Version Available!\n" +
+                        "\n" +
+                        "Installed Version: ${updateInfo!!.ssUpdate}" +
+                        "Latest Version: ${updateInfo!!.ssUpdate}"
+            }
+            else
+            {
+                text = "The installed Starsector is up to date.\n" +
+                        "\n" +
+                        "Installed Version: ${updateInfo!!.ssUpdate}" +
+                        "Latest Version: ${updateInfo!!.ssUpdate}"
+            }
+
+            this.uiElement.addTooltipToPrevious(TooltipHelper(text, 400f, "Installed Version", "Latest Version"), TooltipMakerAPI.TooltipLocation.RIGHT)
 
             onHover {
                 backgroundAlpha = 1f

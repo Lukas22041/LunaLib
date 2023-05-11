@@ -20,6 +20,8 @@ public final class UpdateInfo
     private int numModsChecked = 0;
     private String ssUpdate = null, ssUpdateError = null;
 
+    public Boolean isStarsectorAhead = false;
+
     void setSSUpdate(String latestVersion)
     {
         this.ssUpdate = latestVersion;

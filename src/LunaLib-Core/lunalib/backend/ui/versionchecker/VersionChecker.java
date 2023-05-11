@@ -21,7 +21,7 @@ import lunalib.backend.ui.versionchecker.UpdateInfo.VersionFile;
 final class VersionChecker
 {
     private static final String VANILLA_UPDATE_URL
-            = "https://raw.githubusercontent.com/LazyWizard/version-checker/master/vanilla.txt";
+            = "https://raw.githubusercontent.com/Lukas22041/LunaLib/main/vanilla.txt";
     private static int MAX_THREADS = 12;
 
     static void setMaxThreads(int maxThreads)
@@ -325,10 +325,13 @@ final class VersionChecker
                             latestVanilla = getLatestSSVersion();
                     Log.info("Local Starsector version is " + currentVanilla
                             + ", latest known is " + latestVanilla);
+
+                    results.setSSUpdate(latestVanilla);
+
                     if (isRemoteNewer(currentVanilla, latestVanilla))
                     {
                         Log.info("Starsector update available!");
-                        results.setSSUpdate(latestVanilla);
+                        results.isStarsectorAhead = true;
                     }
                 }
                 catch (IOException ex)
