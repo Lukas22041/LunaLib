@@ -104,6 +104,8 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin(
 
     override fun processInput(events: MutableList<InputEventAPI>) {
 
+        super.processInput(events)
+
         if (closeCooldown > 1)
         {
             closeCooldown--
@@ -111,6 +113,8 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin(
         }
 
         events.forEach { event ->
+            if (event.isConsumed) return@forEach
+            if (isOpenedFromScript()) return@forEach
             if (event.isKeyDownEvent && event.eventValue == LoadedSettings.settingsKeybind)
             {
                 event.consume()

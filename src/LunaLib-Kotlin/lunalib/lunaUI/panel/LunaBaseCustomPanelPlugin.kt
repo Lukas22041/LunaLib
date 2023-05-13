@@ -9,9 +9,11 @@ import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.util.Misc
+import lunalib.backend.scripts.CombatHandler
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.lunaExtensions.addLunaElement
 import lunalib.lunaUI.LunaUIUtils
+import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL20
 import java.awt.Color
@@ -60,6 +62,8 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
     }
 
     abstract fun init()
+
+    fun isOpenedFromScript() = openedFromScript
 
     override fun positionChanged(position: PositionAPI?) {
 
@@ -123,7 +127,17 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
     }
 
     override fun processInput(events: MutableList<InputEventAPI>) {
-
+        if (isOpenedFromScript())
+        {
+            events.forEach {
+                if (it.isConsumed) return@forEach
+                if (it.isKeyDownEvent && it.eventValue == Keyboard.KEY_ESCAPE)
+                {
+                    CombatHandler.canBeRemoved = true
+                    it.consume()
+                }
+            }
+        }
     }
 
     final fun close()

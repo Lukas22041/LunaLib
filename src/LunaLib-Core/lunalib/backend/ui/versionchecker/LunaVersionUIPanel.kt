@@ -797,6 +797,8 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
     }
 
     override fun processInput(events: MutableList<InputEventAPI>) {
+        super.processInput(events)
+
 
         if (closeCooldown > 1)
         {
@@ -805,6 +807,8 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
         }
 
         events.forEach { event ->
+            if (event.isConsumed) return@forEach
+            if (isOpenedFromScript()) return@forEach
             if (event.isKeyDownEvent && event.eventValue == Keyboard.KEY_ESCAPE)
             {
                 event.consume()

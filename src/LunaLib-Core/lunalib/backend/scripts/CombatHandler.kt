@@ -11,6 +11,7 @@ import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.combat.CombatState
 import com.fs.starfarer.title.TitleScreenState
 import com.fs.state.AppDriver
+import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
 import lunalib.backend.ui.settings.LunaSettingsUIModsPanel
 import lunalib.backend.ui.settings.LunaSettingsUISettingsPanel
@@ -50,6 +51,7 @@ class CombatHandler : EveryFrameCombatPlugin
 
     companion object {
         var isUpdateCheckDone = false
+        var canBeRemoved = false
     }
 
     override fun init(engine: CombatEngineAPI?)
@@ -70,13 +72,14 @@ class CombatHandler : EveryFrameCombatPlugin
         versionButtonText = font.createText("Version Checker", Misc.getBasePlayerColor(), 15f)
     }
 
+
     override fun processInputPreCoreControls(amount: Float, events: MutableList<InputEventAPI>?) {
 
 
         events!!.forEach {
             if (it.isConsumed) return@forEach
             if (AppDriver.getInstance().currentState !is TitleScreenState) return@forEach
-            if (it.isKeyDownEvent && it.eventValue == Keyboard.KEY_ESCAPE)
+            if (canBeRemoved)
             {
                 var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
 
@@ -94,6 +97,7 @@ class CombatHandler : EveryFrameCombatPlugin
                     LunaSettingsUISettingsPanel.unsaved = false
 
                     it.consume()
+                    canBeRemoved = false
                     return@forEach
                 }
                 if (LunaVersionUIPanel.panelOpen)
@@ -103,14 +107,11 @@ class CombatHandler : EveryFrameCombatPlugin
                     LunaVersionUIPanel.panelOpen = false
 
                     it.consume()
+                    canBeRemoved = false
                     return@forEach
                 }
             }
 
-            if (it.isKeyDownEvent && it.eventValue == Keyboard.KEY_ESCAPE && versionPanel != null)
-            {
-                getScreenPanel().removeComponent(versionPanel)
-            }
         }
     }
 
