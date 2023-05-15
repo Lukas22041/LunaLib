@@ -18,24 +18,44 @@ Class for getting LunaSettings stored data.
 object LunaSettings
 {
 
-   // internal var listeners: MutableList<LunaSettingsListener> = ArrayList()
     private val log = Global.getLogger(LunaSettings::class.java)
+
+    @JvmStatic
     internal var listeners: MutableList<LunaSettingsListener> = ArrayList()
 
     init {
         log.level = Level.ALL
     }
 
-    fun addListener(listener: LunaSettingsListener) {
+    @JvmStatic
+    fun addSettingsListener(listener: LunaSettingsListener) {
         listeners.add(listener)
     }
 
-    fun removeListener(listener: LunaSettingsListener) {
+    @JvmStatic
+    fun removeSettingsListener(listener: LunaSettingsListener) {
         listeners.remove(listener)
     }
 
-    fun hasListenerOfClass(listenerClass: Class<*>) : Boolean {
+    @JvmStatic
+    fun hasSettingsListenerOfClass(listenerClass: Class<*>) : Boolean {
         return listeners.any { it.javaClass.name == listenerClass.name }
+    }
+
+
+    @Deprecated("Deprecated due to not being JvmStatic, please use addSettingsListener() instead.")
+    fun addListener(listener: LunaSettingsListener) {
+        addSettingsListener(listener)
+    }
+
+    @Deprecated("Deprecated due to not being JvmStatic, please use removeSettingsListener() instead.")
+    fun removeListener(listener: LunaSettingsListener) {
+        removeSettingsListener(listener)
+    }
+
+    @Deprecated("Deprecated due to not being JvmStatic, please use hasSettingsListenerOfClass() instead.")
+    fun hasListenerOfClass(listenerClass: Class<*>) : Boolean {
+        return hasSettingsListenerOfClass(listenerClass)
     }
 
     /*fun addListener(listener: LunaSettingsListener)

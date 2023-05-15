@@ -551,7 +551,7 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
 
         if (downloadURL != null)
         {
-            var tooltipText = "Left click to open in Browser. Rightclick to copy the URL to the clipboard. To stay safe, do not open any file downloaded that isnt a .zip or .rar" +
+            var tooltipText = "Left click to open in Browser. Rightclick to copy the URL to the clipboard. Always be wary of downloading files from the internet." +
                     "\n\nLink: $downloadURL"
             downloadButton.addTooltip(tooltipText, 400f, TooltipMakerAPI.TooltipLocation.BELOW, "Warning", "Link")
         }

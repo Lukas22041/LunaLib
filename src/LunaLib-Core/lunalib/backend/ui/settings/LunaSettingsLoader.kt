@@ -1,6 +1,7 @@
 package lunalib.backend.ui.settings
 
 import com.fs.starfarer.api.Global
+import lunalib.lunaSettings.LunaSettings
 import org.apache.log4j.Level
 import org.json.JSONArray
 import org.lazywizard.lazylib.JSONUtils
@@ -121,6 +122,13 @@ internal object LunaSettingsLoader
                     {
                         maxValue = 100.0
                     }
+                }
+
+                var oldData = SettingsData.find { it.modID == mod.id && it.fieldID == id }
+
+                if (oldData != null)
+                {
+                    SettingsData.remove(oldData)
                 }
 
                 SettingsData.add(LunaSettingsData(mod.id, id, name, type, description, default, secondary, minValue, maxValue, tab))

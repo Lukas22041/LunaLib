@@ -1,3 +1,15 @@
+Version 1.7.4
+
+-> Fixed a bug that caused the menu to close in the main menu when pressing ESC while selecting a textfield or keybind button
+-> Fixed a bug that made you unable to close the main menu config screen.
+-> Improved the tooltip of the Direct Download button.
+
+For Developers:
+-> The Listener methods inside of LunaSettings have been marked as deprecated and received replacements. This is due to them not being marked as JvmStatic, which caused them to be unwieldly to use from Java-Code. The Methods will remain useable however if you are already using them.
+-> The LunaSettings.csv data can now be reloaded by pressing Devmode F8 in combat or from a Snippet in the debug menu. 
+
+
+
 Version 1.7.3
 
 -> Version checker now shows if your starsector install is up to date.

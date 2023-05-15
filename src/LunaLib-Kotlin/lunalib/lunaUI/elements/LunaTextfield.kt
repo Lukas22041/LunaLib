@@ -7,6 +7,8 @@ import com.fs.starfarer.api.ui.LabelAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.IntervalUtil
 import com.fs.starfarer.api.util.Misc
+import com.fs.starfarer.campaign.CampaignEngine
+import lunalib.lunaSettings.LunaSettings
 import org.lwjgl.input.Keyboard
 import java.awt.Color
 import java.awt.Toolkit
@@ -43,7 +45,6 @@ class LunaTextfield(private var text: String, private var multiline: Boolean, va
             }
             unselect()
         }
-
     }
 
 
