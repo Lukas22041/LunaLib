@@ -1,6 +1,6 @@
 Version 1.7.4
 
--> Fixed a bug that caused the menu to close in the main menu when pressing ESC while selecting a textfield or keybind button
+-> Fixed a bug that caused the menu to close in the main menu when pressing ESC while selecting a textfield or keybind button.
 -> Fixed a bug that made you unable to close the main menu config screen.
 -> Improved the tooltip of the Direct Download button.
 
