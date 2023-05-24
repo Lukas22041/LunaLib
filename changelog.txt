@@ -1,3 +1,14 @@
+
+Version 1.7.5
+-> Reduced changelog loading times and prevented them from hanging the game when starting the game up.
+-> The Cargo-Debug menu now shows a message displaying how many items have been given.
+-> Fixed an issue that caused some config changes to not apply immediately when saving.
+
+For Developers:
+-> Added ``reportSettingsChanged`` to ``LunaSettings`` 
+
+
+
 Version 1.7.4
 
 -> Fixed a bug that caused the menu to close in the main menu when pressing ESC while selecting a textfield or keybind button.

@@ -1,5 +1,6 @@
 package lunalib.backend.ui.versionchecker;
 
+import com.fs.starfarer.api.Global;
 import lunalib.lunaSettings.LunaSettings;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -186,7 +187,7 @@ public final class UpdateInfo
             changelogURL = json.optString("changelogURL");
             if (changelogURL.equals("")) changelogURL = null;
 
-            if (changelogURL != null)
+            if (changelogURL != null && isMaster)
             {
                 try
                 {
@@ -194,7 +195,6 @@ public final class UpdateInfo
                     Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
                     txtChangelog = scanner.next();
                 }
-                //Temporarily removed stacktrace reporting for now, caused lots of issues when looking for actual issues.
                 //Temporarily removed stacktrace reporting for now, made it a lot harder to detect the real issues
                 catch (Throwable ex)
                 {

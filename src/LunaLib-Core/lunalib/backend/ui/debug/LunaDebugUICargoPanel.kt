@@ -323,6 +323,7 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
             }
 
             button.onClick {
+                var cargo = Global.getSector().playerFleet.cargo
                 when (item)
                 {
                     is ShipHullSpecAPI -> {
@@ -331,18 +332,26 @@ internal class LunaDebugUICargoPanel : LunaDebugUIInterface {
                             var member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, item.baseHullId + "_Hull");
                             Global.getSector().playerFleet.fleetData.addFleetMember(member)
                         }
+                        var amount = Global.getSector().playerFleet.fleetData.membersListCopy.filter { it.hullSpec.hullId == item.baseHullId }.size
+                        Global.getSector().campaignUI.messageDisplay.addMessage("Cheated in ${item.hullName} (Now has: ${amount})")
                     }
                     is WeaponSpecAPI -> {
-                        Global.getSector().playerFleet.cargo.addWeapons(item.weaponId, slider.value)
+                        cargo.addWeapons(item.weaponId, slider.value)
+                        Global.getSector().campaignUI.messageDisplay.addMessage("Cheated in ${item.weaponName} (Now has: ${cargo.getNumWeapons(item.weaponId)})")
                     }
                     is HullModSpecAPI -> {
-                        Global.getSector().playerFleet.cargo.addHullmods(item.id, slider.value)
+                        cargo.addHullmods(item.id, slider.value)
+                        Global.getSector().campaignUI.messageDisplay.addMessage("Cheated in ${slider.value}x ${item.displayName} ")
+
                     }
                     is FighterWingSpecAPI -> {
-                        Global.getSector().playerFleet.cargo.addFighters(item.id, slider.value)
+                        cargo.addFighters(item.id, slider.value)
+                        Global.getSector().campaignUI.messageDisplay.addMessage("Cheated in ${item.wingName} (Now has: ${cargo.getNumFighters(item.id)})")
                     }
                     is CommoditySpecAPI -> {
-                        Global.getSector().playerFleet.cargo.addCommodity(item.id, slider.value.toFloat())
+                        cargo.addCommodity(item.id, slider.value.toFloat())
+                        Global.getSector().campaignUI.messageDisplay.addMessage("Cheated in ${item.name} (Now has: ${cargo.getCommodityQuantity(item.id)})")
+
                     }
                 }
             }

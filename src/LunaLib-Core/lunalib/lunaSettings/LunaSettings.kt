@@ -42,6 +42,19 @@ object LunaSettings
         return listeners.any { it.javaClass.name == listenerClass.name }
     }
 
+    @JvmStatic
+    fun reportSettingsChanged(modID: String) {
+        for (listener in listeners)
+        {
+            try {
+                listener.settingsChanged(modID)
+            }
+            catch (e: Throwable) {
+                Global.getLogger(this.javaClass).debug("Failed to call LunaSettings listener for $modID")
+            }
+        }
+    }
+
 
     @Deprecated("Deprecated due to not being JvmStatic, please use addSettingsListener() instead.")
     fun addListener(listener: LunaSettingsListener) {

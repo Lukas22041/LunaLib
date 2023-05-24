@@ -16,11 +16,14 @@ class LoadedSettings : LunaSettingsListener
     }
 
     override fun settingsChanged(modID: String) {
-        settingsKeybind = LunaSettings.getInt("lunalib", "luna_SettingsKeybind")
-        debugKeybind = LunaSettings.getInt("lunalib", "luna_DebugKeybind")
-        devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind")
-        debugEntryCap = LunaSettings.getInt("lunalib", "luna_DebugEntries")
-        uidebugKeybind = LunaSettings.getInt("lunalib", "luna_UIDebugKeybind")
+        if (modID == "lunalib")
+        {
+            settingsKeybind = LunaSettings.getInt("lunalib", "luna_SettingsKeybind")
+            debugKeybind = LunaSettings.getInt("lunalib", "luna_DebugKeybind")
+            devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind")
+            debugEntryCap = LunaSettings.getInt("lunalib", "luna_DebugEntries")
+            uidebugKeybind = LunaSettings.getInt("lunalib", "luna_UIDebugKeybind")
 
+        }
     }
 }

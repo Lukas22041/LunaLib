@@ -54,19 +54,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         var selectedMod: ModSpecAPI? = null
     }
 
-    private fun callSettingsChangedListener(data: ModSpecAPI)
-    {
-        val listeners = LunaSettings.listeners
-        for (listener in listeners)
-        {
-            try {
-                listener.settingsChanged(data.id)
-            }
-            catch (e: Throwable) {
-                Global.getLogger(this.javaClass).debug("Failed to call LunaSettings listener for ${data.id}")
-            }
-        }
-    }
+
 
     fun init(parentPanel: CustomPanelAPI, panel: CustomPanelAPI)
     {
@@ -617,7 +605,8 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                     data.save()
                     LunaSettingsLoader.Settings.put(mod, data)
 
-                    if (!newGame) callSettingsChangedListener(selectedMod!!)
+                    if (!newGame) LunaSettings.reportSettingsChanged(mod)
+
                 }
 
 

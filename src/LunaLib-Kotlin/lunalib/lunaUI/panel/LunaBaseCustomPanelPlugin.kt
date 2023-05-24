@@ -52,11 +52,14 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
         panel.addComponent(backgroundPanel)
         var backgroundElement = backgroundPanel.createUIElement(panel.position.width, panel.position.height, false)
         backgroundPanel.addUIElement(backgroundElement)
+        backgroundPanel.position.inTL(0f, 0f)
         backgroundElement.addLunaElement(panel.position.width, panel.position.height).apply {
             renderBackground = true
             renderBorder = false
             backgroundColor = Color(0, 0, 0)
+            position.inTL(0f, 0f)
         }
+        backgroundElement.position.inTL(0f, 0f)
 
         init()
     }
