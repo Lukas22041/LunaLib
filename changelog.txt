@@ -1,3 +1,14 @@
+Version 1.7.6
+
+-> Added a Close Button to the top right of the Settings, Version and Debug Menus.
+-> Version Checker can now be disabled in the Lunalib config.
+-> The Mod Config Panel now remembers which tab was last selected and switches to it when re-opening the menu.
+-> Multiple UI Panels now remember the location of the scrollbar from when they were last opened, those are:
+   * Mod Config: Mod Selection List, Settings List
+   * Version Checker: Mods Selection List
+   * Snippets Tab: Snippets List
+
+
 
 Version 1.7.5
 -> Reduced changelog loading times and prevented them from hanging the game when starting the game up.

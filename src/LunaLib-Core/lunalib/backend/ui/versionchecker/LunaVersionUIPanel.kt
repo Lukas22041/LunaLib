@@ -5,10 +5,12 @@ import com.fs.starfarer.api.ModSpecAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.Misc
+import lunalib.backend.scripts.CombatHandler
 import lunalib.backend.ui.components.base.*
 import lunalib.backend.ui.components.base.LunaUIButton
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.ui.components.util.TooltipHelper
+import lunalib.backend.ui.debug.LunaDebugUISnippetsPanel
 import lunalib.backend.ui.settings.LunaSettingsLoader
 import lunalib.backend.ui.versionchecker.UpdateInfo.ModInfo
 import lunalib.backend.util.getLunaString
@@ -29,6 +31,8 @@ import java.util.concurrent.Future
 class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
 {
 
+    var handler: CombatHandler? = null
+
     var leftPanel: CustomPanelAPI? = null
     var leftElement: TooltipMakerAPI? = null
 
@@ -48,6 +52,8 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
 
     companion object {
         var closeCooldown = 0
+
+        var lastScroller = 0f
 
         @JvmStatic
         var futureUpdateInfo: Future<UpdateInfo>? = null
@@ -70,6 +76,7 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
 
     override fun init() {
 
+        enableCloseButton = true
         panelOpen = true
 
         width = panel!!.position.width
@@ -447,6 +454,7 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
         unsupportedMods()
 
         modsPanel!!.addUIElement(modsElement)
+        modsElement!!.externalScroller.yOffset = lastScroller
 
         addRightPanel()
     }
@@ -699,6 +707,13 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
 
     override fun advance(amount: Float) {
 
+        if (modsElement != null)
+        {
+            if (modsElement!!.externalScroller != null)
+            {
+                lastScroller = modsElement!!.externalScroller.yOffset
+            }
+        }
 
         if (reconstruct)
         {
@@ -796,9 +811,22 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
         }
     }
 
+    override fun onClose() {
+        super.onClose()
+
+        if (handler != null)
+        {
+            handler!!.closeVersionUI()
+        }
+
+        //Not clearing this will cause a memory leak
+        LunaUIBaseElement.selectedMap.clear()
+        panelOpen = false
+
+    }
+
     override fun processInput(events: MutableList<InputEventAPI>) {
         super.processInput(events)
-
 
         if (closeCooldown > 1)
         {
@@ -815,9 +843,6 @@ class LunaVersionUIPanel() : LunaBaseCustomPanelPlugin()
 
                 close()
 
-                //Not clearing this will cause a memory leak
-                LunaUIBaseElement.selectedMap.clear()
-                panelOpen = false
 
                 return@forEach
             }

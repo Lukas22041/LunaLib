@@ -30,12 +30,6 @@ class LunaLibPlugin : BaseModPlugin()
     {
         LunaSettings.addSettingsListener(LoadedSettings())
 
-        var pc = Global.getSettings().modManager.getModSpec("parallel_construction")
-        if (pc != null)
-        {
-            throw Exception("Parallel Construction is not compatible with this version of Lunalib, PC itself is not being updated anymore, but an updated version of PC is included in the mod \"Random Assortment of Things\"")
-        }
-
         if (!LunaSettingsLoader.hasLoaded)
         {
             LunaSettingsLoader.load()

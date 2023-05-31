@@ -17,6 +17,7 @@ import lunalib.backend.ui.components.base.LunaUIPlaceholder
 import lunalib.backend.ui.components.base.LunaUISprite
 import lunalib.backend.ui.components.base.LunaUITextField
 import lunalib.backend.ui.components.util.TooltipHelper
+import lunalib.backend.ui.debug.LunaDebugUISnippetsPanel
 import lunalib.backend.util.getLunaString
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaSettings.LunaSettingsListener
@@ -52,6 +53,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
     {
         var lastSelectedMod = "LunaAboutSection"
         var selectedMod: ModSpecAPI? = null
+        var lastScroller = 0f
     }
 
 
@@ -457,6 +459,8 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
                 onClick {
                     this.setSelected()
+                    LunaSettingsUISettingsPanel.lastSelectedTab = ""
+                    LunaSettingsUISettingsPanel.lastScroller = 0f
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
                 }
 
@@ -484,8 +488,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
                 }
 
                 onSelect {
-                    if (!saving)
-                        setUnsavedData()
+                    if (!saving) setUnsavedData()
                     selectedMod = mod
                     lastSelectedMod = mod.id
                 }
@@ -533,6 +536,7 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
         }
 
         subpanel!!.addUIElement(subpanelElement)
+        subpanelElement!!.externalScroller.yOffset = lastScroller
     }
 
     override fun positionChanged(position: PositionAPI?) {
@@ -611,6 +615,14 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
 
 
                 saving = false
+            }
+        }
+
+        if (subpanelElement != null)
+        {
+            if (subpanelElement!!.externalScroller != null)
+            {
+                lastScroller = subpanelElement!!.externalScroller.yOffset
             }
         }
     }

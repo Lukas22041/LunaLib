@@ -7,6 +7,7 @@ import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
+import lunalib.backend.scripts.CombatHandler
 import lunalib.backend.scripts.LoadedSettings
 import lunalib.lunaUI.panel.LunaBaseCustomPanelPlugin
 import lunalib.backend.ui.components.base.LunaUIBaseElement
@@ -17,6 +18,8 @@ import lunalib.backend.util.*
 //I dont recommend anyone to read through my UI code to learn from, its equivelant to the ramblings of an insane person, and such can only be understood by the crazy person themself.
 class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin()
 {
+
+    var handler: CombatHandler? = null
 
     private var modsPanel: CustomPanelAPI? = null
     private var modsPanelPlugin: LunaSettingsUIModsPanel? = null
@@ -36,6 +39,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin(
 
     override fun init() {
 
+        enableCloseButton = true
         panelOpen = true
 
         width = panel!!.position.width
@@ -101,6 +105,26 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin(
 
     }
 
+    override fun onClose() {
+        super.onClose()
+
+        LunaSettingsUIModsPanel.selectedMod = null
+        LunaSettingsUISettingsPanel.addedElements.clear()
+        LunaSettingsUISettingsPanel.changedSettings.clear()
+        LunaSettingsUISettingsPanel.unsavedCounter.clear()
+        LunaSettingsUISettingsPanel.unsaved = false
+
+        //Not clearing this will cause a memory leak
+        LunaUIBaseElement.selectedMap.clear()
+
+        panelOpen = false
+
+        if (handler != null)
+        {
+            handler!!.closeSettingsUI()
+        }
+
+    }
 
     override fun processInput(events: MutableList<InputEventAPI>) {
 
@@ -121,16 +145,7 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin(
 
                 close()
 
-                LunaSettingsUIModsPanel.selectedMod = null
-                LunaSettingsUISettingsPanel.addedElements.clear()
-                LunaSettingsUISettingsPanel.changedSettings.clear()
-                LunaSettingsUISettingsPanel.unsavedCounter.clear()
-                LunaSettingsUISettingsPanel.unsaved = false
 
-                //Not clearing this will cause a memory leak
-                LunaUIBaseElement.selectedMap.clear()
-
-                panelOpen = false
 
                 closeCooldown = 30
                 return@forEach
@@ -140,12 +155,6 @@ class LunaSettingsUIMainPanel(var newGame: Boolean) : LunaBaseCustomPanelPlugin(
                 event.consume()
 
                 close()
-
-                LunaSettingsUIModsPanel.selectedMod = null
-                LunaSettingsUISettingsPanel.addedElements.clear()
-                LunaSettingsUISettingsPanel.changedSettings.clear()
-                LunaSettingsUISettingsPanel.unsavedCounter.clear()
-                LunaSettingsUISettingsPanel.unsaved = false
 
                 panelOpen = false
 

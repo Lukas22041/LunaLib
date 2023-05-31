@@ -52,6 +52,8 @@ class CombatHandler : EveryFrameCombatPlugin
     companion object {
         var isUpdateCheckDone = false
         var canBeRemoved = false
+
+        var enableVersionChecker = LunaSettings.getBoolean("lunalib", "luna_enableVC")
     }
 
     override fun init(engine: CombatEngineAPI?)
@@ -73,6 +75,25 @@ class CombatHandler : EveryFrameCombatPlugin
     }
 
 
+    fun closeSettingsUI()
+    {
+        getScreenPanel().removeComponent(settingsPanel)
+
+        LunaSettingsUIMainPanel.panelOpen = false
+
+        LunaSettingsUIModsPanel.selectedMod = null
+        LunaSettingsUISettingsPanel.addedElements.clear()
+        LunaSettingsUISettingsPanel.changedSettings.clear()
+        LunaSettingsUISettingsPanel.unsavedCounter.clear()
+        LunaSettingsUISettingsPanel.unsaved = false
+    }
+
+    fun closeVersionUI()
+    {
+        getScreenPanel().removeComponent(versionPanel)
+        LunaVersionUIPanel.panelOpen = false
+    }
+
     override fun processInputPreCoreControls(amount: Float, events: MutableList<InputEventAPI>?) {
 
 
@@ -85,16 +106,8 @@ class CombatHandler : EveryFrameCombatPlugin
 
                 if (LunaSettingsUIMainPanel.panelOpen)
                 {
-                    getScreenPanel().removeComponent(settingsPanel)
 
-                    settingsPlugin!!.close()
-                    LunaSettingsUIMainPanel.panelOpen = false
-
-                    LunaSettingsUIModsPanel.selectedMod = null
-                    LunaSettingsUISettingsPanel.addedElements.clear()
-                    LunaSettingsUISettingsPanel.changedSettings.clear()
-                    LunaSettingsUISettingsPanel.unsavedCounter.clear()
-                    LunaSettingsUISettingsPanel.unsaved = false
+                    closeSettingsUI()
 
                     it.consume()
                     canBeRemoved = false
@@ -102,9 +115,8 @@ class CombatHandler : EveryFrameCombatPlugin
                 }
                 if (LunaVersionUIPanel.panelOpen)
                 {
-                    getScreenPanel().removeComponent(versionPanel)
-                    versionPlugin!!.close()
-                    LunaVersionUIPanel.panelOpen = false
+
+                    closeVersionUI()
 
                     it.consume()
                     canBeRemoved = false
@@ -184,6 +196,9 @@ class CombatHandler : EveryFrameCombatPlugin
                     var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
                     getScreenPanel().addComponent(settingsPanel)
 
+                    (settingsPlugin as LunaSettingsUIMainPanel).handler = this
+
+
                     LunaSettingsUIMainPanel.panelOpen = true
 
 
@@ -232,6 +247,7 @@ class CombatHandler : EveryFrameCombatPlugin
 
                     var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
                     getScreenPanel().addComponent(versionPanel)
+                    (versionPlugin as LunaVersionUIPanel).handler = this
 
                     LunaVersionUIPanel.panelOpen = true
 
@@ -308,7 +324,7 @@ class CombatHandler : EveryFrameCombatPlugin
                 if (dialogActive == null && !LunaSettingsUIMainPanel.panelOpen && !LunaVersionUIPanel.panelOpen)
                 {
                     addModSettingsButton()
-                    addVersionButton()
+                    if (enableVersionChecker!!) addVersionButton()
                 }
             }
 
@@ -327,7 +343,7 @@ class CombatHandler : EveryFrameCombatPlugin
                 tip!!.append("mainMenuText1".getLunaString() + settingsKeybind + "mainMenuText2".getLunaString() + location, Misc.getBasePlayerColor())
             }
 
-            if (!isUpdateCheckDone) {
+            if (!isUpdateCheckDone && enableVersionChecker!!) {
                 // We can't do anything if it's not done checking for updates
                 if (!LunaVersionUIPanel.futureUpdateInfo!!.isDone) {
                     return

@@ -35,6 +35,8 @@ class LunaDebugUIMainPanel() : LunaBaseCustomPanelPlugin()
 
     override fun init() {
 
+        enableCloseButton = true
+
         width = panel!!.position.width
         height = panel!!.position.height
 
@@ -184,15 +186,16 @@ class LunaDebugUIMainPanel() : LunaBaseCustomPanelPlugin()
     }
 
     override fun renderBelow(alphaMult: Float) {
-
+        super.renderBelow(alphaMult)
     }
 
     override fun render(alphaMult: Float) {
-
+        super.render(alphaMult)
     }
 
 
     override fun processInput(events: MutableList<InputEventAPI>) {
+        super.processInput(events)
 
         if (closeCooldown > 1)
         {

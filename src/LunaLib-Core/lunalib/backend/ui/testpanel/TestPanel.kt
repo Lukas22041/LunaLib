@@ -16,6 +16,7 @@ class TestPanel : LunaBaseCustomPanelPlugin() {
 
     override fun init() {
 
+        enableCloseButton = true
         width = panel.position.width
         height = panel.position.height
 

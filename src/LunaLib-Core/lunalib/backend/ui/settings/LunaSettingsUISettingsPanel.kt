@@ -52,12 +52,15 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
     var selectedTab = ""
     var currentTabSpacing = 0f
 
+
     companion object
     {
         var unsaved = false
         var unsavedCounter: MutableMap<String, Int> = HashMap()
         var changedSettings = ArrayList<ChangedSetting>()
         var addedElements: MutableList<LunaUIBaseElement> = ArrayList()
+        var lastSelectedTab = ""
+        var lastScroller = 0f
     }
 
 
@@ -154,9 +157,17 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                     }
                 }
 
-                if (first)
+                if (lastSelectedTab == "" && first)
                 {
                     button.setSelected()
+                    selectedTab = tab
+                    first = false
+                    button.backgroundAlpha = 0.75f
+                }
+                else if (lastSelectedTab == tab)
+                {
+                    button.setSelected()
+                    lastSelectedTab = tab
                     selectedTab = tab
                     first = false
                     button.backgroundAlpha = 0.75f
@@ -168,8 +179,10 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
                 button.onClick {
                     if (selectedTab != tab)
                     {
+                        lastScroller = 0f
                         setUnsavedData()
                         selectedTab = tab
+                        lastSelectedTab = tab
                         setSelected()
                         recreatePanel()
                     }
@@ -385,6 +398,8 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 
 
         subpanel!!.addUIElement(subpanelElement)
+        subpanelElement!!.externalScroller.yOffset = lastScroller
+
     }
 
     fun createTextFieldCard(data: LunaSettingsData, cardPanel: LunaUIPlaceholder,  interactbleElement: TooltipMakerAPI) : LunaUIBaseElement?
@@ -663,6 +678,14 @@ internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
             selectedMod = null
             recreateAboutSection()
             createdAbout = true
+        }
+
+        if (subpanelElement != null)
+        {
+            if (subpanelElement!!.externalScroller != null)
+            {
+                lastScroller = subpanelElement!!.externalScroller.yOffset
+            }
         }
     }
 

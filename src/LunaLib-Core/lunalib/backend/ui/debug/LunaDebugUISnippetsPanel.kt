@@ -37,6 +37,8 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
     // var filters = listOf("Current System", "Starsystems", "Stars", "Planets" ,"Custom Entities", "Fleets")
     companion object
     {
+        var lastScroller = 0f
+
         var searchText = ""
 
         var activeFilter = "All"
@@ -189,6 +191,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
             button.onClick {
                 activeFilter = filter
 
+                lastScroller = 0f
                 searchForSnippets()
                 createList()
             }
@@ -401,6 +404,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
         }
         subpanelElement!!.addSpacer(20f)
         subpanel!!.addUIElement(subpanelElement)
+        subpanelElement!!.externalScroller.yOffset = lastScroller
         outputPanel!!.addUIElement(outputElement)
     }
 
@@ -448,7 +452,13 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
     }
 
     override fun advance(amount: Float) {
-
+        if (subpanelElement != null)
+        {
+            if (subpanelElement!!.externalScroller != null)
+            {
+                lastScroller = subpanelElement!!.externalScroller.yOffset
+            }
+        }
     }
 
     override fun processInput(events: MutableList<InputEventAPI>?) {

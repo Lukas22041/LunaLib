@@ -1,7 +1,7 @@
 package lunalib.lunaUI.panel
 
+import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate.DialogCallbacks
 import com.fs.starfarer.api.campaign.InteractionDialogAPI
@@ -13,14 +13,22 @@ import lunalib.backend.scripts.CombatHandler
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.lunaExtensions.addLunaElement
 import lunalib.lunaUI.LunaUIUtils
+import org.lazywizard.lazylib.MathUtils
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL20
+import org.lwjgl.util.vector.Vector2f
 import java.awt.Color
-import java.lang.Exception
 
 abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
 
+    private var closeSpriteOff = Global.getSettings().getSprite("ui", "tripad_power_button")
+    private var closeSpriteOn = Global.getSettings().getSprite("ui", "tripad_power_button_glow")
+    private var closeSpriteBackground = Global.getSettings().getSprite("ui", "tripad_power_button_slot")
+    private var buttonAlpha = 0f
+
+    var enableCloseButton = false
+
+    private var buttonLocation = Vector2f(Global.getSettings().screenWidth - closeSpriteOff.width, Global.getSettings().screenHeight - closeSpriteOff.height)
 
     lateinit var panel: CustomPanelAPI
     lateinit var callbacks: DialogCallbacks
@@ -123,6 +131,18 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
             GL11.glEnd()
             GL11.glPopMatrix()
         }
+
+        if (enableCloseButton)
+        {
+            closeSpriteBackground.render(buttonLocation.x - 32f, buttonLocation.y)
+            closeSpriteBackground.alphaMult = alphaMult
+
+            closeSpriteOff.render(buttonLocation.x, buttonLocation.y)
+            closeSpriteOff.alphaMult = alphaMult
+
+            closeSpriteOn.alphaMult = buttonAlpha * alphaMult
+            closeSpriteOn.render(buttonLocation.x, buttonLocation.y)
+        }
     }
 
     override fun advance(amount: Float) {
@@ -138,6 +158,29 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
                 {
                     CombatHandler.canBeRemoved = true
                     it.consume()
+                }
+            }
+        }
+
+        if (enableCloseButton)
+        {
+            for (event in events) {
+                if (event.isMouseEvent) {
+                    if (event.x.toFloat() in buttonLocation.x..(buttonLocation.x + closeSpriteOff.width) && event.y.toFloat() in buttonLocation.y..(buttonLocation.y + closeSpriteOff.height)) {
+                        buttonAlpha = MathUtils.clamp(buttonAlpha + 0.5f, 0f, 1f)
+                    }
+                    else
+                    {
+                        buttonAlpha = MathUtils.clamp(buttonAlpha - 0.5f, 0f, 1f)
+                    }
+                }
+                if (event.isMouseDownEvent)
+                {
+                    if (event.x.toFloat() in buttonLocation.x..(buttonLocation.x + closeSpriteOff.width) && event.y.toFloat() in buttonLocation.y..(buttonLocation.y + closeSpriteOff.height))
+                    {
+                        Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f)
+                        close()
+                    }
                 }
             }
         }
@@ -167,7 +210,7 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
 
     }
 
-    fun onClose()
+    open fun onClose()
     {
 
     }
