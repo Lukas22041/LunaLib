@@ -20,13 +20,14 @@ internal class LunaUIRadioButton(var value: String?, var choices: List<String>?,
         super.positionChanged(position)
 
 
+
         if (choices != null && !created && lunaElement != null)
         {
             var pan = lunaElement!!.createUIElement(width, height, false)
            // uiElement.addComponent(pan)
             lunaElement!!.addUIElement(pan)
             pan.position.inTL(0f, 0f)
-
+            var element = LunaUIButton(false, false, 0f, 0f,"", group, panel!!, pan!!)
             for (choice in choices!!)
             {
 

@@ -218,7 +218,6 @@ open class LunaElement : CustomUIPanelPlugin {
 
             GL11.glRectf(x, y , x + width, y + height)
 
-            GL11.glFinish()
             GL11.glPopMatrix()
         }
 

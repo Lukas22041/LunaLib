@@ -1,3 +1,11 @@
+Version 1.7.7
+
+-> Fixed large performance issues for Lunalib UI that occured due to some bad compatibility fixes.
+ --> Should also improve performance for RAT and other mods making use of LunaUI elements.
+-> Fixed the first radio button in a selection to have the wrong color.
+
+
+
 Version 1.7.6
 
 -> Added a Close Button to the top right of the Settings, Version and Debug Menus.

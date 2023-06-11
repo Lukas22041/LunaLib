@@ -146,6 +146,7 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
 
     final fun createGLLines(color: Color, alphaMult: Float, function: () -> Unit)
     {
+
         GL11.glPushMatrix()
 
         GL11.glTranslatef(0f, 0f, 0f)
@@ -170,6 +171,7 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
 
     final fun createGLRectangle(color: Color, alphaMult: Float, function: () -> Unit)
     {
+
         GL11.glPushMatrix()
         GL11.glDisable(GL11.GL_TEXTURE_2D)
         GL11.glDisable(GL11.GL_CULL_FACE)
@@ -185,7 +187,6 @@ abstract class LunaUIBaseElement(var width: Float = 0f, var height: Float = 0f, 
 
         function()
 
-        GL11.glFinish()
         GL11.glPopMatrix()
     }
 
