@@ -66,11 +66,11 @@ internal class LunaUIRadioButton(var value: String?, var choices: List<String>?,
 
                         if (button.isHovering)
                         {
-                            backgroundAlpha = 0.85f
+                            backgroundAlpha = 0.75f
                         }
                         else
                         {
-                            backgroundAlpha = 0.75f
+                            backgroundAlpha = 0.65f
                         }
                     }
                     else
@@ -80,11 +80,11 @@ internal class LunaUIRadioButton(var value: String?, var choices: List<String>?,
 
                         if (button.isHovering)
                         {
-                            backgroundAlpha = 0.6f
+                            backgroundAlpha = 0.7f
                         }
                         else
                         {
-                            backgroundAlpha = 0.5f
+                            backgroundAlpha = 0.4f
                         }
                     }
                 }
@@ -92,11 +92,11 @@ internal class LunaUIRadioButton(var value: String?, var choices: List<String>?,
                 button!!.onHover {
                     if (button.isSelected())
                     {
-                        backgroundAlpha = 0.85f
+                        backgroundAlpha = 0.75f
                     }
                     else
                     {
-                        backgroundAlpha = 0.6f
+                        backgroundAlpha = 0.5f
                     }
 
                 }

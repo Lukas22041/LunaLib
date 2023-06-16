@@ -375,7 +375,7 @@ object LunaSettings
         fun addRadio(ModID: String, FieldID: String, FieldName: String, Tooltip: String, DefaultValue: String, secondaryValue: String, Tab: String)
         {
             if (LunaSettingsLoader.SettingsData.find { it.modID == ModID && it.fieldID == FieldID } != null) return
-            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "String", Tooltip, DefaultValue, secondaryValue,0.0, 0.0, Tab))
+            LunaSettingsLoader.SettingsData.add(LunaSettingsData(ModID, FieldID, FieldName, "Radio", Tooltip, DefaultValue, secondaryValue,0.0, 0.0, Tab))
         }
 
 
