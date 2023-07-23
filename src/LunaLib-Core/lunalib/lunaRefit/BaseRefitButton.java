@@ -15,20 +15,10 @@ import java.awt.*;
 
 public abstract class BaseRefitButton {
 
-    transient private CustomPanelAPI backgroundPanel;
-    transient private UIPanelAPI attachedPanel;
-
-    /* Ignore .*/
-    public final void prePanelInit(CustomPanelAPI backgroundPanel, UIPanelAPI attachedPanel) {
-        this.backgroundPanel = backgroundPanel;
-        this.attachedPanel = attachedPanel;
-    }
 
     /* Closes the panel when called.*/
     public final void closePanel() {
-        if (attachedPanel != null) {
-            attachedPanel.removeComponent(backgroundPanel);
-        }
+        RefitButtonAdder.setRemoveActivePanel(true);
     }
 
     /* Refreshes the list of Refit Buttons. */
@@ -65,7 +55,7 @@ public abstract class BaseRefitButton {
     }
 
     /** Return true to make the button visible*/
-    public boolean shouldShow(FleetMemberAPI member, ShipVariantAPI variant) {
+    public boolean shouldShow(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         return true;
     }
 
@@ -95,7 +85,7 @@ public abstract class BaseRefitButton {
     }
 
     /** Return true to add a tooltip to the button.*/
-    public boolean hasTooltip(FleetMemberAPI member, ShipVariantAPI variant) {
+    public boolean hasTooltip(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         return false;
     }
 

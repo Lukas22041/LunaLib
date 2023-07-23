@@ -23,7 +23,9 @@ class RefitButtonAdder : EveryFrameScript {
 
     var mainPanel: CustomPanelAPI? = null
     var backgroundPanel: CustomPanelAPI? = null
+
     var corePanel: UIPanelAPI? = null
+    var activePanel: CustomPanelAPI? = null
 
     var member: FleetMemberAPI? = null
     var variant: ShipVariantAPI? = null
@@ -47,6 +49,9 @@ class RefitButtonAdder : EveryFrameScript {
 
         @JvmStatic
         var updateBackgroundPanel = false
+
+        @JvmStatic
+        var removeActivePanel = false
     }
 
 
@@ -67,6 +72,7 @@ class RefitButtonAdder : EveryFrameScript {
             variant = null
             corePanel = null
             market = null
+            activePanel = null
             lastCount = 0
             return
         }
@@ -78,6 +84,13 @@ class RefitButtonAdder : EveryFrameScript {
 
 
         var base: UIPanelAPI? = null
+
+        if (corePanel != null && removeActivePanel) {
+            removeActivePanel = false
+            if (activePanel != null){
+                corePanel!!.removeComponent(activePanel)
+            }
+        }
 
         var core = invokeMethod("getCore", state)
 
@@ -225,14 +238,14 @@ class RefitButtonAdder : EveryFrameScript {
 
             }, TooltipMakerAPI.TooltipLocation.BELOW)
 
-            var size = LunaRefitManager.buttons.filter { it.shouldShow(member, variant) }.size
+            var size = LunaRefitManager.buttons.filter { it.shouldShow(member, variant, market) }.size
             lastCount = size
             var openPara = openButtonElement.addPara("$size", 0f, Misc.getBasePlayerColor().setAlpha(0), Misc.getHighlightColor())
 
             openButton.advance {
                 if (member != null && variant != null)
                 {
-                    var buttons = LunaRefitManager.buttons.filter { it.shouldShow(member, variant) }.size
+                    var buttons = LunaRefitManager.buttons.filter { it.shouldShow(member, variant, market) }.size
                     if (buttons != lastCount)
                     {
                         lastCount = buttons
@@ -339,7 +352,7 @@ class RefitButtonAdder : EveryFrameScript {
         var last: UIComponentAPI? = null
         for (button in LunaRefitManager.buttons.sortedBy {it.getOrder(member, variant)})
         {
-            if (!button.shouldShow(member, variant)) continue
+            if (!button.shouldShow(member, variant, market)) continue
 
             var sprite = buttonElement.addLunaSpriteElement(button.getIconName(member, variant), LunaSpriteElement.ScalingTypes.STRETCH_SPRITE, 0f, 0f).apply {
                 elementPanel.position.setSize(40f, 40f)
@@ -384,15 +397,15 @@ class RefitButtonAdder : EveryFrameScript {
 
                         var width = button.getPanelWidth(member, variant)
                         var height = button.getPanelHeight(member, variant)
-                        var openedPanel = Global.getSettings().createCustom(width, height, buttonPlugin)
+                        activePanel = Global.getSettings().createCustom(width, height, buttonPlugin)
 
-                        openedPanel.position.inTL(Global.getSettings().screenWidth / 2 - width / 2, Global.getSettings().screenHeight / 2 - height / 2)
+                        activePanel!!.position.inTL(Global.getSettings().screenWidth / 2 - width / 2, Global.getSettings().screenHeight / 2 - height / 2)
 
-                        buttonPlugin.panel = openedPanel
-                        corePanel!!.addComponent(openedPanel)
+                        buttonPlugin.panel = activePanel
+                        corePanel!!.addComponent(activePanel)
 
-                        button.prePanelInit(openedPanel, corePanel)
-                        button.initPanel(openedPanel, member, variant, market)
+                        //button.prePanelInit(openedPanel, corePanel)
+                        button.initPanel(activePanel, member, variant, market)
                     }
                 }
 
@@ -418,7 +431,7 @@ class RefitButtonAdder : EveryFrameScript {
             }
             uiButton.elementPanel.position.rightOfMid(sprite.elementPanel, 10f)
 
-            if (button.hasTooltip(member, variant)) {
+            if (button.hasTooltip(member, variant, market)) {
                 buttonElement.addTooltipToPrevious( object : TooltipMakerAPI.TooltipCreator {
                     override fun isTooltipExpandable(tooltipParam: Any?): Boolean {
                         return false

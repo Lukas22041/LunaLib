@@ -40,7 +40,7 @@ public class RefitPanelButtonExample extends BaseRefitButton {
     }
 
     @Override
-    public boolean hasTooltip(FleetMemberAPI member, ShipVariantAPI variant) {
+    public boolean hasTooltip(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         return true;
     }
 
@@ -85,7 +85,7 @@ public class RefitPanelButtonExample extends BaseRefitButton {
 
     //Causes the button to only show up in devmode.
     @Override
-    public boolean shouldShow(FleetMemberAPI member, ShipVariantAPI variant) {
+    public boolean shouldShow(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         return Global.getSettings().isDevMode();
     }
 
