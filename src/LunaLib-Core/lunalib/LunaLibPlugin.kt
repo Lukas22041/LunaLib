@@ -24,17 +24,12 @@ class LunaLibPlugin : BaseModPlugin()
     override fun onGameLoad(newGame: Boolean)
     {
         Global.getSector().addTransientScript(RefitButtonAdder())
-
-
         Global.getSector().addTransientScript(KeybindsScript())
     }
 
     override fun onApplicationLoad()
     {
 
-        /*for (i in 0..20) {
-            LunaRefitButtonManager.addRefitButton(ExampleRefitButton())
-        }*/
         LunaRefitManager.addRefitButton(RefitEffectButtonExample())
         LunaRefitManager.addRefitButton(RefitPanelButtonExample())
 

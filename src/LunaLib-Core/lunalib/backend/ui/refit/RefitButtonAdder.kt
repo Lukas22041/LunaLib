@@ -3,6 +3,7 @@ package lunalib.backend.ui.refit
 import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CoreUITabId
+import com.fs.starfarer.api.campaign.econ.MarketAPI
 import com.fs.starfarer.api.combat.ShipVariantAPI
 import com.fs.starfarer.api.fleet.FleetMemberAPI
 import com.fs.starfarer.api.ui.*
@@ -26,11 +27,11 @@ class RefitButtonAdder : EveryFrameScript {
 
     var member: FleetMemberAPI? = null
     var variant: ShipVariantAPI? = null
+    var market: MarketAPI? = null
 
     var firstButtonLoad = true
     var lastCount = 0
 
-    var docked = false
 
     private val fieldClass = Class.forName("java.lang.reflect.Field", false, Class::class.java.classLoader)
     private val setFieldHandle = MethodHandles.lookup().findVirtual(fieldClass, "set", MethodType.methodType(Void.TYPE, Any::class.java, Any::class.java))
@@ -65,6 +66,7 @@ class RefitButtonAdder : EveryFrameScript {
             member = null
             variant = null
             corePanel = null
+            market = null
             lastCount = 0
             return
         }
@@ -78,13 +80,21 @@ class RefitButtonAdder : EveryFrameScript {
         var base: UIPanelAPI? = null
 
         var core = invokeMethod("getCore", state)
-        docked = false
 
         var dialog = invokeMethod("getEncounterDialog", state)
         if (dialog != null)
         {
             core = invokeMethod("getCoreUI", dialog)
-            docked = true
+
+            var target = Global.getSector().campaignUI?.currentInteractionDialog?.interactionTarget
+            if (target != null && target.market != null)
+            {
+                market = target.market
+            }
+        }
+        else
+        {
+            market = null
         }
 
         if (core is UIPanelAPI)
@@ -340,7 +350,7 @@ class RefitButtonAdder : EveryFrameScript {
             var uiButton = buttonElement.addLunaElement(225f, 40f).apply {
                 enableTransparency = true
 
-                if (!button.isClickable(member, variant, docked))
+                if (!button.isClickable(member, variant, market))
                 {
                     backgroundAlpha = 0.4f
                 }
@@ -354,21 +364,21 @@ class RefitButtonAdder : EveryFrameScript {
                 centerText()
 
                 advance {
-                    button.advance(member, variant, it, docked)
+                    button.advance(member, variant, it, market)
                 }
 
                 onClick {
 
-                    if (!button.isClickable(member, variant, docked)) {
+                    if (!button.isClickable(member, variant, market)) {
                         playSound("ui_button_disabled_pressed", 1f, 1f)
                         return@onClick
                     }
 
                     playClickSound()
 
-                    button.onClick(member, variant, it, docked)
+                    button.onClick(member, variant, it, market)
 
-                    if (button.hasPanel(member, variant, docked)) {
+                    if (button.hasPanel(member, variant, market)) {
 
                         var buttonPlugin = RefitPanelBackgroundPlugin(corePanel!!)
 
@@ -382,21 +392,21 @@ class RefitButtonAdder : EveryFrameScript {
                         corePanel!!.addComponent(openedPanel)
 
                         button.prePanelInit(openedPanel, corePanel)
-                        button.initPanel(openedPanel, member, variant, docked)
+                        button.initPanel(openedPanel, member, variant, market)
                     }
                 }
 
                 onHoverEnter{
                     playScrollSound()
 
-                    if (button.isClickable(member, variant, docked)) {
+                    if (button.isClickable(member, variant, market)) {
                         borderAlpha = 1f
                         backgroundAlpha = 1f
                     }
                 }
 
                 onHoverExit {
-                    if (!button.isClickable(member, variant, docked))
+                    if (!button.isClickable(member, variant, market))
                     {
                         backgroundAlpha = 0.4f
                     }
@@ -419,7 +429,7 @@ class RefitButtonAdder : EveryFrameScript {
                     }
 
                     override fun createTooltip(tooltip: TooltipMakerAPI?, expanded: Boolean, tooltipParam: Any?) {
-                        button.addTooltip(tooltip, member, variant, docked)
+                        button.addTooltip(tooltip, member, variant, market)
                     }
 
                 }, TooltipMakerAPI.TooltipLocation.RIGHT)

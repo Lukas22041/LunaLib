@@ -1,6 +1,7 @@
 package lunalib.lunaRefit;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//Example refit button that lets the player toggle a ship between automated/crewed.
+//Example refit button that opens a custom panel that displays a sprite.
 public class RefitPanelButtonExample extends BaseRefitButton {
 
 
@@ -44,7 +45,7 @@ public class RefitPanelButtonExample extends BaseRefitButton {
     }
 
     @Override
-    public void addTooltip(TooltipMakerAPI tooltip, FleetMemberAPI member, ShipVariantAPI variant, Boolean docked) {
+    public void addTooltip(TooltipMakerAPI tooltip, FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         tooltip.addPara("[Lunalib Devmode Example]", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor());
 
         tooltip.addSpacer(10f);
@@ -64,12 +65,12 @@ public class RefitPanelButtonExample extends BaseRefitButton {
     }
 
     @Override
-    public boolean hasPanel(FleetMemberAPI member, ShipVariantAPI variant, Boolean docked) {
+    public boolean hasPanel(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         return true;
     }
 
     @Override
-    public void initPanel(CustomPanelAPI backgroundPanel, FleetMemberAPI member, ShipVariantAPI variant, Boolean docked) {
+    public void initPanel(CustomPanelAPI backgroundPanel, FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
 
         float width = getPanelWidth(member, variant);
         float height = getPanelHeight(member, variant);

@@ -1,6 +1,7 @@
 package lunalib.lunaRefit;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.HullMods;
@@ -34,7 +35,7 @@ public class RefitEffectButtonExample extends BaseRefitButton {
     }
 
     @Override
-    public void addTooltip(TooltipMakerAPI tooltip, FleetMemberAPI member, ShipVariantAPI variant, Boolean docked) {
+    public void addTooltip(TooltipMakerAPI tooltip, FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         tooltip.addPara("[Lunalib Devmode Example]", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor());
         tooltip.addSpacer(5f);
 
@@ -49,7 +50,7 @@ public class RefitEffectButtonExample extends BaseRefitButton {
 
     //Gets triggered when the button was pressed.
     @Override
-    public void onClick(FleetMemberAPI member, ShipVariantAPI variant, InputEventAPI event, Boolean docked) {
+    public void onClick(FleetMemberAPI member, ShipVariantAPI variant, InputEventAPI event, MarketAPI market) {
 
         //When adding hullmods or changing stats, ALWAYS modify the provided variant, do not use member.getVariant()
         if (isAutomated(variant)) {
@@ -72,7 +73,7 @@ public class RefitEffectButtonExample extends BaseRefitButton {
 
     //Makes the button not clickable if the ship has a captain.
     @Override
-    public boolean isClickable(FleetMemberAPI member, ShipVariantAPI variant, Boolean docked) {
+    public boolean isClickable(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         return !hasCaptain(member);
     }
 

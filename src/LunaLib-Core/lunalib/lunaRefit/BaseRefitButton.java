@@ -1,5 +1,6 @@
 package lunalib.lunaRefit;
 
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -17,23 +18,25 @@ public abstract class BaseRefitButton {
     transient private CustomPanelAPI backgroundPanel;
     transient private UIPanelAPI attachedPanel;
 
+    /* Ignore .*/
     public final void prePanelInit(CustomPanelAPI backgroundPanel, UIPanelAPI attachedPanel) {
         this.backgroundPanel = backgroundPanel;
         this.attachedPanel = attachedPanel;
     }
 
+    /* Closes the panel when called.*/
     public final void closePanel() {
         if (attachedPanel != null) {
             attachedPanel.removeComponent(backgroundPanel);
         }
     }
 
-    /* Call in case you need the list of buttons refreshed. For example, if shouldShow() is used to make the button not be listed after being pressed once*/
+    /* Refreshes the list of Refit Buttons. */
     public final void refreshButtonList() {
         RefitButtonAdder.setUpdateBackgroundPanel(true);
     }
 
-    /* May need to be called after modifying the refit variant*/
+    /* Has to be called after modifying a ShipVariantAPI in any form*/
     public final void refreshVariant() {
         RefitButtonAdder.setRequiresVariantUpdate(true);
     }
@@ -67,27 +70,27 @@ public abstract class BaseRefitButton {
     }
 
     //Grays out the button and prevents onClick() and initPanel() from being called.
-    public boolean isClickable(FleetMemberAPI member, ShipVariantAPI variant, Boolean docked) {
+    public boolean isClickable(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         return true;
     }
 
     /** Gets called when the button is clicked*/
-    public void onClick(FleetMemberAPI member, ShipVariantAPI variant, InputEventAPI event, Boolean docked) {
+    public void onClick(FleetMemberAPI member, ShipVariantAPI variant, InputEventAPI event, MarketAPI market) {
 
     }
 
     /** Return false to prevent the panel from being created, also stops initPanel() from being called*/
-    public boolean hasPanel(FleetMemberAPI member, ShipVariantAPI variant, Boolean docked) {
+    public boolean hasPanel(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
         return false;
     }
 
     /** Override this method to be able to interact with the created panel.*/
-    public void initPanel(CustomPanelAPI backgroundPanel, FleetMemberAPI member, ShipVariantAPI variant, Boolean docked) {
+    public void initPanel(CustomPanelAPI backgroundPanel, FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
 
     }
 
     /** Called when the button exists in the menu.*/
-    public void advance( FleetMemberAPI member, ShipVariantAPI variant, Float amount, Boolean docked) {
+    public void advance( FleetMemberAPI member, ShipVariantAPI variant, Float amount, MarketAPI market) {
 
     }
 
@@ -97,7 +100,7 @@ public abstract class BaseRefitButton {
     }
 
     /** Allows adding a tooltip to the button, only active if hasTooltip() returns true*/
-    public void addTooltip(TooltipMakerAPI tooltip, FleetMemberAPI member, ShipVariantAPI variant, Boolean docked) {
+    public void addTooltip(TooltipMakerAPI tooltip, FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
 
     }
 }
