@@ -368,7 +368,7 @@ class LunaDebugUISnippetsPanel : LunaDebugUIInterface {
                 {
                     if (element is LunaUITextField<*>)
                     {
-                        parameters.put(element.key as String, element.value!!)
+                        parameters.put(element.key as String, element.paragraph!!.text!!)
                     }
                     if (element is LunaUITextFieldWithSlider<*>)
                     {

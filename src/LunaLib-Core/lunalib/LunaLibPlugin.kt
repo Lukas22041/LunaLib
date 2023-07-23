@@ -2,32 +2,42 @@ package lunalib
 
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
-import com.fs.starfarer.api.combat.ShipwideAIFlags.AIFlags
-import com.fs.starfarer.api.impl.campaign.procgen.themes.BaseThemeGenerator
 import lunalib.backend.scripts.KeybindsScript
 import lunalib.backend.scripts.LoadedSettings
+import lunalib.backend.ui.refit.RefitButtonAdder
 import lunalib.backend.ui.settings.LunaSettingsConfigLoader
 import lunalib.backend.ui.settings.LunaSettingsLoader
-import lunalib.backend.ui.testpanel.TestPanel
 import lunalib.backend.ui.versionchecker.VCModPlugin
 import lunalib.lunaDebug.LunaDebug
 import lunalib.lunaDebug.snippets.LunaLibDataSnippet
 import lunalib.lunaDebug.snippets.ModListSnippet
 import lunalib.lunaDebug.snippets.ReloadSettingsSnippet
 import lunalib.lunaDebug.snippets.SnippetsListSnippet
+import lunalib.lunaRefit.RefitEffectButtonExample
+import lunalib.lunaRefit.LunaRefitManager
+import lunalib.lunaRefit.RefitPanelButtonExample
 import lunalib.lunaSettings.LunaSettings
-import java.lang.Exception
 
 
 class LunaLibPlugin : BaseModPlugin()
 {
     override fun onGameLoad(newGame: Boolean)
     {
+        Global.getSector().addTransientScript(RefitButtonAdder())
+
+
         Global.getSector().addTransientScript(KeybindsScript())
     }
 
     override fun onApplicationLoad()
     {
+
+        /*for (i in 0..20) {
+            LunaRefitButtonManager.addRefitButton(ExampleRefitButton())
+        }*/
+        LunaRefitManager.addRefitButton(RefitEffectButtonExample())
+        LunaRefitManager.addRefitButton(RefitPanelButtonExample())
+
         LunaSettings.addSettingsListener(LoadedSettings())
 
         if (!LunaSettingsLoader.hasLoaded)

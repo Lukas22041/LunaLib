@@ -3,12 +3,14 @@ package lunalib.lunaUI.elements
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.graphics.SpriteAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
+import java.awt.Color
 
 class LunaSpriteElement(var spritePath: String, var scaling: ScalingTypes = ScalingTypes.STRETCH_SPRITE, tooltip: TooltipMakerAPI, width: Float, height: Float) : LunaElement(tooltip, width, height) {
 
     enum class ScalingTypes {
         STRETCH_SPRITE, STRETCH_ELEMENT, NONE
     }
+
 
     private var sprite: SpriteAPI
 
@@ -57,7 +59,13 @@ class LunaSpriteElement(var spritePath: String, var scaling: ScalingTypes = Scal
     override fun render(alphaMult: Float) {
         super.render(alphaMult)
 
+        var ogAlpha = sprite.alphaMult
+
+        sprite.alphaMult = ogAlpha * alphaMult
         sprite.render(x, y)
+
+        sprite.alphaMult = ogAlpha
+
     }
 
 }

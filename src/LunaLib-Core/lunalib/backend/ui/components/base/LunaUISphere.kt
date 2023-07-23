@@ -48,8 +48,6 @@ class LunaUISphere(var spritePath: String, var size: Float, width: Float, height
             //where you want the sphere to render
             GL11.glTranslatef(posX + width / 3, posY , 1f);
 
-
-
             //rotates the sphere
             //not gonna lie, I've got no idea what's going on with this matrix maths, I'm just pressing buttons until it looks ok
             GL11.glRotatef(90f, 1f, 0f, 0f);
