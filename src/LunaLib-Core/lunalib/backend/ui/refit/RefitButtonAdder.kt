@@ -9,7 +9,6 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI
 import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.campaign.CampaignState
-import com.fs.starfarer.loading.specs.HullVariantSpec
 import com.fs.state.AppDriver
 import lunalib.lunaExtensions.*
 import lunalib.lunaRefit.LunaRefitManager
@@ -127,7 +126,7 @@ class RefitButtonAdder : EveryFrameScript {
                         base = child3
 
                         var shipdisplay = invokeMethod("getShipDisplay", child3!!) as UIPanelAPI?
-                        variant = invokeMethod("getCurrentVariant", shipdisplay!!) as HullVariantSpec?
+                        variant = invokeMethod("getCurrentVariant", shipdisplay!!) as ShipVariantAPI?
 
                         if (requiresVariantUpdate)
                         {

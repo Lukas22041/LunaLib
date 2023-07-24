@@ -503,6 +503,8 @@ internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlug
             var potentialIcon = LunaSettingsConfigLoader.getIconPath(mod.id)
             if (potentialIcon != "") icon = potentialIcon
 
+            Global.getSettings().loadTexture(icon)
+
             var sprite = LunaUISprite(icon, 40f, 40f, 40f, 40f, 40f, 40f, "", "Group", cardPanel.lunaElement!!, spriteElement!!)
             sprite.position!!.inTL(5f,spriteElement.position!!.height / 2 - sprite.height / 2 )
             sprite.position!!.inTL(5f,spriteElement.position!!.height / 2 - sprite.height / 2 )
