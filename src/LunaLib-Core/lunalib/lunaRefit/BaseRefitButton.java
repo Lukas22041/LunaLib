@@ -79,6 +79,10 @@ public abstract class BaseRefitButton {
 
     }
 
+    public void onPanelClose(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
+
+    }
+
     /** Called when the button exists in the menu.*/
     public void advance( FleetMemberAPI member, ShipVariantAPI variant, Float amount, MarketAPI market) {
 

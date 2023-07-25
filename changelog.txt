@@ -1,3 +1,9 @@
+Version 1.8.1
+
+-> Added a "onPanelClose" method to the BaseRefitButton class, which allows for cleaning up unused variables more easily.
+
+
+
 Version 1.8.0
 
 -> Added a feature that allows modders to add buttons to the refit menu. A guide for this has been added to the wiki.

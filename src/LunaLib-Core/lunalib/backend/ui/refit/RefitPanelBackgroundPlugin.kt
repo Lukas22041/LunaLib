@@ -2,17 +2,16 @@ package lunalib.backend.ui.refit
 
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin
-import com.fs.starfarer.api.fleet.FleetMemberAPI
 import com.fs.starfarer.api.input.InputEventAPI
 import com.fs.starfarer.api.ui.PositionAPI
 import com.fs.starfarer.api.ui.UIPanelAPI
 import com.fs.starfarer.api.util.Misc
-import org.lazywizard.lazylib.MathUtils
+import lunalib.backend.ui.refit.RefitButtonAdder.Companion.removeActivePanel
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import java.awt.Color
 
-class RefitPanelBackgroundPlugin(private var parent: UIPanelAPI) : CustomUIPanelPlugin {
+class RefitPanelBackgroundPlugin(private var parent: UIPanelAPI, var forButton: Boolean) : CustomUIPanelPlugin {
 
     var position: PositionAPI? = null
     var panel: UIPanelAPI? = null
@@ -139,7 +138,12 @@ class RefitPanelBackgroundPlugin(private var parent: UIPanelAPI) : CustomUIPanel
     }
 
     fun close() {
-        parent.removeComponent(panel)
+        if (forButton) {
+            RefitButtonAdder.removeActivePanel = true
+        }
+        else {
+            parent.removeComponent(panel)
+        }
     }
 
 }

@@ -11,6 +11,7 @@ import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.campaign.CampaignState
 import com.fs.state.AppDriver
 import lunalib.lunaExtensions.*
+import lunalib.lunaRefit.BaseRefitButton
 import lunalib.lunaRefit.LunaRefitManager
 import lunalib.lunaUI.elements.LunaSpriteElement
 import org.lazywizard.lazylib.MathUtils
@@ -25,6 +26,7 @@ class RefitButtonAdder : EveryFrameScript {
 
     var corePanel: UIPanelAPI? = null
     var activePanel: CustomPanelAPI? = null
+    var activePanelButton: BaseRefitButton? = null
 
     var member: FleetMemberAPI? = null
     var variant: ShipVariantAPI? = null
@@ -72,6 +74,7 @@ class RefitButtonAdder : EveryFrameScript {
             corePanel = null
             market = null
             activePanel = null
+            activePanelButton = null
             lastCount = 0
             return
         }
@@ -87,7 +90,11 @@ class RefitButtonAdder : EveryFrameScript {
         if (corePanel != null && removeActivePanel) {
             removeActivePanel = false
             if (activePanel != null){
+                activePanelButton!!.onPanelClose(member, variant, market)
                 corePanel!!.removeComponent(activePanel)
+
+                activePanel = null
+                activePanelButton = null
             }
         }
 
@@ -292,7 +299,7 @@ class RefitButtonAdder : EveryFrameScript {
             mainPanel!!.removeComponent(backgroundPanel)
         }
 
-        var plugin = RefitPanelBackgroundPlugin(mainPanel!!)
+        var plugin = RefitPanelBackgroundPlugin(mainPanel!!, false)
         backgroundPanel = mainPanel!!.createCustomPanel(mainPanel!!.position.width, mainPanel!!.position.height, plugin)
 
         plugin.panel = backgroundPanel
@@ -390,13 +397,16 @@ class RefitButtonAdder : EveryFrameScript {
 
                     button.onClick(member, variant, it, market)
 
+                    if (!it.isLMBEvent) return@onClick
+
                     if (button.hasPanel(member, variant, market)) {
 
-                        var buttonPlugin = RefitPanelBackgroundPlugin(corePanel!!)
+                        var buttonPlugin = RefitPanelBackgroundPlugin(corePanel!!, true)
 
                         var width = button.getPanelWidth(member, variant)
                         var height = button.getPanelHeight(member, variant)
                         activePanel = Global.getSettings().createCustom(width, height, buttonPlugin)
+                        activePanelButton = button
 
                         activePanel!!.position.inTL(Global.getSettings().screenWidth / 2 - width / 2, Global.getSettings().screenHeight / 2 - height / 2)
 

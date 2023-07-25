@@ -83,6 +83,11 @@ public class RefitPanelButtonExample extends BaseRefitButton {
         sprite.getPosition().inTL(0f, 0f);
     }
 
+    @Override
+    public void onPanelClose(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
+        String test = "";
+    }
+
     //Causes the button to only show up in devmode.
     @Override
     public boolean shouldShow(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
