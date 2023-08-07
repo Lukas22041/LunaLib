@@ -1,3 +1,11 @@
+Version 1.8.2
+
+- Changed the text of the refit menu button to be something that is easier to refer to.
+- Improved the sprite and text used for the button.
+- added "getToolipWidth" to "BaseRefitButton" so that the width of a buttons tooltip can be modified.
+
+
+
 Version 1.8.1
 
 -> Added a "onPanelClose" method to the BaseRefitButton class, which allows for cleaning up unused variables more easily.

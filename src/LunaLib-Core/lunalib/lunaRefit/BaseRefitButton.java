@@ -93,6 +93,11 @@ public abstract class BaseRefitButton {
         return false;
     }
 
+
+    public float getToolipWidth(FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
+        return 300f;
+    }
+
     /** Allows adding a tooltip to the button, only active if hasTooltip() returns true*/
     public void addTooltip(TooltipMakerAPI tooltip, FleetMemberAPI member, ShipVariantAPI variant, MarketAPI market) {
 

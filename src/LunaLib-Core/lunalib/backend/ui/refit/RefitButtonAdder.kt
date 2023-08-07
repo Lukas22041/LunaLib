@@ -207,15 +207,17 @@ class RefitButtonAdder : EveryFrameScript {
             corePanel = core as UIPanelAPI?
             if (dialog is UIPanelAPI) corePanel = dialog
 
-            mainPanel = Global.getSettings().createCustom(opPanel.position.width , 300f, null)
+            var buttonWidth = 320f
+
+            mainPanel = Global.getSettings().createCustom(buttonWidth , 300f, null)
 
             base.addComponent(mainPanel)
             //buttonPanel!!.position.inTL(0f, 0f)
             mainPanel!!.position.leftOfTop(opPanel, 75f)
 
-            var openButtonElement = mainPanel!!.createUIElement(opPanel.position.width, 20f, false)
+            var openButtonElement = mainPanel!!.createUIElement(buttonWidth, 20f, false)
             mainPanel!!.addUIElement(openButtonElement)
-            var openButton = openButtonElement.addLunaSpriteElement("graphics/ui/lunaRefitButtonMain.png", LunaSpriteElement.ScalingTypes.STRETCH_SPRITE, opPanel.position.width, 20f).apply {
+            var openButton = openButtonElement.addLunaSpriteElement("graphics/ui/lunaRefitButtonMain.png", LunaSpriteElement.ScalingTypes.STRETCH_SPRITE, buttonWidth, 20f).apply {
                 getSprite().color = Misc.getDarkPlayerColor().setAlpha(255)
                 innerElement.bringComponentToTop(innerElement.prev)
 
@@ -246,7 +248,9 @@ class RefitButtonAdder : EveryFrameScript {
 
             var size = LunaRefitManager.buttons.filter { it.shouldShow(member, variant, market) }.size
             lastCount = size
-            var openPara = openButtonElement.addPara("$size", 0f, Misc.getBasePlayerColor().setAlpha(0), Misc.getHighlightColor())
+
+            openButtonElement.setTitleFont(Fonts.DEFAULT_SMALL)
+            var openPara = openButtonElement.addTitle("Additional Options  ($size)", Misc.getBasePlayerColor().setAlpha(0))
 
             openButton.advance {
                 if (member != null && variant != null)
@@ -255,14 +259,14 @@ class RefitButtonAdder : EveryFrameScript {
                     if (buttons != lastCount)
                     {
                         lastCount = buttons
-                        openPara.text = "${buttons}"
-                        openPara.position.inTL(openButtonElement.position.width / 2 - openPara.computeTextWidth(openPara.text) / 2 + 5 ,2f)
+                        openPara.text = "Additional Options  ($buttons)"
+                        openPara.position.inTL(openButtonElement.position.width / 2 - openPara.computeTextWidth(openPara.text) / 2 + 5 ,1f)
                     }
 
                 }
             }
 
-            openPara.position.inTL(openButtonElement.position.width / 2 - openPara.computeTextWidth(openPara.text) / 2 + 5 ,2f)
+            openPara.position.inTL(openButtonElement.position.width / 2 - openPara.computeTextWidth(openPara.text) / 2 + 5 ,1f)
 
             openButtonElement.position.inTL(0f, -5f)
 
@@ -344,8 +348,11 @@ class RefitButtonAdder : EveryFrameScript {
         }, TooltipMakerAPI.TooltipLocation.BELOW)
 
         closeButton.position.inTL(0f, 0f)
-        var closePara = closeButtonElement.addPara("X", 0f, Misc.getBasePlayerColor(), Misc.getHighlightColor())
-        closePara.position.inTL(closeButtonElement.position.width / 2 - closePara.computeTextWidth(closePara.text) / 2 ,2f)
+
+        closeButtonElement.setTitleFont(Fonts.DEFAULT_SMALL)
+
+        var closePara = closeButtonElement.addTitle("Close", Misc.getBasePlayerColor())
+        closePara.position.inTL(closeButtonElement.position.width / 2 - closePara.computeTextWidth(closePara.text) / 2 ,1f)
         closeButtonElement.position.inTL(0f, 0f)
 
 
@@ -447,7 +454,7 @@ class RefitButtonAdder : EveryFrameScript {
                     }
 
                     override fun getTooltipWidth(tooltipParam: Any?): Float {
-                        return 300f
+                        return button.getToolipWidth(member, variant, market)
                     }
 
                     override fun createTooltip(tooltip: TooltipMakerAPI?, expanded: Boolean, tooltipParam: Any?) {
