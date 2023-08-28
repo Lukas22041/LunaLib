@@ -4,8 +4,8 @@
 
 		###Title Screen
 		"mainMenuText1": "Open the Mod Settings Menu with ",
-		"mainMenuTextNex": "New Game -> Sector Configuration -> Mod Settings.",
-		"mainMenuTextNonNex": "New Game -> Ship Selection -> Difficulty -> Mod Settings.",
+		"mainMenuTextNex": "New Game -> Sector Configuration -> Mod Settings",
+		"mainMenuTextNonNex": "New Game -> Ship Selection -> Difficulty -> Mod Settings",
 		"mainMenuText2": " in the Campaign, or at ",
 
 
@@ -14,7 +14,7 @@
 		###Settings
 
 		#Header at the top of the Settings Menu
-		"header":"Mod Settings.",
+		"header":"Mod Settings",
 		"headerTooltip": "Mod Settings added by Lunalib.",
 
 		#Left Side of Settings Menu
