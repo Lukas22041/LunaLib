@@ -329,8 +329,17 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
                     parentClass!!.close()
                     LunaUIBaseElement.selectedMap.clear()
 
-                    Global.getSector().doHyperspaceTransition(Global.getSector().playerFleet, Global.getSector().playerFleet,
-                        JumpPointAPI.JumpDestination(entity, ""), 0f)
+                    var playerFleet = Global.getSector().playerFleet
+                    var currentLocation = playerFleet.containingLocation
+                    var targetSystem = entity.containingLocation
+
+                    currentLocation.removeEntity(playerFleet)
+                    targetSystem.addEntity(playerFleet)
+                    Global.getSector().setCurrentLocation(targetSystem)
+                    playerFleet.setLocation(entity.location.x, entity.location.y)
+
+                  /*  Global.getSector().doHyperspaceTransition(Global.getSector().playerFleet, Global.getSector().playerFleet,
+                        JumpPointAPI.JumpDestination(entity, ""), 0f)*/
                 }
             }
             if (entity is StarSystemAPI)
@@ -339,8 +348,17 @@ internal class LunaDebugUIEntitiesPanel : LunaDebugUIInterface {
                     parentClass!!.close()
                     LunaUIBaseElement.selectedMap.clear()
 
-                    Global.getSector().doHyperspaceTransition(Global.getSector().playerFleet, Global.getSector().playerFleet,
-                        JumpPointAPI.JumpDestination(entity.center, ""), 0f)
+                    var playerFleet = Global.getSector().playerFleet
+                    var currentLocation = playerFleet.containingLocation
+                    var targetSystem = entity
+
+                    currentLocation.removeEntity(playerFleet)
+                    targetSystem.addEntity(playerFleet)
+                    Global.getSector().setCurrentLocation(targetSystem)
+                    playerFleet.setLocation(entity.center.location.x, entity.center.location.y)
+
+                  /*  Global.getSector().doHyperspaceTransition(Global.getSector().playerFleet, Global.getSector().playerFleet,
+                        JumpPointAPI.JumpDestination(entity.center, ""), 0f)*/
                 }
             }
 

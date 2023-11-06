@@ -1,3 +1,12 @@
+Version 1.8.3
+
+- Added a small utility class called "LunaCommons", with methods for quickly saving cross-save data.
+- Fixed a memory leak.
+- Some grammar & typo fixes, thanks to johnaaron
+- Debug menu teleport is now instant and no longer has a delay.
+
+
+
 Version 1.8.2
 
 - Changed the text of the refit menu button to be something that is easier to refer to.

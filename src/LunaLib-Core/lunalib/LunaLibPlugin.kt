@@ -17,6 +17,8 @@ import lunalib.lunaRefit.RefitEffectButtonExample
 import lunalib.lunaRefit.LunaRefitManager
 import lunalib.lunaRefit.RefitPanelButtonExample
 import lunalib.lunaSettings.LunaSettings
+import lunalib.lunaUtil.LunaCommons
+import org.lazywizard.lazylib.MathUtils
 
 
 class LunaLibPlugin : BaseModPlugin()
@@ -49,6 +51,8 @@ class LunaLibPlugin : BaseModPlugin()
         LunaDebug.addSnippet(ReloadSettingsSnippet())
 
         VCModPlugin().onApplicationLoad()
+
+        LunaCommons.init()
     }
 
     override fun onDevModeF8Reload() {

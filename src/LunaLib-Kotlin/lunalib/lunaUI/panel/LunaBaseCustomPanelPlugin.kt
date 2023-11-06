@@ -157,6 +157,7 @@ abstract class LunaBaseCustomPanelPlugin : BaseCustomUIPanelPlugin() {
                 if (it.isKeyDownEvent && it.eventValue == Keyboard.KEY_ESCAPE)
                 {
                     CombatHandler.canBeRemoved = true
+                    LunaUIBaseElement.selectedMap.clear()
                     it.consume()
                 }
             }

@@ -13,8 +13,6 @@ class LoadedSettings : LunaSettingsListener
         var devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind")
         var debugEntryCap = LunaSettings.getInt("lunalib", "luna_DebugEntries")
         var uidebugKeybind = LunaSettings.getInt("lunalib", "luna_UIDebugKeybind")
-
-
     }
 
     override fun settingsChanged(modID: String) {

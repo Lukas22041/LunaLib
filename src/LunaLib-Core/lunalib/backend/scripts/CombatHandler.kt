@@ -96,7 +96,6 @@ class CombatHandler : EveryFrameCombatPlugin
 
     override fun processInputPreCoreControls(amount: Float, events: MutableList<InputEventAPI>?) {
 
-
         events!!.forEach {
             if (it.isConsumed) return@forEach
             if (AppDriver.getInstance().currentState !is TitleScreenState) return@forEach
