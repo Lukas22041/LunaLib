@@ -53,12 +53,14 @@ class CombatHandler : EveryFrameCombatPlugin
         var isUpdateCheckDone = false
         var canBeRemoved = false
 
-        var enableVersionChecker = LunaSettings.getBoolean("lunalib", "luna_enableVC")
+        var enableVersionChecker: Boolean? = null
     }
 
     override fun init(engine: CombatEngineAPI?)
     {
-
+        if (enableVersionChecker == null) {
+            enableVersionChecker = LunaSettings.getBoolean("lunalib", "luna_enableVC")
+        }
 
         this.engine = engine
 
@@ -282,6 +284,9 @@ class CombatHandler : EveryFrameCombatPlugin
 
       //  panel!!.render(1f)
 
+        if (enableVersionChecker == null) {
+            enableVersionChecker = LunaSettings.getBoolean("lunalib", "luna_enableVC")
+        }
 
 
         if (Global.getCurrentState() == GameState.TITLE && tip != null)

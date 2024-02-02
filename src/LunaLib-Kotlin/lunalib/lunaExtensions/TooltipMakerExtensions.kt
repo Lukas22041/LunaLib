@@ -1,8 +1,12 @@
 package lunalib.lunaExtensions
 
+import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
+import com.fs.starfarer.api.ui.UIPanelAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.lunaUI.elements.*
+import lunalib.lunaUI.panel.LunaWindowPlugin
 import java.awt.Color
 
 
@@ -54,5 +58,22 @@ fun TooltipMakerAPI.addLunaProgressBar(defaultValue: Float, min: Float, max: Flo
     var element = LunaProgressBar(defaultValue, min, max, textColor, this, width, height)
     return element
 }
+
+/*
+fun TooltipMakerAPI.addWindow(to: UIPanelAPI, width: Float, height: Float, lambda: (LunaWindowPlugin) -> Unit) {
+    var parentPanel = Global.getSettings().createCustom(width, height, null)
+    this.addCustom(parentPanel, 0f)
+
+    var plugin = LunaWindowPlugin(parentPanel, this)
+    var panel = parentPanel.createCustomPanel(width, height, plugin)
+    plugin.position = panel.position
+    plugin.panel = panel
+    parentPanel.addComponent(panel)
+
+    parentPanel.position.rightOfTop(to, 20f)
+
+    lambda(plugin)
+}
+*/
 
 
