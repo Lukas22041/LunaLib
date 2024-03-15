@@ -2,6 +2,7 @@ package lunalib.backend.ui.versionchecker;
 
 import com.fs.starfarer.api.Global;
 import lunalib.lunaSettings.LunaSettings;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.lwjgl.input.Keyboard;
@@ -163,6 +164,8 @@ public final class UpdateInfo
 
         private String  directDownloadURL, changelogURL, txtChangelog;
 
+        private String  githubOwner, githubRepo;
+
         /*private String githubOwner, githubRepo;
         private Map<String, String> githubChangelog = new HashMap<>();*/
 
@@ -174,11 +177,81 @@ public final class UpdateInfo
             modThreadId = (isMaster ? 0 : (int) json.optDouble("modThreadId", 0));
             modNexusId = (isMaster ? 0 : (int) json.optDouble("modNexusId", 0));
 
-            /*githubOwner = json.optString("githubOwner");
-            if (githubOwner.equals("")) githubOwner = null;
+            githubOwner = json.optString("githubOwner");
+            if (githubOwner.isEmpty()) githubOwner = null;
 
             githubRepo = json.optString("githubRepo");
-            if (githubRepo.equals("")) githubRepo = null;*/
+            if (githubRepo.isEmpty()) githubRepo = null;
+
+
+            boolean readFromGithub = false;
+            if (githubOwner != null && githubRepo != null && isMaster) {
+                String apiURL = "https://api.github.com/repos/" + githubOwner + "/" + githubRepo +"/releases";
+
+                try {
+                    InputStream stream = new URL(apiURL).openStream();
+                    Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
+                    String apiString = scanner.next();
+                    JSONArray releases = new JSONArray(apiString);
+
+                    String changelog = "";
+
+                    for (int i = 0; i < releases.length(); i++) {
+                        JSONObject release = releases.getJSONObject(i);
+
+                        String tag = release.getString("tag_name");
+                        String date = release.getString("created_at");
+                        int index = date.indexOf("T");
+                        date = date.substring(0, index);
+
+                        String[] times = date.split("-");
+                        List<String> reversed = Arrays.asList(times);
+                        Collections.reverse(reversed);
+                        String combined = "";
+
+                        for (int j = 0; j < reversed.size(); j++) {
+                            String item = reversed.get(j);
+                            combined += item;
+                            if (j != 2) {
+                                combined += ".";
+                            }
+
+                        }
+
+                        date = combined;
+
+                        String body = release.getString("body");
+                        body = body.replaceAll("\r", "");
+
+                        changelog += "Version " + tag + "\n";
+                        changelog += "Released: " + date + "\n\n";
+                        changelog += body;
+
+                        changelog += "\n\n\n";
+
+                    }
+
+                    txtChangelog = changelog;
+
+                    readFromGithub = true;
+                }
+                catch (Throwable ex)
+                {
+                    Log.error("Error while loading github api from URL: \"" + apiURL + "\", Exception: " + ex.getClass());
+                }
+            }
+
+            //Test
+           /* try (InputStream stream = new URL("https://api.github.com/repos/Lukas22041/Random-Assortment-of-Things/releases").openStream();
+                 Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A"))
+            {
+                String string = scanner.next();
+                JSONArray test2 = new JSONArray(string);
+                String test = "";
+            }
+            catch (Throwable ex) {
+
+            }*/
 
 
             directDownloadURL = json.optString("directDownloadURL");
@@ -187,7 +260,7 @@ public final class UpdateInfo
             changelogURL = json.optString("changelogURL");
             if (changelogURL.equals("")) changelogURL = null;
 
-            if (changelogURL != null && isMaster)
+            if (changelogURL != null && isMaster && !readFromGithub)
             {
                 try
                 {
@@ -202,43 +275,7 @@ public final class UpdateInfo
                 }
             }
 
-            //Currently scrapped as Java7 is missing the required ciphers/protocols to work, if alex updates to java8 it should work.
 
-            /*if (githubRepo != null && githubOwner != null)
-            {
-                String url = "https://api.github.com/repos/Lukas22041/LunaLib/releases";
-                //String url = "https://api.github.com/repos/" + githubOwner + "/" + githubRepo + "/releases";
-                try {
-
-                    URL link = new URL(url);
-                    InputStream stream = link.openStream();
-                    Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
-                    JSONObject githubJson = new JSONObject(scanner.next());
-                    Iterator<String> keys = githubJson.keys();
-
-                    while (keys.hasNext())
-                    {
-                        try {
-                            String key = keys.next();
-                            if (githubJson.get(key) instanceof JSONObject) {
-                                String name = githubJson.getJSONObject(key).getString("name");
-                                String body = githubJson.getJSONObject(key).getString("body");
-                                githubChangelog.put(name, body);
-                            }
-                        }
-                        catch (Exception ex) {}
-                    }
-                }
-
-                catch (MalformedURLException ex)
-                {
-                    Log.error("Failed to load github from URL \"" + url + "\"", ex);
-                }
-                catch (IOException ex)
-                {
-                    Log.error("Failed to load github from URL \"" + url + "\"", ex);
-                }
-            }*/
 
             // Parse version number
             JSONObject modVersion = json.getJSONObject("modVersion");

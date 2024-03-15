@@ -1,6 +1,7 @@
 package lunalib.backend.ui.versionchecker;
 
 import com.fs.starfarer.api.Global;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -115,6 +116,8 @@ final class VersionChecker
     {
         Log.info("Loading starsector update info from remote URL " + VANILLA_UPDATE_URL);
 
+
+
         // Get latest Starsector version from remote URL
         try (InputStream stream = new URL(VANILLA_UPDATE_URL).openStream();
              Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A"))
@@ -131,6 +134,8 @@ final class VersionChecker
             Log.error("Error while loading vanilla update data: \"" + VANILLA_UPDATE_URL + "\"");
             return null;
         }
+
+
     }
 
     private static ModInfo checkForUpdate(final VersionFile localVersion)

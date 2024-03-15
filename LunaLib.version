@@ -16,4 +16,7 @@
 	#The menu will highlight any line that beginns with "Version"
 	"changelogURL":"https://raw.githubusercontent.com/Lukas22041/LunaLib/main/changelog.txt",
 
+	#WIP, automaticly generate changelog based on github releases. Read from Remote file. Overwrites changelogURL
+	"githubOwner":"Lukas22041",
+	"githubRepo":"LunaLib",
 }
