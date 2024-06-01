@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.LocationAPI
 import com.fs.starfarer.api.impl.campaign.ids.Factions
 import com.fs.starfarer.api.util.IntervalUtil
 import com.fs.starfarer.api.util.Misc
+import lunalib.lunaSettings.LunaSettings
 import org.lwjgl.util.vector.Vector2f
 
 class LunaCampaignRenderer : EveryFrameScript {
@@ -29,6 +30,16 @@ class LunaCampaignRenderer : EveryFrameScript {
         @JvmStatic
         fun removeTransientRenderer(renderer: LunaCampaignRenderingPlugin) {
             getScript().getTransientRenderers().remove(renderer)
+        }
+
+        @JvmStatic
+        fun hasRenderer(renderer: LunaCampaignRenderingPlugin) : Boolean {
+            return getScript().getRenderers().contains(renderer)
+        }
+
+        @JvmStatic
+        fun hasRendererOfClass(rendererClass: Class<*>) : Boolean {
+            return getScript().getRenderers().any { it.javaClass.name == rendererClass.name }
         }
 
         fun getScript() : LunaCampaignRenderer {
@@ -64,21 +75,29 @@ class LunaCampaignRenderer : EveryFrameScript {
     }
 
 
-    private var interval = IntervalUtil(0.9f, 1f)
     override fun isDone(): Boolean {
         return false
     }
 
 
     override fun runWhilePaused(): Boolean {
-        return false
+        return true
     }
 
 
+    var interval = IntervalUtil(4.5f, 5f)
     override fun advance(amount: Float) {
-        interval.advance(amount)
 
+        interval.advance(amount)
         var renderers = getRenderers()
+
+        var currentLocation = Global.getSector().playerFleet?.containingLocation
+        if (currentLocation != null) {
+            if (currentLocation.customEntities.none { it.customEntitySpec?.id == "luna_campaign_renderer" }) {
+                var entity = currentLocation.addCustomEntity("luna_campaign_renderer_${Misc.genUID()}", "", "luna_campaign_renderer", Factions.NEUTRAL)
+                entity.location.set(Vector2f())
+            }
+        }
 
         if (interval.intervalElapsed()) {
             var locations = ArrayList<LocationAPI>()
@@ -86,24 +105,13 @@ class LunaCampaignRenderer : EveryFrameScript {
             locations.addAll(Global.getSector().starSystems)
 
             for (location in locations) {
-                if (location.customEntities.none { it.customEntitySpec?.id == "luna_campaign_renderer" }) {
-                    var entity = location.addCustomEntity("luna_campaign_renderer_${Misc.genUID()}", "", "luna_campaign_renderer", Factions.NEUTRAL)
-                    entity.location.set(Vector2f())
+                var entity = location.customEntities.find { it.customEntitySpec?.id == "luna_campaign_renderer" } ?: continue
+                if (!entity.isInCurrentLocation) {
+                    location.removeEntity(entity)
                 }
             }
         }
 
-        for (renderer in ArrayList(getRenderers())) {
-
-            var expired = renderer.isExpired()
-
-            if (expired) {
-                getTransientRenderers().remove(renderer)
-                getNonTransientRenderers().remove(renderer)
-            } else {
-                renderer.advance(amount)
-            }
-        }
 
     }
 }
