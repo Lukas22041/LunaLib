@@ -1,6 +1,7 @@
 package lunalib.backend.ui.versionchecker;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.ModSpecAPI;
 import lunalib.lunaSettings.LunaSettings;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -159,12 +160,17 @@ public final class UpdateInfo
                 = "http://fractalsoftworks.com/forum/index.php?topic=%d.0";
         private static final String MOD_NEXUS_FORMAT
                 = "https://www.nexusmods.com/starsector/mods/%d?tab=files";
-        private final int major, minor, modThreadId, modNexusId;
-        private final String patch, masterURL, modName;
+        private int major, minor, modThreadId, modNexusId;
+        private String patch, masterURL, modName;
 
         private String  directDownloadURL, changelogURL, txtChangelog;
 
         private String  githubOwner, githubRepo;
+
+        private String modID = null;
+
+        private Boolean enableAutomaticChangelog = null;
+        private Boolean enableAutomaticVersioning = null;
 
         /*private String githubOwner, githubRepo;
         private Map<String, String> githubChangelog = new HashMap<>();*/
@@ -177,14 +183,19 @@ public final class UpdateInfo
             modThreadId = (isMaster ? 0 : (int) json.optDouble("modThreadId", 0));
             modNexusId = (isMaster ? 0 : (int) json.optDouble("modNexusId", 0));
 
+
             githubOwner = json.optString("githubOwner");
             if (githubOwner.isEmpty()) githubOwner = null;
 
             githubRepo = json.optString("githubRepo");
             if (githubRepo.isEmpty()) githubRepo = null;
 
+            /*modID = json.optString("modId");
+            enableAutomaticChangelog = json.optBoolean("automaticGithubChangelog");
+            enableAutomaticVersioning = json.optBoolean("automaticGithubVersioning");
 
-            boolean readFromGithub = false;
+            boolean readChangelogFromGithub = false;
+            boolean readVersionFromGithub = false;
             if (githubOwner != null && githubRepo != null && isMaster) {
                 String apiURL = "https://api.github.com/repos/" + githubOwner + "/" + githubRepo +"/releases";
 
@@ -194,63 +205,66 @@ public final class UpdateInfo
                     String apiString = scanner.next();
                     JSONArray releases = new JSONArray(apiString);
 
-                    String changelog = "";
 
-                    for (int i = 0; i < releases.length(); i++) {
-                        JSONObject release = releases.getJSONObject(i);
+                    if (enableAutomaticVersioning) {
+                        JSONObject latest = releases.getJSONObject(0);
+                        String tag = latest.getString("tag_name");
+                        List<String> versions = Arrays.asList(tag.split("\\."));
 
-                        String tag = release.getString("tag_name");
-                        String date = release.getString("created_at");
-                        int index = date.indexOf("T");
-                        date = date.substring(0, index);
+                        major = Integer.parseInt(versions.get(0));
+                        minor = Integer.parseInt(versions.get(1));
+                        patch = versions.get(2);
 
-                        String[] times = date.split("-");
-                        List<String> reversed = Arrays.asList(times);
-                        Collections.reverse(reversed);
-                        String combined = "";
+                        readVersionFromGithub = true;
+                    }
 
-                        for (int j = 0; j < reversed.size(); j++) {
-                            String item = reversed.get(j);
-                            combined += item;
-                            if (j != 2) {
-                                combined += ".";
+                    if (enableAutomaticChangelog) {
+                        String changelog = "";
+
+                        for (int i = 0; i < releases.length(); i++) {
+                            JSONObject release = releases.getJSONObject(i);
+
+                            String tag = release.getString("tag_name");
+                            String date = release.getString("created_at");
+                            int index = date.indexOf("T");
+                            date = date.substring(0, index);
+
+                            String[] times = date.split("-");
+                            List<String> reversed = Arrays.asList(times);
+                            Collections.reverse(reversed);
+                            String combined = "";
+
+                            for (int j = 0; j < reversed.size(); j++) {
+                                String item = reversed.get(j);
+                                combined += item;
+                                if (j != 2) {
+                                    combined += ".";
+                                }
+
                             }
+
+                            date = combined;
+
+                            String body = release.getString("body");
+                            body = body.replaceAll("\r", "");
+
+                            changelog += "Version " + tag + "\n";
+                            changelog += "Released: " + date + "\n\n";
+                            changelog += body;
+
+                            changelog += "\n\n\n";
 
                         }
 
-                        date = combined;
+                        txtChangelog = changelog;
 
-                        String body = release.getString("body");
-                        body = body.replaceAll("\r", "");
-
-                        changelog += "Version " + tag + "\n";
-                        changelog += "Released: " + date + "\n\n";
-                        changelog += body;
-
-                        changelog += "\n\n\n";
-
+                        readChangelogFromGithub = true;
                     }
-
-                    txtChangelog = changelog;
-
-                    readFromGithub = true;
                 }
                 catch (Throwable ex)
                 {
                     Log.error("Error while loading github api from URL: \"" + apiURL + "\", Exception: " + ex.getClass());
                 }
-            }
-
-            //Test
-           /* try (InputStream stream = new URL("https://api.github.com/repos/Lukas22041/Random-Assortment-of-Things/releases").openStream();
-                 Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A"))
-            {
-                String string = scanner.next();
-                JSONArray test2 = new JSONArray(string);
-                String test = "";
-            }
-            catch (Throwable ex) {
-
             }*/
 
 
@@ -260,7 +274,7 @@ public final class UpdateInfo
             changelogURL = json.optString("changelogURL");
             if (changelogURL.equals("")) changelogURL = null;
 
-            if (changelogURL != null && isMaster && !readFromGithub)
+            if (changelogURL != null && isMaster /*&& !readChangelogFromGithub*/)
             {
                 try
                 {
@@ -275,13 +289,30 @@ public final class UpdateInfo
                 }
             }
 
-
-
-            // Parse version number
             JSONObject modVersion = json.getJSONObject("modVersion");
             major = modVersion.optInt("major", 0);
             minor = modVersion.optInt("minor", 0);
             patch = modVersion.optString("patch", "0");
+
+           /* if (!isMaster && enableAutomaticVersioning) {
+                ModSpecAPI mod = Global.getSettings().getModManager().getModSpec(modID);
+
+                List<String> versions = Arrays.asList(mod.getVersion().split("\\."));
+
+                major = Integer.parseInt(versions.get(0));
+                minor = Integer.parseInt(versions.get(1));
+                patch = versions.get(2);
+            }
+            else if (!readVersionFromGithub) {
+                // Parse version number
+                JSONObject modVersion = json.getJSONObject("modVersion");
+                major = modVersion.optInt("major", 0);
+                minor = modVersion.optInt("minor", 0);
+                patch = modVersion.optString("patch", "0");
+            }*/
+
+
+
         }
 
         boolean isSameAs(VersionFile other)

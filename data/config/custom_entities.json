@@ -1,0 +1,38 @@
+{	
+	"luna_campaign_renderer":{
+		"defaultName":"", # used if name=null in addCustomEntity()
+		"defaultRadius":0, # used if radius<0 in addCustomEntity()
+		"showInCampaign":true,
+		"showIconOnMap":false,
+		"scaleIconWithZoom":true,
+		"tags":[],
+		"layers":[
+			TERRAIN_1,
+			TERRAIN_2,
+			PLANETS,
+			TERRAIN_3,
+			RINGS,
+			TERRAIN_4,
+			ASTEROIDS,
+			TERRAIN_5,
+			JUMP_POINTS,
+			TERRAIN_6,
+			TERRAIN_6A,
+			TERRAIN_6B,
+			BELOW_STATIONS,
+			STATIONS,
+			ABOVE_STATIONS,
+			TERRAIN_7,
+			TERRAIN_7A,
+			TERRAIN_SLIPSTREAM,
+			FLEETS,
+			TERRAIN_8,
+			TERRAIN_9,
+			TERRAIN_10,
+			ABOVE
+			 ], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
+		"pluginClass":"lunalib.backend.scripts.LunaCampaignRendererEntity",
+	},
+}
+
+

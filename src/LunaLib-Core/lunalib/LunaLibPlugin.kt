@@ -18,6 +18,7 @@ import lunalib.lunaRefit.LunaRefitManager
 import lunalib.lunaRefit.RefitPanelButtonExample
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaUtil.LunaCommons
+import lunalib.lunaUtil.campaign.LunaCampaignRenderer
 import org.lazywizard.lazylib.MathUtils
 
 
@@ -27,6 +28,11 @@ class LunaLibPlugin : BaseModPlugin()
     {
         Global.getSector().addTransientScript(RefitButtonAdder())
         Global.getSector().addTransientScript(KeybindsScript())
+
+        var script = LunaCampaignRenderer.getScript()
+        if (!Global.getSector().hasScript(script::class.java)) {
+            Global.getSector().addScript(script)
+        }
     }
 
     override fun onApplicationLoad()
