@@ -1,3 +1,16 @@
+Version 1.8.5
+
+-> Added the "LunaCampaignRenderingPlugin" class.
+-> https://github.com/Lukas22041/LunaLib/wiki/LunaCampaignRenderingPlugin
+
+
+
+Version 1.8.4
+
+-> Updated to 0.97a.
+
+
+
 Version 1.8.3
 
 - Added a small utility class called "LunaCommons", with methods for quickly saving cross-save data.

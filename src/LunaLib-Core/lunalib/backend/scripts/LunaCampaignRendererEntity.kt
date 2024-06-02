@@ -15,8 +15,6 @@ class LunaCampaignRendererEntity : BaseCustomEntityPlugin() {
 
     override fun render(layer: CampaignEngineLayers?, viewport: ViewportAPI?) {
 
-        if (!entity.isInCurrentLocation) return
-
         for (renderer in LunaCampaignRenderer.getScript().getRenderers()) {
             if (renderer.activeLayers.contains(layer)) {
                 renderer.render(layer, viewport)
@@ -26,7 +24,10 @@ class LunaCampaignRendererEntity : BaseCustomEntityPlugin() {
 
     override fun advance(amount: Float) {
 
-        if (!entity.isInCurrentLocation) return
+        if (!entity.isInCurrentLocation) {
+            //entity.containingLocation.removeEntity(entity)
+            return
+        }
 
         var script = LunaCampaignRenderer.getScript()
         var renderers = script.getRenderers()

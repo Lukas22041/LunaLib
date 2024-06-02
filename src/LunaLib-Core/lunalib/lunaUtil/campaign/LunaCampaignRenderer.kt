@@ -42,6 +42,12 @@ class LunaCampaignRenderer : EveryFrameScript {
             return getScript().getRenderers().any { it.javaClass.name == rendererClass.name }
         }
 
+        @JvmStatic
+        fun getRendererOfClass(rendererClass: Class<*>) : LunaCampaignRenderingPlugin? {
+            return getScript().getRenderers().find { it.javaClass.name == rendererClass.name }
+        }
+
+        @JvmStatic
         fun getScript() : LunaCampaignRenderer {
             var script = Global.getSector().memoryWithoutUpdate.get("\$luna_campaign_renderer") as LunaCampaignRenderer?
             if (script == null) {
@@ -85,7 +91,7 @@ class LunaCampaignRenderer : EveryFrameScript {
     }
 
 
-    var interval = IntervalUtil(4.5f, 5f)
+    var interval = IntervalUtil(2f, 3f)
     override fun advance(amount: Float) {
 
         interval.advance(amount)
@@ -104,10 +110,17 @@ class LunaCampaignRenderer : EveryFrameScript {
             locations.add(Global.getSector().hyperspace)
             locations.addAll(Global.getSector().starSystems)
 
-            for (location in locations) {
+            /*for (location in locations) {
                 var entity = location.customEntities.find { it.customEntitySpec?.id == "luna_campaign_renderer" } ?: continue
                 if (!entity.isInCurrentLocation) {
                     location.removeEntity(entity)
+                }
+            }*/
+
+            for (location in locations) {
+                if (location.customEntities.none { it.customEntitySpec?.id == "luna_campaign_renderer" }) {
+                    var entity = location.addCustomEntity("luna_campaign_renderer_${Misc.genUID()}", "", "luna_campaign_renderer", Factions.NEUTRAL)
+                    entity.location.set(Vector2f())
                 }
             }
         }

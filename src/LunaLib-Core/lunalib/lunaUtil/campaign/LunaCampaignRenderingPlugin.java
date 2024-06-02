@@ -8,6 +8,13 @@ import com.fs.starfarer.api.combat.ViewportAPI;
 
 import java.util.EnumSet;
 
+/**
+*A plugin that functions similary as to a CombatLayeredRenderingPlugin but for campaign use.
+*Allows rendering without having to add your own entity for everything.
+
+* Needs to be added to the campaign through LunaCampaignRenderer.addRenderer() or LunaCampaignRenderer.addTransientRenderer().
+* Transient Renderers are removed on safe-load, non Transient Renderers remain until expired.
+ */
 public interface LunaCampaignRenderingPlugin {
 
     public boolean isExpired();
