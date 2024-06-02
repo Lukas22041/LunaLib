@@ -4,7 +4,7 @@
     {
         "major":1,
         "minor":8,
-        "patch":5 # Can be a number, character or string (1, 2, a, b, "-RC2", etc)
+        "patch":4 # Can be a number, character or string (1, 2, a, b, "-RC2", etc)
     },
     "modName":"LunaLib",
 	"modThreadId":25658,
