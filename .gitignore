@@ -51,6 +51,9 @@ out/
 .idea/
 .run/
 
+#VSCode
+.vscode/
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 

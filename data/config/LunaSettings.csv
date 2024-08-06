@@ -31,5 +31,5 @@ luna_newExampleColor,Example Color,Color,#f22e6e,,"Creates a color picker, givin
 ",,,Examples
 luna_exampleRadio,Example Radio,Radio,None,"None, Hegemony, Tritachyon, Persean League, Sindrian, Independent","Creates a radio button selector. 
 
-The defaultValue decides which one is selected by default, the secondaryValue creates the list of choices with a comma seperated String. 
+The defaultValue decides which one is selected by default, the secondaryValue creates the list of choices with a comma separated String. 
 Can be retrieved as a String.",,,Examples
