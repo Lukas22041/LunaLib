@@ -1,3 +1,10 @@
+Version 1.8.6
+
+-> Fix to a slight render order issue with refit panels.
+-> The mod is no longer marked as "utility" in the mod_config.json file.
+
+
+
 Version 1.8.5
 
 -> Added the "LunaCampaignRenderingPlugin" class.

@@ -2,10 +2,10 @@
   "id": "lunalib",
   "name": "LunaLib",
   "author": "Lukas04",
-  "utility": "true",
-  "version": "1.8.5",
+  "utility": "false",
+  "version": "1.8.6",
   "description": "Library including utilities for players and mod developers.",
-  "gameVersion": "0.97a-RC6",
+  "gameVersion": "0.97a-RC11",
   "jars": [
     "jars/LunaLib.jar",
     "jars/LunaLib-Kotlin.jar",

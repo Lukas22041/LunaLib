@@ -23,6 +23,9 @@ class RefitPanelBackgroundPlugin(private var parent: UIPanelAPI, var forButton: 
 
     override fun renderBelow(alphaMult: Float) {
         if (position == null) return
+
+        //Background
+
         var c = Color(0, 0, 0)
        /* if (CustomExoticaPanel.renderDefaultBackground())
         {*/
@@ -54,15 +57,11 @@ class RefitPanelBackgroundPlugin(private var parent: UIPanelAPI, var forButton: 
 
         GL11.glRectf(0f, 0f, Global.getSettings().screenWidth, Global.getSettings().screenHeight)
 
-        //GL11.glEnd()
+
+        //Border
         GL11.glPopMatrix()
-    }
 
-    override fun render(alphaMult: Float) {
-        if (position == null) return
-      //  if (!CustomExoticaPanel.renderDefaultBorder()) return
-
-        var c = Misc.getDarkPlayerColor()
+        c = Misc.getDarkPlayerColor()
         GL11.glPushMatrix()
 
         GL11.glTranslatef(0f, 0f, 0f)
@@ -94,6 +93,44 @@ class RefitPanelBackgroundPlugin(private var parent: UIPanelAPI, var forButton: 
 
         GL11.glEnd()
         GL11.glPopMatrix()
+    }
+
+    override fun render(alphaMult: Float) {
+        if (position == null) return
+      //  if (!CustomExoticaPanel.renderDefaultBorder()) return
+
+        /*var c = Misc.getDarkPlayerColor()
+        GL11.glPushMatrix()
+
+        GL11.glTranslatef(0f, 0f, 0f)
+        GL11.glRotatef(0f, 0f, 0f, 1f)
+
+        GL11.glDisable(GL11.GL_TEXTURE_2D)
+
+        GL11.glEnable(GL11.GL_BLEND)
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+
+        GL11.glColor4f(c.red / 255f,
+            c.green / 255f,
+            c.blue / 255f,
+            c.alpha / 255f * (alphaMult * 1f))
+
+        GL11.glEnable(GL11.GL_LINE_SMOOTH)
+        GL11.glBegin(GL11.GL_LINE_STRIP)
+
+        var x = position!!.x
+        var y = position!!.y
+        var width = position!!.width
+        var height = position!!.height
+
+        GL11.glVertex2f(x, y)
+        GL11.glVertex2f(x, y + height)
+        GL11.glVertex2f(x + width, y + height)
+        GL11.glVertex2f(x + width, y)
+        GL11.glVertex2f(x, y)
+
+        GL11.glEnd()
+        GL11.glPopMatrix()*/
     }
 
     override fun advance(amount: Float) {
