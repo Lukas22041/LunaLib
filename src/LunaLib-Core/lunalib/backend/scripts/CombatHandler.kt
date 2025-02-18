@@ -18,6 +18,7 @@ import lunalib.backend.ui.settings.LunaSettingsUISettingsPanel
 import lunalib.backend.ui.versionchecker.LunaVersionUIPanel
 import lunalib.backend.util.getLunaString
 import lunalib.lunaSettings.LunaSettings
+import lunalib.lunaTitle.TitlescreenManager
 import org.lazywizard.lazylib.MathUtils
 import org.lazywizard.lazylib.ui.LazyFont
 import org.lwjgl.input.Keyboard
@@ -58,6 +59,9 @@ class CombatHandler : EveryFrameCombatPlugin
 
     override fun init(engine: CombatEngineAPI?)
     {
+
+        TitlescreenManager.decideOnTitle()
+
         if (enableVersionChecker == null) {
             enableVersionChecker = LunaSettings.getBoolean("lunalib", "luna_enableVC")
         }

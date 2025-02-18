@@ -1,3 +1,9 @@
+Version 1.8.7
+
+-> Added a utility to manage custom title screens. Mostly exists to avoid conflicts.
+
+
+
 Version 1.8.6
 
 -> Fix to a slight render order issue with refit panels.

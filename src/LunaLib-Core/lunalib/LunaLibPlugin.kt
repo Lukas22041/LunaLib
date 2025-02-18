@@ -17,6 +17,8 @@ import lunalib.lunaRefit.RefitEffectButtonExample
 import lunalib.lunaRefit.LunaRefitManager
 import lunalib.lunaRefit.RefitPanelButtonExample
 import lunalib.lunaSettings.LunaSettings
+import lunalib.lunaTitle.LunaTitleRecordingScipt
+import lunalib.lunaTitle.TitleSpecLoader
 import lunalib.lunaUtil.LunaCommons
 import lunalib.lunaUtil.campaign.LunaCampaignRenderer
 import org.lazywizard.lazylib.MathUtils
@@ -26,6 +28,7 @@ class LunaLibPlugin : BaseModPlugin()
 {
     override fun onGameLoad(newGame: Boolean)
     {
+        Global.getSector().addTransientScript(LunaTitleRecordingScipt())
         Global.getSector().addTransientScript(RefitButtonAdder())
         Global.getSector().addTransientScript(KeybindsScript())
 
@@ -37,6 +40,8 @@ class LunaLibPlugin : BaseModPlugin()
 
     override fun onApplicationLoad()
     {
+
+        TitleSpecLoader.loadTitlesFromCSV()
 
         LunaRefitManager.addRefitButton(RefitEffectButtonExample())
         LunaRefitManager.addRefitButton(RefitPanelButtonExample())
