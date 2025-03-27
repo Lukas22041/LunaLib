@@ -481,7 +481,7 @@ class RefitButtonAdder : EveryFrameScript {
     //Used to be able to find specific files without having to reference their obfuscated class name.
     private fun hasMethodOfName(name: String, instance: Any) : Boolean {
 
-        val instancesOfMethods: Array<out Any> = instance.javaClass.getDeclaredMethods()
+        val instancesOfMethods: Array<out Any> = instance.javaClass.getDeclaredMethods() as Array<out Any>
         return instancesOfMethods.any { getMethodNameHandle.invoke(it) == name }
     }
 
@@ -494,7 +494,7 @@ class RefitButtonAdder : EveryFrameScript {
         val args = arguments.map { it!!::class.javaPrimitiveType ?: it::class.java }
         val methodType = MethodType.methodType(Void.TYPE, args)
 
-        method = clazz.getMethod(methodName, *methodType.parameterArray())
+        method = clazz.getMethod(methodName, *methodType.parameterArray()) as Any?
 
         return invokeMethodHandle.invoke(method, instance, arguments)
     }

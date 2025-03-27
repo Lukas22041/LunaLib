@@ -142,7 +142,8 @@ class CombatHandler : EveryFrameCombatPlugin
         val invokeMethod = MethodHandles.lookup().findVirtual(methodClass, "invoke", MethodType.methodType(Any::class.java, Any::class.java, Array<Any>::class.java))
 
         var foundMethod: Any? = null
-        for (method in titlescreen::class.java.methods as Array<Any>)
+        var methods = titlescreen::class.java.methods as Array<Any>
+        for (method in methods)
         {
             if (getNameMethod.invoke(method) == "getScreenPanel")
             {
@@ -315,7 +316,7 @@ class CombatHandler : EveryFrameCombatPlugin
                         val getNameMethod = MethodHandles.lookup().findVirtual(fieldClass, "getName", MethodType.methodType(String::class.java))
                         val setAcessMethod = MethodHandles.lookup().findVirtual(fieldClass,"setAccessible", MethodType.methodType(Void.TYPE, Boolean::class.javaPrimitiveType))
 
-                        val instancesOfFields: Array<out Any> = instanceToGetFrom.javaClass.getDeclaredFields()
+                        val instancesOfFields: Array<out Any> = instanceToGetFrom.javaClass.getDeclaredFields() as Array<out Any>
                         for (obj in instancesOfFields)
                         {
                             setAcessMethod.invoke(obj, true)

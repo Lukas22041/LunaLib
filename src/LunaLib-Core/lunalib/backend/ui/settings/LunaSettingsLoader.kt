@@ -23,7 +23,7 @@ Class that both loads and holds data for LunaSettings. Can not be used outside L
 
 [LunaSettings on the Github Wiki](https://github.com/Lukas22041/LunaLib/wiki/Integrating-LunaSettings)
 */
-internal object LunaSettingsLoader
+object LunaSettingsLoader
 {
 
     var hasLoaded = false

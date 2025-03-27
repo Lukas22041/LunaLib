@@ -12,7 +12,7 @@ import lunalib.backend.util.getLunaString
 import org.lwjgl.opengl.GL11
 import java.awt.Color
 
-internal class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+class LunaUIColorPicker (var value: Color?, var hasParagraph: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var textField: LunaUITextField<String>? = null
 

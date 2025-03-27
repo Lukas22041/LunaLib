@@ -2,7 +2,7 @@ package lunalib.lunaRefit
 
 object LunaRefitManager {
 
-    internal var buttons = ArrayList<BaseRefitButton>()
+    var buttons = ArrayList<BaseRefitButton>()
 
     @JvmStatic
     fun addRefitButton(button: BaseRefitButton) {

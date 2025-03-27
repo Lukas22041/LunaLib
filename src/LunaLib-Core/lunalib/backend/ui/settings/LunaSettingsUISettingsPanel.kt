@@ -26,7 +26,7 @@ import java.net.URI
 
 data class ChangedSetting(var modID: String, var fieldID: String, var data: Any?)
 
-internal class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
+class LunaSettingsUISettingsPanel() : CustomUIPanelPlugin
 {
 
     enum class SettingsType {

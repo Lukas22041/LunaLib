@@ -1,8 +1,8 @@
 fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
 luna_settingsHeader,Keybinds Header,Header,Keybinds,,,,,
-luna_SettingsKeybind,Settings Keybind,Keycode,60,,"Changes the Keybind for opening this Menu in the Campaign. 
+luna_SettingsKeybind_new,Settings Keybind,Keycode,61,,"Changes the Keybind for opening this Menu in the Campaign. 
 Can always be opened by pressing [Shift + F2], even if set to another key.",,,
-luna_DebugKeybind,Debug Keybind,Keycode,61,,Changes the Keybind used to open the Debug Menu.,,,
+luna_DebugKeybind_new,Debug Keybind,Keycode,62,,Changes the Keybind used to open the Debug Menu.,,,
 ,,,,,,,,
 ,,,,,,,,
 luna_versionHeader,Version Checker,Header,Version Checker,,,,,

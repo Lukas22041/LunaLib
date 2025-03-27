@@ -26,7 +26,7 @@ import org.lazywizard.lazylib.JSONUtils
 import org.lwjgl.input.Keyboard
 import java.awt.Color
 
-internal class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
+class LunaSettingsUIModsPanel(var newGame: Boolean) : CustomUIPanelPlugin
 {
 
     var parentPanel: CustomPanelAPI? = null

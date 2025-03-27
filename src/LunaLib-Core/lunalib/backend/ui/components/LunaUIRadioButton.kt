@@ -9,8 +9,7 @@ import com.fs.starfarer.api.util.Misc
 import lunalib.backend.ui.components.base.LunaUIBaseElement
 import lunalib.backend.ui.components.base.LunaUIButton
 import org.lwjgl.input.Keyboard
-
-internal class LunaUIRadioButton(var value: String?, var choices: List<String>?, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+class LunaUIRadioButton(var value: String?, var choices: List<String>?, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var created = false
     var buttonHeight = 25f

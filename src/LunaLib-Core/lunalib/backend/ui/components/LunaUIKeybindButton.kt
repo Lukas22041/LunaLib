@@ -12,7 +12,7 @@ import lunalib.backend.util.getLunaString
 import org.lwjgl.input.Keyboard
 import org.lwjgl.util.vector.Vector2f
 
-internal class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+class LunaUIKeybindButton(var keycode: Int?, var regularButton: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var button: LunaUIButton? = null
 

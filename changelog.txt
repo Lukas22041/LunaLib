@@ -1,3 +1,17 @@
+Version 2.0.1
+
+-> Fixed a crash in the refit screen
+
+
+
+Version 2.0.0
+
+-> Updated to 0.98a
+-> The Settings & Debug Keybinds have been reset to accomendate F2 being reserved for the codex, they are both one further to the right now.
+-> Compiled Java 17 and Kotlin 2.0, should improve performance somewhat.
+
+
+
 Version 1.8.7
 
 -> Added a utility to manage custom title screens. Mostly exists to avoid conflicts.

@@ -11,7 +11,7 @@ import org.lwjgl.util.vector.Vector2f
 import kotlin.math.round
 
 
-internal class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+class LunaUISlider <T> (var value: T, var minValue: Float, var maxValue: Float, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var borderColor = Misc.getDarkPlayerColor()
     var sliderCenterColor = Misc.getDarkPlayerColor()

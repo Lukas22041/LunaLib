@@ -10,7 +10,7 @@ import lunalib.backend.util.getLunaString
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector2f
 
-internal class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
+class LunaUIButton(var value: Boolean, var regularButton: Boolean, width: Float, height: Float, key: Any, group: String, panel: CustomPanelAPI, uiElement: TooltipMakerAPI) : LunaUIBaseElement(width, height, key, group, panel, uiElement) {
 
     var buttonText: LabelAPI? = null
     var borderColor = Misc.getDarkPlayerColor()
