@@ -1,3 +1,9 @@
+Version 2.0.2
+
+-> Fixed a crash that occured after saving Lunalib configurations
+
+
+
 Version 2.0.1
 
 -> Fixed a crash in the refit screen
