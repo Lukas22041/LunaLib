@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 public final class UpdateInfo
@@ -278,7 +279,9 @@ public final class UpdateInfo
             {
                 try
                 {
-                    InputStream stream = new URL(changelogURL).openStream();
+                    URLConnection connection = new URL(changelogURL).openConnection();
+                    connection.setUseCaches(false);
+                    InputStream stream = connection.getInputStream();
                     Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
                     txtChangelog = scanner.next();
                 }
