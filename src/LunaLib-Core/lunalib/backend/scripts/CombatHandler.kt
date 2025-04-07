@@ -16,7 +16,6 @@ import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
 import lunalib.backend.ui.settings.LunaSettingsUIModsPanel
 import lunalib.backend.ui.settings.LunaSettingsUISettingsPanel
 import lunalib.backend.ui.versionchecker.LunaVersionUIPanel
-import lunalib.backend.util.getLunaString
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaTitle.TitlescreenManager
 import org.lazywizard.lazylib.MathUtils
@@ -29,6 +28,10 @@ import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.util.concurrent.TimeUnit
 
+fun String.getLunaString() : String
+{
+    return Global.getSettings().getString("lunalib", this)
+}
 
 class CombatHandler : EveryFrameCombatPlugin
 {
@@ -383,9 +386,7 @@ class CombatHandler : EveryFrameCombatPlugin
     fun drawButton(x: Float, y: Float, width: Float, height: Float, back: Color, border: Color)
     {
         //background
-        GL11.glPushMatrix()
         GL11.glDisable(GL11.GL_TEXTURE_2D)
-
         GL11.glDisable(GL11.GL_BLEND)
 
         GL11.glColor4f(back.red / 255f,
@@ -394,19 +395,6 @@ class CombatHandler : EveryFrameCombatPlugin
             back.alpha / 255f)
 
         GL11.glRectf(x, y , x + width, y + height)
-        
-        GL11.glEnd()
-        GL11.glPopMatrix()
-
-        //border
-        GL11.glPushMatrix()
-
-        GL11.glTranslatef(0f, 0f, 0f)
-        GL11.glRotatef(0f, 0f, 0f, 1f)
-
-        GL11.glDisable(GL11.GL_TEXTURE_2D)
-
-        GL11.glDisable(GL11.GL_BLEND)
 
         GL11.glColor4f(border.red / 255f,
             border.green / 255f,
@@ -414,15 +402,13 @@ class CombatHandler : EveryFrameCombatPlugin
             border.alpha / 255f )
 
         GL11.glEnable(GL11.GL_LINE_SMOOTH)
-        GL11.glBegin(GL11.GL_LINE_STRIP)
 
+        GL11.glBegin(GL11.GL_LINE_STRIP)
         GL11.glVertex2f(x, y)
         GL11.glVertex2f(x, y + height)
         GL11.glVertex2f(x + width, y + height)
         GL11.glVertex2f(x + width, y)
         GL11.glVertex2f(x, y)
-
         GL11.glEnd()
-        GL11.glPopMatrix()
     }
 }

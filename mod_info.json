@@ -3,7 +3,7 @@
   "name": "LunaLib",
   "author": "Lukas04",
   "utility": "false",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Library including utilities for players and mod developers.",
   "gameVersion": "0.98a-RC5",
   "jars": [

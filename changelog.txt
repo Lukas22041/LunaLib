@@ -1,3 +1,10 @@
+Version 2.0.3
+
+-> Added LunaCodex
+ -> A simple utility that adds a "Mods" section towards the Codex. The intended use is for Overview pages of mods.
+ -> Use LunaCodex.getModsCategory() to get the categories CodexEntryPlugin. Works like any other codex category.
+-> Fixed issues regarding the rendering of buttons on the main menu.
+
 Version 2.0.2
 
 -> Fixed a crash that occured after saving Lunalib configurations

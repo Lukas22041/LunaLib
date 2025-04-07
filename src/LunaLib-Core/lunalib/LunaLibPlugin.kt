@@ -2,30 +2,43 @@ package lunalib
 
 import com.fs.starfarer.api.BaseModPlugin
 import com.fs.starfarer.api.Global
+import com.fs.starfarer.api.impl.codex.CodexDataV2
+import com.fs.starfarer.api.impl.codex.CodexEntryV2
 import lunalib.backend.scripts.KeybindsScript
 import lunalib.backend.scripts.LoadedSettings
 import lunalib.backend.ui.refit.RefitButtonAdder
 import lunalib.backend.ui.settings.LunaSettingsConfigLoader
 import lunalib.backend.ui.settings.LunaSettingsLoader
 import lunalib.backend.ui.versionchecker.VCModPlugin
+import lunalib.lunaCodex.LunaCodex
 import lunalib.lunaDebug.LunaDebug
 import lunalib.lunaDebug.snippets.LunaLibDataSnippet
 import lunalib.lunaDebug.snippets.ModListSnippet
 import lunalib.lunaDebug.snippets.ReloadSettingsSnippet
 import lunalib.lunaDebug.snippets.SnippetsListSnippet
-import lunalib.lunaRefit.RefitEffectButtonExample
 import lunalib.lunaRefit.LunaRefitManager
+import lunalib.lunaRefit.RefitEffectButtonExample
 import lunalib.lunaRefit.RefitPanelButtonExample
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaTitle.LunaTitleRecordingScipt
 import lunalib.lunaTitle.TitleSpecLoader
 import lunalib.lunaUtil.LunaCommons
 import lunalib.lunaUtil.campaign.LunaCampaignRenderer
-import org.lazywizard.lazylib.MathUtils
 
 
 class LunaLibPlugin : BaseModPlugin()
 {
+
+    override fun onAboutToStartGeneratingCodex() {
+        super.onAboutToStartGeneratingCodex()
+
+        var path = "graphics/icons/lunalib_ModsCategory.png"
+        Global.getSettings().loadTexture(path)
+        val cat = CodexEntryV2(LunaCodex.CODEX_CAT_MODS, "Mods", path)
+
+        CodexDataV2.ROOT.addChild(cat)
+    }
+
     override fun onGameLoad(newGame: Boolean)
     {
         Global.getSector().addTransientScript(LunaTitleRecordingScipt())
