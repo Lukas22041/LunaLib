@@ -16,6 +16,7 @@ import lunalib.backend.ui.settings.LunaSettingsUIMainPanel
 import lunalib.backend.ui.settings.LunaSettingsUIModsPanel
 import lunalib.backend.ui.settings.LunaSettingsUISettingsPanel
 import lunalib.backend.ui.versionchecker.LunaVersionUIPanel
+import lunalib.backend.util.ReflectionUtils
 import lunalib.lunaSettings.LunaSettings
 import lunalib.lunaTitle.TitlescreenManager
 import org.lazywizard.lazylib.MathUtils
@@ -24,8 +25,6 @@ import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 import org.lwjgl.opengl.GL11
 import java.awt.Color
-import java.lang.invoke.MethodHandles
-import java.lang.invoke.MethodType
 import java.util.concurrent.TimeUnit
 
 fun String.getLunaString() : String
@@ -138,9 +137,9 @@ class CombatHandler : EveryFrameCombatPlugin
     fun getScreenPanel() : UIPanelAPI
     {
         var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
+        return ReflectionUtils.invoke("getScreenPanel", titlescreen) as UIPanelAPI
 
-
-        val methodClass = Class.forName("java.lang.reflect.Method", false, Class::class.java.classLoader)
+      /*  val methodClass = Class.forName("java.lang.reflect.Method", false, Class::class.java.classLoader)
         val getNameMethod = MethodHandles.lookup().findVirtual(methodClass, "getName", MethodType.methodType(String::class.java))
         val invokeMethod = MethodHandles.lookup().findVirtual(methodClass, "invoke", MethodType.methodType(Any::class.java, Any::class.java, Array<Any>::class.java))
 
@@ -154,7 +153,7 @@ class CombatHandler : EveryFrameCombatPlugin
             }
         }
 
-        return invokeMethod.invoke(foundMethod, titlescreen) as UIPanelAPI
+        return invokeMethod.invoke(foundMethod, titlescreen) as UIPanelAPI*/
     }
 
     override fun advance(amount: Float, events: MutableList<InputEventAPI>?)
@@ -312,7 +311,8 @@ class CombatHandler : EveryFrameCombatPlugin
                     try {
 
                         var titlescreen: TitleScreenState = AppDriver.getInstance().currentState as TitleScreenState
-                        var instanceToGetFrom = titlescreen
+                        dialogActive = ReflectionUtils.get("dialogType", titlescreen)
+                       /* var instanceToGetFrom = titlescreen
 
                         val fieldClass = Class.forName("java.lang.reflect.Field", false, Class::class.java.classLoader)
                         val getMethod = MethodHandles.lookup().findVirtual(fieldClass, "get", MethodType.methodType(Any::class.java, Any::class.java))
@@ -328,7 +328,7 @@ class CombatHandler : EveryFrameCombatPlugin
                             {
                                 dialogActive = getMethod.invoke(obj, instanceToGetFrom)
                             }
-                        }
+                        }*/
                     } catch (e: Throwable) {}
 
                 }
