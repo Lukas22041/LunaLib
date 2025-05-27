@@ -8,7 +8,7 @@
   "gameVersion": "0.98a-RC5",
   "jars": [
     "jars/LunaLib.jar",
-    "jars/LunaLib-Kotlin.jar",
+    #"jars/LunaLib-Kotlin.jar",
     "jars/libs/fuzzywuzzy-1.3.0.jar"
   ],
   "modPlugin": "lunalib.LunaLibPlugin",
