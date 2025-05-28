@@ -1,3 +1,19 @@
+Version 2.0.4
+
+-> Changed the mods icon in the mod settings.
+-> Improved performance for the button being added to refit & removed some jankiness.
+-> Now caches Reflection calls to improve on performance.
+
+Changed the mods license from "Attribution-NonCommercial-ShareAlike 4.0 International" to the
+"Attribution 4.0 International" License, to be less restrictive.
+
+For Modders
+- Lunalib is no longer split in to a LunaLib.jar and a Lunalib-Kotlin.jar
+- This should not require mod updates, as package paths have been unchanged.
+- You will want to remove "Lunalib-Kotlin.jar" from your library references if you have it there.
+
+
+
 Version 2.0.3
 
 -> Added LunaCodex
