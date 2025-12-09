@@ -3,6 +3,7 @@ package lunalib.backend.ui.versionchecker;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ModSpecAPI;
+import lunalib.backend.scripts.LoadedSettings;
 import org.apache.log4j.Level;
 import org.json.JSONArray;
 import org.json.JSONException;

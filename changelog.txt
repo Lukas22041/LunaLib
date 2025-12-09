@@ -1,3 +1,9 @@
+Version 2.0.5
+
+-> Fixed version checker downloading remote mod & starsector version data even when supposed to be disabled.
+
+
+
 Version 2.0.4
 
 -> Changed the mods icon in the mod settings.

@@ -69,12 +69,14 @@ class LunaLibPlugin : BaseModPlugin()
         /*LunaSettings.SettingsCreator.addColor("lunalib", "test", "Test Color", "Test Description", Color(255, 255, 255))
         LunaSettings.SettingsCreator.refresh("lunalib")*/
 
-        LunaDebug.addSnippet(lunalib.lunaDebug.snippets.ModListSnippet())
+        LunaDebug.addSnippet(ModListSnippet())
         LunaDebug.addSnippet(LunaLibDataSnippet())
         LunaDebug.addSnippet(SnippetsListSnippet())
         LunaDebug.addSnippet(ReloadSettingsSnippet())
 
-        lunalib.backend.ui.versionchecker.VCModPlugin().onApplicationLoad()
+        if (LoadedSettings.enableVersionChecker == true) {
+            lunalib.backend.ui.versionchecker.VCModPlugin().onApplicationLoad()
+        }
 
         LunaCommons.init()
     }

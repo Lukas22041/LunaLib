@@ -13,6 +13,11 @@ class LoadedSettings : LunaSettingsListener
         var devmodeKeybind = LunaSettings.getInt("lunalib", "luna_DevmodeKeybind")
         var debugEntryCap = LunaSettings.getInt("lunalib", "luna_DebugEntries")
         var uidebugKeybind = LunaSettings.getInt("lunalib", "luna_UIDebugKeybind")
+
+        //Only gets updated on game start
+        @JvmStatic
+        var enableVersionChecker = LunaSettings.getBoolean("lunalib", "luna_enableVC")
+
     }
 
     override fun settingsChanged(modID: String) {

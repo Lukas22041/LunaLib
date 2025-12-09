@@ -56,17 +56,12 @@ class CombatHandler : EveryFrameCombatPlugin
         var isUpdateCheckDone = false
         var canBeRemoved = false
 
-        var enableVersionChecker: Boolean? = null
     }
 
     override fun init(engine: CombatEngineAPI?)
     {
 
         TitlescreenManager.decideOnTitle()
-
-        if (enableVersionChecker == null) {
-            enableVersionChecker = LunaSettings.getBoolean("lunalib", "luna_enableVC")
-        }
 
         this.engine = engine
 
@@ -291,10 +286,6 @@ class CombatHandler : EveryFrameCombatPlugin
 
       //  panel!!.render(1f)
 
-        if (enableVersionChecker == null) {
-            enableVersionChecker = LunaSettings.getBoolean("lunalib", "luna_enableVC")
-        }
-
 
         if (Global.getCurrentState() == GameState.TITLE && tip != null)
         {
@@ -336,7 +327,7 @@ class CombatHandler : EveryFrameCombatPlugin
                 if (dialogActive == null && !LunaSettingsUIMainPanel.panelOpen && !LunaVersionUIPanel.panelOpen)
                 {
                     addModSettingsButton()
-                    if (enableVersionChecker!!) addVersionButton()
+                    if (LoadedSettings.enableVersionChecker!!) addVersionButton()
                 }
             }
 
@@ -355,7 +346,7 @@ class CombatHandler : EveryFrameCombatPlugin
                 tip!!.append("mainMenuText1".getLunaString() + settingsKeybind + "mainMenuText2".getLunaString() + location, Misc.getBasePlayerColor())
             }
 
-            if (!isUpdateCheckDone && enableVersionChecker!!) {
+            if (!isUpdateCheckDone && LoadedSettings.enableVersionChecker!!) {
                 // We can't do anything if it's not done checking for updates
                 if (!LunaVersionUIPanel.futureUpdateInfo!!.isDone) {
                     return
