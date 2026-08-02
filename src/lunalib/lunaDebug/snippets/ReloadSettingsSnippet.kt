@@ -41,7 +41,7 @@ class ReloadSettingsSnippet() : lunalib.lunaDebug.LunaSnippet() {
             LunaSettingsLoader.loadSettings()
         }
 
-        output.addPara("Sucesfully reloaded LunaSettings.csv in ${time}ms", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
+        output.addPara("Successfully reloaded LunaSettings.csv in ${time}ms", 0f, Misc.getBasePlayerColor(), Misc.getBasePlayerColor())
 
     }
 }
