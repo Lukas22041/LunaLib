@@ -1,6 +1,7 @@
 package lunalib.backend.ui.settings
 
 import com.fs.starfarer.api.Global
+import lunalib.backend.util.ReflectionUtils
 import lunalib.lunaSettings.LunaSettings
 import org.apache.log4j.Level
 import org.json.JSONArray
@@ -40,6 +41,38 @@ object LunaSettingsLoader
         log.level = Level.ALL
     }
 
+    private val resourceLoaderLock: Any? by lazy {
+        try {
+            val settingsClass = Global.getSettings().javaClass.name
+            var trace: Array<StackTraceElement> = arrayOf()
+            try {
+                Global.getSettings().loadText("data/config/lunalib_resource_loader_probe.txt")
+            } catch (e: Throwable) {
+                var cause: Throwable? = e
+                while (cause != null) {
+                    if (cause.stackTrace.any { it.className == settingsClass }) trace = cause.stackTrace
+                    cause = cause.cause
+                }
+            }
+
+            val settingsFrame = trace.indexOfFirst { it.className == settingsClass }
+            var lock: Any? = null
+            for (index in settingsFrame - 1 downTo 0) {
+                val className = trace[index].className
+                if (className.startsWith("java.") || className.startsWith("jdk.") || className.startsWith("sun.") || className == settingsClass) continue
+                lock = ReflectionUtils.getStaticSingleton(Class.forName(className, false, Global.getSettings().javaClass.classLoader))
+                if (lock != null) break
+            }
+
+            if (lock == null) log.warn("LunaSettings: Could not find the resource loader, loading settings without its lock.")
+            else log.info("LunaSettings: Found the resource loader: ${lock.javaClass.name}")
+            lock
+        } catch (e: Throwable) {
+            log.warn("LunaSettings: Could not find the resource loader, loading settings without its lock.", e)
+            null
+        }
+    }
+
     fun load()
     {
         loadDefault()
@@ -57,7 +90,16 @@ object LunaSettingsLoader
             var CSV: JSONArray? = null
 
             try {
-                CSV = Global.getSettings().loadCSV("data/config/LunaSettings.csv", mod.id)
+                CSV = synchronized(Global.getSettings().modManager) {
+                    val loaderLock = resourceLoaderLock
+                    if (loaderLock != null) {
+                        synchronized(loaderLock) {
+                            Global.getSettings().loadCSV("data/config/LunaSettings.csv", mod.id)
+                        }
+                    } else {
+                        Global.getSettings().loadCSV("data/config/LunaSettings.csv", mod.id)
+                    }
+                }
             } catch (e: Throwable) {}
             if (CSV == null) continue
 

@@ -20,8 +20,10 @@ internal object ReflectionUtils {
     private val getMethodNameHandle = MethodHandles.lookup().findVirtual(methodClass, "getName", MethodType.methodType(String::class.java))
     private val getMethodParametersHandle = MethodHandles.lookup().findVirtual(methodClass, "getParameterTypes", MethodType.methodType(arrayOf<Class<*>>().javaClass))
     private val getMethodReturnTypeHandle = MethodHandles.lookup().findVirtual(methodClass, "getReturnType", MethodType.methodType(Class::class.java))
+    private val getMethodModifiersHandle = MethodHandles.lookup().findVirtual(methodClass, "getModifiers", MethodType.methodType(Int::class.javaPrimitiveType))
 
     private val invokeMethodHandle = MethodHandles.lookup().findVirtual(methodClass, "invoke", MethodType.methodType(Any::class.java, Any::class.java, Array<Any>::class.java))
+    private val setMethodAccessibleHandle = MethodHandles.lookup().findVirtual(methodClass, "setAccessible", MethodType.methodType(Void.TYPE, Boolean::class.javaPrimitiveType))
 
 
     //Cache
@@ -212,6 +214,19 @@ internal object ReflectionUtils {
 
             ReflectedMethod(targetMethod!!) //Returns the method
         }
+    }
+
+    fun getStaticSingleton(clazz: Class<*>): Any? {
+        val instancesOfMethods: Array<out Any> = clazz.declaredMethods as Array<out Any>
+        val candidates = instancesOfMethods.filter { method ->
+            (getMethodModifiersHandle.invoke(method) as Int) and 0x0008 != 0
+                    && (getMethodParametersHandle.invoke(method) as Array<*>).isEmpty()
+                    && getMethodReturnTypeHandle.invoke(method) == clazz
+        }
+        if (candidates.size != 1) return null
+
+        setMethodAccessibleHandle.invoke(candidates[0], true)
+        return invokeMethodHandle.invoke(candidates[0], null, arrayOf<Any>())
     }
 
     //Useful for some classes with just one field
