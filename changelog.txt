@@ -1,3 +1,10 @@
+Version 2.1.0
+
+- Updated to 0.98.5a
+- Improved hotkey detection for the devmode hotkey
+
+
+
 Version 2.0.5
 
 -> Fixed version checker downloading remote mod & starsector version data even when supposed to be disabled.

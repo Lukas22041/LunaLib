@@ -13,6 +13,10 @@ class DevmodeKeyListener : CampaignInputListener {
     }
 
     override fun processCampaignInputPreCore(events: List<InputEventAPI?>?) {
+
+    }
+
+    override fun processCampaignInputPreFleetControl(events: List<InputEventAPI?>?) {
         if (events == null) return
         for (event in events) {
             if (event!!.isConsumed) return
@@ -24,10 +28,6 @@ class DevmodeKeyListener : CampaignInputListener {
                 }
             }
         }
-    }
-
-    override fun processCampaignInputPreFleetControl(events: List<InputEventAPI?>?) {
-
     }
 
     override fun processCampaignInputPostCore(events: List<InputEventAPI?>?) {
