@@ -511,7 +511,9 @@ class RefitButtonAdder : EveryFrameScript {
 
     //Extends the UI API by adding the required method to get the child objects of a panel, only when used within this class.
     private fun UIPanelAPI.getChildrenCopy() : List<UIComponentAPI> {
-        return ReflectionUtils.invoke("getChildrenCopy", this) as List<UIComponentAPI>
+        //Used to be needed in 0.98a, lazy fix by just replacing the extension method with the new method instead
+        //return ReflectionUtils.invoke("getChildrenCopy", this) as List<UIComponentAPI>
+        return this.childrenCopy2
     }
 
     private fun Color.setAlpha(alpha: Int) : Color {
